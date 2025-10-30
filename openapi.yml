@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: PinkCapy API
+  version: 1.0.0
+  description: Tài liệu API cho hệ thống bán lẻ điện tử PinkCapy
+servers:
+  - url: https://pinkcapy.dev/v1
+paths:
+  /manage/blogposts:
+    post:
+      summary: Tạo bài viết blog mới
+      tags: [BlogPost]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPostCreate'
+      responses:
+        '201':
+          description: Tạo thành công
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    BlogPostCreate:
+      type: object
+      properties:
+        title:
+          type: string
+        desc:
+          type: string
+        content:
+          type: string
+        thumb:
+          type: string
