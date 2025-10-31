@@ -1,5 +1,10 @@
 type: object
 description: 'Chi tiết sản phẩm trong đơn hàng (Order Item)'
+required:
+  - order_id
+  - product_id
+  - price
+  - quantity
 properties:
   id:
     type: integer
@@ -13,6 +18,11 @@ properties:
     type: integer
     description: 'Mã sản phẩm'
     example: 23
+  sku:
+    type: string
+    maxLength: 150
+    description: 'Mã SKU của sản phẩm'
+    example: 'WH1000XM5-BLK'
   is_active:
     type: boolean
     description: 'Trạng thái hiệu lực của sản phẩm trong đơn'
@@ -37,8 +47,3 @@ properties:
     nullable: true
     description: 'Ghi chú cho sản phẩm trong đơn (nếu có)'
     example: 'Gói quà sinh nhật'
-required:
-  - order_id
-  - product_id
-  - price
-  - quantity

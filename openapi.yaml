@@ -11,12 +11,13 @@ paths:
     $ref: './paths/products.yaml#/paths/~1products~1{id}'
   /products:
     $ref: './paths/products.yaml#/paths/~1products'
+  
   /manage/products/{id}:
-    $ref: './paths/products.yaml#/paths/~1manage~1products~1{id}'
+    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}'
   /manage/products:
-    $ref: './paths/products.yaml#/paths/~1manage~1products'
+    $ref: './paths/products_admin.yaml#/paths/~1manage~1products'
   /manage/products/{id}/inventories:
-    $ref: './paths/products.yaml#/paths/~1manage~1products~1{id}~1inventories'
+    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}~1inventories'
 
   /categories:
     $ref: './paths/categories.yaml#/paths/~1categories'
@@ -34,6 +35,26 @@ paths:
   /me/carts/clear:
     $ref: './paths/carts.yaml#/paths/~1me~1carts~1clear'
 
+  /me/orders:
+    $ref: './paths/orders.yaml#/paths/~1me~1orders'
+  /me/orders/{id}:
+    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}'
+  /me/orders/{id}/status:
+    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1status'
+  /me/orders/{id}/delivery:
+    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1delivery'
+  /me/orders/{id}/cancel:
+    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1cancel'
+
+  /manage/orders:
+    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders'
+  /manage/orders/{id}:
+    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}'
+  /manage/orders/{id}/status:
+    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}~1status'
+  /manage/orders/{id}/cancel:
+    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}~1cancel'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -49,8 +70,26 @@ components:
     ProductBase:
       $ref: './components/schemas/product/product_base.yaml'
     
-    parameters:
-      $ref: './components/schemas/core/parameters.yaml#/components/parameters'
+    Category:
+      $ref: './components/schemas/category/category.yaml'
+    CategoryPublic:
+      $ref: './components/schemas/category/category_public.yaml'
+    CategoryBase:
+      $ref: './components/schemas/category/category_base.yaml'
+
+    Cart:
+      $ref: './components/schemas/cart/cart.yaml'
+    CartItem:
+      $ref: './components/schemas/cart/cart_item.yaml'
+
+    Order:
+      $ref: './components/schemas/order/order.yaml'
+    OrderItem:
+      $ref: './components/schemas/order/order_item.yaml'
+    OrderAdmin:
+      $ref: './components/schemas/order/order_admin.yaml'
+    OrderItemAdmin:
+      $ref: './components/schemas/order/order_item_admin.yaml'
 
   responses:
     Error:

@@ -1,0 +1,39 @@
+type: object
+description: 'Đơn hàng (Order)'
+required:
+  - id
+  - user_id
+  - total
+  - grand_total
+  - status
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: 'Mã đơn hàng (khóa chính)'
+    example: 1001
+  total:
+    type: number
+    format: float
+    description: 'Tổng cộng (subtotal + tax + shipping)'
+    example: 14319000.00
+  grand_total:
+    type: number
+    format: float
+    description: 'Thành tiền cuối (sau giảm giá)'
+    example: 13819000.00
+
+  status:
+    type: string
+    enum: [1, 2, 3, 4, 5, 6, 7, 8]
+    description: >
+      Trạng thái đơn hàng:
+      - `pending_payment`: Chờ thanh toán  
+      - `paid`: Đã thanh toán  
+      - `processing`: Đang xử lý  
+      - `shipped`: Đã giao hàng cho đơn vị vận chuyển  
+      - `delivered`: Đã giao thành công  
+      - `refunded`: Đã hoàn tiền  
+      - `returned`: Khách hàng trả hàng  
+      - `cancelled`: Đã hủy
+    example: 'paid'

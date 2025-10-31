@@ -36,9 +36,10 @@ properties:
     example: 2
     description: 'Số lượng sản phẩm trong giỏ'
   discount:
-    type: float
-    example: 10.0
-    description: 'Giảm giá áp dụng (nếu có)'
+    type: number
+    format: float
+    description: 'Số tiền giảm giá áp dụng cho sản phẩm'
+    example: 500000.00
   note:
     type: string
     nullable: true

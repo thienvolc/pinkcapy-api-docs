@@ -1,0 +1,25 @@
+type: object
+description: 'Đơn hàng (Order)'
+required:
+  - id
+  - status
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: 'Mã đơn hàng (khóa chính)'
+    example: 1001
+  status:
+    type: string
+    enum: [1, 2, 3, 4, 5, 6, 7, 8]
+    description: >
+      Trạng thái đơn hàng:
+      - `pending_payment`: Chờ thanh toán  
+      - `paid`: Đã thanh toán  
+      - `processing`: Đang xử lý  
+      - `shipped`: Đã giao hàng cho đơn vị vận chuyển  
+      - `delivered`: Đã giao thành công  
+      - `refunded`: Đã hoàn tiền  
+      - `returned`: Khách hàng trả hàng  
+      - `cancelled`: Đã hủy
+    example: 'processing'

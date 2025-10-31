@@ -1,13 +1,43 @@
 paths:
-  /me/orders:
+  /manage/orders:
     get:
-      summary: Get user orders history
+      summary: Search user orders for admin
       description: Retrieve a list of the user's past orders.
-      tags: [Order]
+      tags: [Order_Admin]
       security:
         - bearerAuth: []
       parameters:
         - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - name: page
+          in: query
+          required: true
+          description: Page number to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+        - name: size
+          in: query
+          required: true
+          description: Number of results per page
+          default: 10
+          schema:
+            type: integer
+            example: 10
+        - name: sort
+          in: query
+          required: false
+          description: Sort order
+          schema:
+            type: string
+            format: '<sort_field>:<order>'
+            example: 'created_at:desc'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
         - name: status
           in: query
           optional: true
@@ -16,6 +46,13 @@ paths:
             type: integer
             enum: [1, 2, 3, 4, 5, 6, 7, 8]
           example: 3
+        - name: user_id
+          in: query
+          optional: true
+          description: Filter orders by user ID
+          schema:
+            type: integer
+          example: 1
       responses:
         '200':
           description: Success
@@ -28,7 +65,7 @@ paths:
                     properties:
                       data:
                         allOf:
-                          - $ref: '../components/schemas/core/infinite_response.yaml'
+                          - $ref: '../components/schemas/core/pagination_response.yaml'
                           - type: object
                             properties:
                               data:
@@ -36,22 +73,19 @@ paths:
                                   $ref: '../components/schemas/order/order_history.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
+  /manage/orders/{id}/confirm:
     post:
-      summary: Create a order
-      description: Create a new order.
-      tags: [Order]
+      summary: Confirm a new order
+      description: Confirm a new order.
+      tags: [Order_Admin]
       security:
         - bearerAuth: []
       parameters:
         - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
         - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../components/schemas/order/order_create.yaml'
       responses:
         '200':
           description: Success
@@ -62,15 +96,17 @@ paths:
                   - $ref: '../components/schemas/core/response.yaml'
                   - type: object
                     properties:
-                      - $ref: '../components/schemas/order/order.yaml'
+                      - $ref: '../components/schemas/order/order_status.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
-  /me/orders/{id}:
+  /manage/orders/{id}:
     get:
       summary: Get order details
       description: Retrieve the details of a specific order.
-      tags: [Order]
+      tags: [Order_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -86,17 +122,19 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/order/order.yaml'
+                        $ref: '../components/schemas/order/order_admin.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
-  /me/orders/{id}/status:
+  /manage/orders/{id}/status:
     get:
       summary: Get the status of a specific order
       description: Retrieve the current status of a specific order.
-      tags: [Order]
+      tags: [Order_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -119,57 +157,19 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/order/order.yaml'
+                        $ref: '../components/schemas/order/order_status.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
-  /me/orders/{id}/delivery:
-    patch:
-      summary: Update a order delivery information
-      description: Update delivery information for a specific order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
-        - name: id
-          in: path
-          required: true
-          description: ID of the order to update
-          schema:
-            type: integer
-            example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../components/schemas/order/order_delivery.yaml'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../components/schemas/core/response.yaml'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../components/schemas/order/order.yaml'
-        '400':
-          $ref: '../components/responses/error.yaml#/BadRequest'
-        '404':
-          $ref: '../components/responses/error.yaml#/NotFound'
-
-  /me/orders/{id}/cancel:
+  /manage/orders/{id}/cancel:
     delete:
       summary: Cancel an order
       description: User to cancel an existing order.
-      tags: [Order]
+      tags: [Order_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -198,3 +198,5 @@ paths:
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'

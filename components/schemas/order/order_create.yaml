@@ -1,0 +1,22 @@
+type: object
+description: 'Đơn hàng (Order)'
+required:
+  - status
+properties:
+  promo:
+    type: string
+    maxLength: 255
+    description: 'Mã khuyến mãi áp dụng'
+    example: 'SUMMER2025'
+  note:
+    type: string
+    maxLength: 255
+    description: 'Ghi chú của khách hàng'
+    example: 'Giao buổi sáng, gọi trước khi tới'
+  items:
+    type: array
+    description: 'Danh sách sản phẩm trong đơn hàng'
+    items:
+      type: integer
+      description: 'ID của sản phẩm'
+      example: 1
