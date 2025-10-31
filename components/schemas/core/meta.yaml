@@ -1,0 +1,19 @@
+type: object
+required:
+  - code
+  - type
+  - message
+properties:
+  code:
+    type: string
+    example: "200000"
+    description: Business code
+  type:
+    type: string
+    example: "SUCCESS"
+  message:
+    type: string
+    example: "Success"
+  extra_meta:
+    type: object
+    description: Extra metadata

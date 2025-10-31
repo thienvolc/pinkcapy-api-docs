@@ -1,0 +1,82 @@
+required:
+  - id
+  - category_id
+  - title
+  - slug
+  - price
+  - quantity
+  - status
+properties:
+  id:
+    type: integer
+    readOnly: true
+    example: 1
+    description: ID duy nhất của sản phẩm (tự động sinh)
+
+  category_id:
+    type: integer
+    example: 3
+    description: ID danh mục mà sản phẩm thuộc về
+
+  title:
+    type: string
+    example: 'Tai nghe Bluetooth Sony WH-1000XM5'
+    description: Tên sản phẩm
+
+  slug:
+    type: string
+    example: 'tai-nghe-bluetooth-sony-wh-1000xm5'
+    description: Đường dẫn thân thiện (slug) của sản phẩm
+
+  thumb:
+    type: string
+    format: uri
+    example: 'https://cdn.pinkcapy.vn/products/sony-wh1000xm5-thumb.jpg'
+    description: Ảnh sản phẩm (đường dẫn đến ảnh thumbnail)
+
+  desc:
+    type: string
+    example: 'Sony WH-1000XM5 là thế hệ tai nghe chống ồn cao cấp, pin 30 giờ, sạc nhanh, Bluetooth 5.2.'
+    description: Mô tả chi tiết sản phẩm
+
+  summary:
+    type: string
+    example: 'Tai nghe chống ồn cao cấp, pin 30 giờ, âm thanh Hi-Res, Bluetooth 5.2'
+    description: Tóm tắt ngắn gọn nội dung mô tả sản phẩm
+
+  type:
+    type: string
+    example: 'headphone'
+    description: 'Loại sản phẩm (ví dụ: smartphone, laptop, headphone, accessory)'
+
+  price:
+    type: string
+    example: '8990000'
+    description: Giá bán (đơn vị VNĐ, lưu ở dạng chuỗi để bảo toàn định dạng)
+
+  quantity:
+    type: string
+    example: '25'
+    description: Số lượng tồn (số sản phẩm còn trong kho)
+
+  status:
+    type: integer
+    enum: [1, 2, 3, 4]
+    example: 1
+    description: >
+      Trạng thái của sản phẩm:
+        - **active** (1): Đang hoạt động và hiển thị
+        - **out_of_stock** (2): Hết hàng
+        - **inactive** (3): Tạm ngưng bán
+        - **discontinued** (4): Ngừng sản xuất
+
+  discount:
+    type: string
+    example: '10%'
+    description: Giảm giá (tính theo phần trăm hoặc giá trị cụ thể)
+
+  ends_at:
+    type: string
+    format: date-time
+    example: '2025-11-10T23:59:59Z'
+    description: Ngày kết thúc áp dụng giảm giá hoặc chương trình khuyến mãi

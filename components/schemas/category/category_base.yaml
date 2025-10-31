@@ -1,0 +1,40 @@
+type: object
+required:
+  - id
+  - title
+  - slug
+description: 'Danh mục sản phẩm'
+properties:
+  id:
+    type: integer
+    readOnly: true
+    example: 3
+    description: 'Mã danh mục'
+  parent_id:
+    type: integer
+    nullable: true
+    example: 1
+    description: 'Mã danh mục cha'
+  level:
+    type: integer
+    example: 2
+    description: 'Cấp độ của danh mục (ví dụ: 1 = cấp cha, 2 = cấp con)'
+  title:
+    type: string
+    maxLength: 150
+    example: 'Tai nghe Bluetooth'
+    description: 'Tên danh mục hiển thị'
+  meta_title:
+    type: string
+    maxLength: 150
+    example: 'Tai nghe Bluetooth - Âm thanh đỉnh cao | PinkCapy'
+    description: 'Tiêu đề SEO cho danh mục'
+  slug:
+    type: string
+    maxLength: 150
+    example: 'tai-nghe-bluetooth'
+    description: 'Đường dẫn thân thiện'
+  desc:
+    type: string
+    example: 'Danh mục các loại tai nghe không dây, chống ồn, pin lâu.'
+    description: 'Mô tả danh mục'

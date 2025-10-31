@@ -1,0 +1,271 @@
+paths:
+  /categories:
+    get:
+      summary: Search categories
+      description: Retrieve a list of categories.
+      tags: [Category]
+      parameters:
+        - name: offset
+          in: query
+          required: true
+          description: Currect offset to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: true
+          description: Limit number of results
+          default: 10
+          schema:
+            type: integer
+            example: 10
+        - name: sort
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            format: '<sort_field>:<order>'
+            example: 'created_at:desc'
+        - name: query
+          in: query
+          description: Search keyword
+          default: ''
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: level
+          in: query
+          required: true
+          description: Level of categories to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../components/schemas/core/infinite_response.yaml'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../components/schemas/category/category_public.yaml'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'
+
+  /manage/categories/{id}:
+    get:
+      summary: Get category for admin
+      description: Retrieve a category by its ID for admin.
+      tags: [Category]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the category to retrieve
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/category/category.yaml'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'
+
+    put:
+      summary: Update a category
+      description: Admin to update an existing category in the system.
+      tags: [Category]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the category to update
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/category/category.yaml'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/category/category.yaml'
+        '400':
+          $ref: '../components/responses/error.yaml#/BadRequest'
+        '401':
+          $ref: '../components/responses/error.yaml#/Unauthorized'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'
+
+    delete:
+      summary: Delete a category
+      description: Admin to delete an existing category in the system.
+      tags: [Category]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the category to delete
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/category/category.yaml'
+        '400':
+          $ref: '../components/responses/error.yaml#/BadRequest'
+        '401':
+          $ref: '../components/responses/error.yaml#/Unauthorized'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'
+
+  /manage/categories:
+    post:
+      summary: Create a category
+      description: Admin to add a new category to the system.
+      tags: [Category]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/category/category.yaml'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/category/category.yaml'
+        '400':
+          $ref: '../components/responses/error.yaml#/BadRequest'
+        '401':
+          $ref: '../components/responses/error.yaml#/Unauthorized'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'
+
+    get:
+      summary: Search categories for admin
+      description: Retrieve a list of categories.
+      tags: [Category]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: Page number to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+        - name: size
+          in: query
+          required: true
+          description: Number of results per page
+          default: 10
+          schema:
+            type: integer
+            example: 10
+        - name: sort
+          in: query
+          required: false
+          description: Sort order
+          schema:
+            type: string
+            format: '<sort_field>:<order>'
+            example: 'created_at:desc'
+        - name: level
+          in: query
+          required: true
+          description: Level of categories to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../components/schemas/core/pagination_response.yaml'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../components/schemas/category/category.yaml'
+        '401':
+          $ref: '../components/responses/error.yaml#/Unauthorized'
+        '500':
+          $ref: '../components/responses/error.yaml#/InternalServerError'

@@ -1,0 +1,13 @@
+type: object
+required:
+  - meta
+  - data
+properties:
+  meta:
+    $ref: './meta.yaml'
+  data:
+    nullable: true
+    description: 'The data that was returned from the API'
+    oneOf:
+      - type: object
+      - type: 'null'

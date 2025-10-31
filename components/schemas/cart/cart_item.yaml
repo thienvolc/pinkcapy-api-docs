@@ -1,0 +1,47 @@
+type: object
+description: 'Chi tiết sản phẩm trong giỏ hàng (Cart Item)'
+properties:
+  id:
+    type: integer
+    example: 101
+    description: 'Mã chi tiết giỏ hàng'
+  cart_id:
+    type: integer
+    example: 5
+    description: 'Mã giỏ hàng'
+  product_id:
+    type: integer
+    example: 23
+    description: 'Mã sản phẩm'
+  sku:
+    type: string
+    maxLength: 100
+    example: 'WH1000XM5-BLK'
+    description: 'Mã SKU của sản phẩm'
+  is_active:
+    type: boolean
+    example: true
+    description: 'Trạng thái hoạt động của item trong giỏ hàng'
+  price:
+    type: number
+    format: float
+    example: 8990000
+    description: 'Giá sản phẩm tại thời điểm thêm vào giỏ'
+  quantity:
+    type: integer
+    example: 2
+    description: 'Số lượng sản phẩm trong giỏ'
+  discount:
+    type: string
+    example: '10%'
+    description: 'Giảm giá áp dụng (nếu có)'
+  note:
+    type: string
+    nullable: true
+    example: 'Gói quà sinh nhật'
+    description: 'Ghi chú thêm của người dùng'
+required:
+  - cart_id
+  - product_id
+  - price
+  - quantity

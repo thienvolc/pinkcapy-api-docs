@@ -1,41 +1,47 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: PinkCapy API
   version: 1.0.0
   description: Tài liệu API cho hệ thống bán lẻ điện tử PinkCapy
 servers:
   - url: https://pinkcapy.dev/v1
+
 paths:
-  /manage/blogposts:
-    post:
-      summary: Tạo bài viết blog mới
-      tags: [BlogPost]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlogPostCreate'
-      responses:
-        '201':
-          description: Tạo thành công
+  /products/{id}:
+    $ref: './paths/products.yaml#/paths/~1products~1{id}'
+  /products:
+    $ref: './paths/products.yaml#/paths/~1products'
+  /manage/products/{id}:
+    $ref: './paths/products.yaml#/paths/~1manage~1products~1{id}'
+  /manage/products:
+    $ref: './paths/products.yaml#/paths/~1manage~1products'
+
+  /categories:
+    $ref: './paths/categories.yaml#/paths/~1categories'
+  /manage/categories/{id}:
+    $ref: './paths/categories.yaml#/paths/~1manage~1categories~1{id}'
+  /manage/categories:
+    $ref: './paths/categories.yaml#/paths/~1manage~1categories'
+
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
-    BlogPostCreate:
-      type: object
-      properties:
-        title:
-          type: string
-        desc:
-          type: string
-        content:
-          type: string
-        thumb:
-          type: string
+    Product:
+      $ref: './components/schemas/product/product.yaml'
+    ProductPublic:
+      $ref: './components/schemas/product/product_public.yaml'
+    ProductBase:
+      $ref: './components/schemas/product/product_base.yaml'
+
+  responses:
+    Error:
+      $ref: './components/responses/error.yaml'
+
+tags:
+  - name: Product
+    description: Quản lý sản phẩm
