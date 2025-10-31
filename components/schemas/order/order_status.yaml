@@ -10,7 +10,7 @@ properties:
     description: 'Mã đơn hàng (khóa chính)'
     example: 1001
   status:
-    type: string
+    type: integer
     enum: [1, 2, 3, 4, 5, 6, 7, 8]
     description: >
       Trạng thái đơn hàng:
@@ -22,4 +22,4 @@ properties:
       - `refunded`: Đã hoàn tiền  
       - `returned`: Khách hàng trả hàng  
       - `cancelled`: Đã hủy
-    example: 'processing'
+    example: '3'
