@@ -11,9 +11,11 @@ paths:
     $ref: './paths/products.yaml#/paths/~1products~1{id}'
   /products:
     $ref: './paths/products.yaml#/paths/~1products'
-  
+
   /manage/products/{id}:
     $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}'
+  /manage/products/{id}/status:
+    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}~1status'
   /manage/products:
     $ref: './paths/products_admin.yaml#/paths/~1manage~1products'
   /manage/products/{id}/inventories:
@@ -55,6 +57,27 @@ paths:
   /manage/orders/{id}/cancel:
     $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}~1cancel'
 
+  /manage/users:
+    $ref: './paths/users_admin.yaml#/paths/~1manage~1users'
+  /manage/users/{id}/profile:
+    $ref: './paths/users_admin.yaml#/paths/~1manage~1users~1{id}~1profile'
+  /manage/users/{id}/status:
+    $ref: './paths/users_admin.yaml#/paths/~1manage~1users~1{id}~1status'
+  /me/profile:
+    $ref: './paths/users.yaml#/paths/~1me~1profile'
+
+  /manage/transactions:
+    $ref: './paths/transactions.yaml#/paths/~1manage~1transactions'
+
+  /manage/dashboard/overview:
+    $ref: './paths/dashboard.yaml#/paths/~1overview'
+  /manage/dashboard/revenue:
+    $ref: './paths/dashboard.yaml#/paths/~1revenue'
+  /manage/dashboard/orders/stats:
+    $ref: './paths/dashboard.yaml#/paths/~1orders~1stats'
+  /manage/dashboard/products/top:
+    $ref: './paths/dashboard.yaml#/paths/~1products~1top'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -69,7 +92,7 @@ components:
       $ref: './components/schemas/product/product_public.yaml'
     ProductBase:
       $ref: './components/schemas/product/product_base.yaml'
-    
+
     Category:
       $ref: './components/schemas/category/category.yaml'
     CategoryPublic:

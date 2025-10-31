@@ -1,0 +1,47 @@
+allOf:
+  - type: object
+    description: 'Thông tin hồ sơ người dùng (User Profile)'
+    properties:
+      first_name:
+        type: string
+        maxLength: 150
+        description: 'Họ của người dùng'
+        example: 'Nguyễn'
+      middle_name:
+        type: string
+        maxLength: 150
+        nullable: true
+        description: 'Tên đệm của người dùng'
+        example: 'Văn'
+      last_name:
+        type: string
+        maxLength: 150
+        description: 'Tên của người dùng'
+        example: 'A'
+      avatar:
+        type: string
+        maxLength: 255
+        format: uri
+        description: 'URL ảnh đại diện của người dùng'
+        example: 'https://cdn.pinkcapy.vn/avatars/user1.jpg'
+      profile:
+        type: string
+        description: 'Giới thiệu bản thân hoặc tiểu sử người dùng'
+        example: 'Yêu công nghệ, thích nghe nhạc và khám phá sản phẩm mới.'
+      registered_at:
+        type: string
+        format: date-time
+        description: 'Thời điểm người dùng đăng ký tài khoản'
+        example: '2025-01-15T08:30:00Z'
+      last_login:
+        type: string
+        format: date-time
+        nullable: true
+        description: 'Thời điểm đăng nhập gần nhất của người dùng'
+        example: '2025-10-31T09:00:00Z'
+    required:
+      - user_id
+      - first_name
+      - last_name
+      - registered_at
+  - $ref: '../user/user_admin.yaml'

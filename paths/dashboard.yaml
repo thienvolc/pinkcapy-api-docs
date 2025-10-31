@@ -1,0 +1,127 @@
+paths:
+  /overview:
+    get:
+      summary: Get dashboard overview
+      description: Retrieve the overview statistics for the dashboard.
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/dashboard/overview.yaml'
+
+  /revenue:
+    get:
+      summary: Lấy dữ liệu doanh thu theo thời gian
+      tags: [Dashboard]
+      description: |
+        Trả về thống kê doanh thu theo ngày, tuần, hoặc tháng.  
+        Dữ liệu được sử dụng để hiển thị biểu đồ doanh thu, số đơn hàng, và doanh thu trung bình.
+      parameters:
+        - name: period
+          in: query
+          description: Khoảng thời gian thống kê (`day`, `week`, `month`)
+          required: false
+          schema:
+            type: string
+            enum: [day, week, month]
+            default: month
+          example: month
+        - name: year
+          in: query
+          description: Năm cần thống kê (nếu period = month)
+          required: false
+          schema:
+            type: integer
+            example: 2025
+        - name: month
+          in: query
+          description: Tháng cần thống kê (nếu period = day)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+            example: 10
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/dashboard/revenue.yaml#/components/schemas/Revenue'
+
+  /orders/stats:
+    get:
+      summary: Lấy thống kê đơn hàng theo trạng thái
+      tags:
+        - Dashboard
+      description: |
+        API trả về số lượng đơn hàng được nhóm theo các trạng thái như:
+        - `pending`
+        - `processing`
+        - `completed`
+        - `cancelled`
+        - `refunded`
+
+        Dữ liệu được sử dụng để hiển thị biểu đồ tròn hoặc biểu đồ thanh trong phần thống kê đơn hàng của Dashboard.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/dashboard/orders_stats.yaml'
+
+  /products/top:
+    get:
+      summary: Lấy danh sách sản phẩm bán chạy nhất
+      tags:
+        - Dashboard
+      description: |
+        Trả về danh sách các sản phẩm có **doanh số hoặc số lượng bán cao nhất** trong kỳ gần đây.
+        Dữ liệu được dùng để hiển thị bảng hoặc biểu đồ “Top Selling Products” trên Dashboard.
+      parameters:
+        - name: limit
+          in: query
+          description: Số lượng sản phẩm tối đa cần lấy (mặc định 5)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 5
+          example: 5
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/dashboard/product_top.yaml'

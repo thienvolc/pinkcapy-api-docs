@@ -1,0 +1,3 @@
+allOf:
+  - $ref: './user.yaml'
+  - $ref: ../core/audit_fields.yaml

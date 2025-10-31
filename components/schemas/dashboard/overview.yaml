@@ -1,0 +1,42 @@
+type: object
+properties:
+  total_revenue:
+    type: number
+    format: double
+    example: 253900000
+    description: Tổng doanh thu toàn hệ thống
+  total_orders:
+    type: integer
+    example: 128
+    description: Tổng số đơn hàng
+  total_customers:
+    type: integer
+    example: 74
+    description: Tổng số khách hàng
+  total_products:
+    type: integer
+    example: 312
+    description: Tổng số sản phẩm đang bán
+  today_revenue:
+    type: number
+    format: double
+    example: 18900000
+    description: Doanh thu trong ngày hiện tại
+  month_revenue:
+    type: number
+    format: double
+    example: 203000000
+    description: Doanh thu trong tháng hiện tại
+  growth_rate:
+    type: number
+    format: float
+    example: 12.5
+    description: Tỷ lệ tăng trưởng doanh thu so với kỳ trước (%)
+required:
+  - total_revenue
+  - total_orders
+  - total_customers
+  - total_products
+  - today_revenue
+  - month_revenue
+  - growth_rate

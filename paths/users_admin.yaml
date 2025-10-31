@@ -1,9 +1,9 @@
 paths:
-  /manage/products/{id}:
+  /manage/users/{id}/profile:
     get:
-      summary: Get product for admin
-      description: Retrieve a product by its ID for admin.
-      tags: [Product_Admin]
+      summary: Get user for admin
+      description: Retrieve a user by its ID for admin.
+      tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -26,16 +26,17 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/product/product.yaml'
+                        $ref: '../components/schemas/user/user_profile_admin.yaml'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
         '403':
           $ref: '../components/responses/error.yaml#/Forbidden'
 
-    put:
-      summary: Update a product
-      description: Admin to update an existing product in the system.
-      tags: [Product_Admin]
+  /manage/users/{id}/status:
+    patch:
+      summary: Update a user status
+      description: Admin to update a status of an existing user in the system.
+      tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -44,7 +45,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: ID of the product to update
+          description: ID of the user to update
           schema:
             type: integer
             example: 1
@@ -53,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas/product/product.yaml'
+              $ref: '../components/schemas/user/user_status.yaml'
       responses:
         '200':
           description: Success
@@ -65,7 +66,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/product/product.yaml'
+                        $ref: '../components/schemas/user/user_status.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
@@ -74,9 +75,9 @@ paths:
           $ref: '../components/responses/error.yaml#/Forbidden'
 
     delete:
-      summary: Delete a product
-      description: Admin to delete an existing product in the system.
-      tags: [Product_Admin]
+      summary: Delete a user
+      description: Admin to delete an existing user in the system.
+      tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -85,7 +86,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: ID of the product to delete
+          description: ID of the user to delete
           schema:
             type: integer
             example: 1
@@ -100,7 +101,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/product/product.yaml'
+                        $ref: '../components/schemas/user/user_admin.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
@@ -108,53 +109,11 @@ paths:
         '403':
           $ref: '../components/responses/error.yaml#/Forbidden'
 
-  /manage/products/{id}/status:
-    patch:
-      summary: Update a product status
-      description: Admin to update the status of an existing product in the system.
-      tags: [Product_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
-        - name: id
-          in: path
-          required: true
-          description: ID of the product
-          schema:
-            type: integer
-            example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../components/schemas/product/product_status.yaml'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../components/schemas/core/response.yaml'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../components/schemas/product/product_status.yaml'
-        '400':
-          $ref: '../components/responses/error.yaml#/BadRequest'
-        '404':
-          $ref: '../components/responses/error.yaml#/NotFound'
-        '403':
-          $ref: '../components/responses/error.yaml#/Forbidden'
-
-  /manage/products:
+  /manage/users:
     post:
-      summary: Create a product
-      description: Admin to add a new product to the system.
-      tags: [Product_Admin]
+      summary: Create a new user
+      description: Admin to add a new user to the system.
+      tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -165,7 +124,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas/product/product.yaml'
+              $ref: '../components/schemas/user/user_create.yaml'
       responses:
         '201':
           description: Success
@@ -177,7 +136,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas/product/product.yaml'
+                        $ref: '../components/schemas/user/user_admin.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
         '404':
@@ -186,9 +145,9 @@ paths:
           $ref: '../components/responses/error.yaml#/Forbidden'
 
     get:
-      summary: Search products for admin
-      description: Retrieve a list of products based on search criteria.
-      tags: [Product_Admin]
+      summary: Search users for admin
+      description: Retrieve a list of users based on search criteria.
+      tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
@@ -223,24 +182,18 @@ paths:
           schema:
             type: string
             example: 'tai nghe'
-        - name: category
+        - name: is_admin
           in: query
-          description: Category ID of the products
+          description: Filter by admin status
+          schema:
+            type: boolean
+            example: true
+        - name: status
+          in: query
+          description: Filter by user status
           schema:
             type: integer
-            example: 3
-        - name: price_min
-          in: query
-          description: Minimum price of the products
-          schema:
-            type: integer
-            example: 100000
-        - name: price_max
-          in: query
-          description: Maximum price of the products
-          schema:
-            type: integer
-            example: 500000
+            example: 1
       responses:
         '200':
           description: Success
@@ -259,48 +212,6 @@ paths:
                               data:
                                 type: array
                                 items:
-                                  $ref: '../components/schemas/product/product.yaml'
-        '403':
-          $ref: '../components/responses/error.yaml#/Forbidden'
-
-  /manage/products/{id}/inventories:
-    patch:
-      summary: Update a product stock
-      description: Admin to update an stock of existing product in the system.
-      tags: [Product_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
-        - name: id
-          in: path
-          required: true
-          description: ID of the product to update
-          schema:
-            type: integer
-            example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../components/schemas/product/product_adjust_inventory.yaml'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../components/schemas/core/response.yaml'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../components/schemas/product/product.yaml'
-        '400':
-          $ref: '../components/responses/error.yaml#/BadRequest'
-        '404':
-          $ref: '../components/responses/error.yaml#/NotFound'
+                                  $ref: '../components/schemas/user/user_admin.yaml'
         '403':
           $ref: '../components/responses/error.yaml#/Forbidden'

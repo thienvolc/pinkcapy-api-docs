@@ -1,0 +1,39 @@
+type: object
+description: 'Người dùng hệ thống (User)'
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: 'Mã người dùng (khóa chính)'
+    example: 1
+  email:
+    type: string
+    format: email
+    maxLength: 100
+    description: 'Email đăng nhập của người dùng'
+    example: 'user@example.com'
+  phone:
+    type: string
+    maxLength: 20
+    description: 'Số điện thoại của người dùng'
+    example: '0987654321'
+  is_admin:
+    type: boolean
+    readOnly: true
+    description: 'Quyền quản trị (true = admin, false = người dùng thường)'
+    example: false
+  status:
+    type: integer
+    readOnly: true
+    enum: [1, 2, 3, 4]
+    description: >
+      Trạng thái người dùng:
+      - `active`: Hoạt động  
+      - `inactive`: Chưa kích hoạt  
+      - `suspend`: Tạm ngưng  
+      - `banned`: Bị khóa vĩnh viễn
+    example: 1
+required:
+  - id
+  - email
+  - status

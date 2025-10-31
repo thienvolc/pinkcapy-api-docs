@@ -48,11 +48,38 @@ paths:
           example: 3
         - name: user_id
           in: query
-          optional: true
           description: Filter orders by user ID
           schema:
             type: integer
           example: 1
+        - name: start
+          in: query
+          description: Order start date (upper bound)
+          schema:
+            type: string
+            format: date
+            example: '2025-01-01'
+        - name: end
+          in: query
+          description: Order end date (lower bound)
+          schema:
+            type: string
+            format: date
+            example: '2025-12-01'
+        - name: min
+          in: query
+          description: Order minimum price
+          schema:
+            type: number
+            format: float
+            example: 100.0
+        - name: max
+          in: query
+          description: Order maximum price
+          schema:
+            type: number
+            format: float
+            example: 200.0
       responses:
         '200':
           description: Success
@@ -146,6 +173,47 @@ paths:
           schema:
             type: integer
             example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/order/order_status.yaml'
+        '400':
+          $ref: '../components/responses/error.yaml#/BadRequest'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
+
+    put:
+      summary: Update the status of a specific order
+      description: Update the current status of a specific order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the order
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/order/order_status.yaml'
       responses:
         '200':
           description: Success

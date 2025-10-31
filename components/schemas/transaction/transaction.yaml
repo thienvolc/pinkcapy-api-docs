@@ -24,29 +24,21 @@ properties:
     description: 'Mã giao dịch (từ cổng thanh toán hoặc hệ thống nội bộ)'
     example: 'TXN-VNPAY-20251031-0001'
   type:
-    type: string
-    enum:
-      - payment
-      - refund
+    type: integer
+    enum: [1, 2]
     description: >
       Loại giao dịch:
       - `payment`: Thanh toán  
       - `refund`: Hoàn tiền
-    example: 'payment'
+    example: 1
   mode:
     type: string
     maxLength: 150
     description: 'Phương thức thanh toán hoặc hoàn tiền (ví dụ: VNPay, MoMo, COD, Bank Transfer)'
     example: 'VNPay'
   status:
-    type: string
-    enum:
-      - initiated
-      - pending
-      - success
-      - failed
-      - cancelled
-      - expired
+    type: integer
+    enum: [1, 2, 3, 4, 5, 6]
     description: >
       Trạng thái giao dịch:
       - `initiated`: Khởi tạo  
@@ -55,7 +47,7 @@ properties:
       - `failed`: Thất bại  
       - `cancelled`: Đã hủy  
       - `expired`: Hết hạn
-    example: 'success'
+    example: 1
 required:
   - id
   - order_id
