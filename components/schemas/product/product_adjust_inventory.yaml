@@ -1,0 +1,18 @@
+required:
+  - amount
+properties:
+  amount:
+    type: integer
+    example: 10
+    description: Quantity to adjust.
+  operationType:
+    type: string
+    enum:
+      - increase
+      - decrease
+    example: increase
+    description: Type of adjustment operation.
+  reason:
+    type: string
+    example: 'Restocking after inventory audit'
+    description: Reason for the inventory adjustment.

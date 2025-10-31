@@ -66,11 +66,13 @@ properties:
 
   quantity:
     type: string
+    readOnly: true
     example: '25'
     description: Số lượng tồn (số sản phẩm còn trong kho)
 
   published_at:
     type: string
+    readOnly: true
     format: date-time
     example: '2025-10-30T09:00:00Z'
     description: Ngày đăng bán (thời điểm sản phẩm được công khai)
@@ -88,8 +90,8 @@ properties:
         - **archive** (5): Lưu trữ (không hiển thị trên website)
 
   discount:
-    type: string
-    example: '10%'
+    type: float
+    example: 10.0
     description: Giảm giá (tính theo phần trăm hoặc giá trị cụ thể)
 
   starts_at:

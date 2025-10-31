@@ -1,0 +1,64 @@
+type: object
+description: 'Giao dịch thanh toán hoặc hoàn tiền (Transaction)'
+properties:
+  id:
+    type: integer
+    description: 'Mã giao dịch (khóa chính)'
+    example: 5001
+  order_id:
+    type: integer
+    description: 'Mã đơn hàng liên quan (FK → Order.id)'
+    example: 1001
+  amount:
+    type: number
+    format: float
+    description: 'Số tiền giao dịch'
+    example: 13819000.00
+  content:
+    type: string
+    description: 'Nội dung hoặc ghi chú giao dịch (ví dụ: mô tả thanh toán hoặc hoàn tiền)'
+    example: 'Thanh toán đơn hàng #1001 qua cổng VNPay'
+  code:
+    type: string
+    maxLength: 255
+    description: 'Mã giao dịch (từ cổng thanh toán hoặc hệ thống nội bộ)'
+    example: 'TXN-VNPAY-20251031-0001'
+  type:
+    type: string
+    enum:
+      - payment
+      - refund
+    description: >
+      Loại giao dịch:
+      - `payment`: Thanh toán  
+      - `refund`: Hoàn tiền
+    example: 'payment'
+  mode:
+    type: string
+    maxLength: 150
+    description: 'Phương thức thanh toán hoặc hoàn tiền (ví dụ: VNPay, MoMo, COD, Bank Transfer)'
+    example: 'VNPay'
+  status:
+    type: string
+    enum:
+      - initiated
+      - pending
+      - success
+      - failed
+      - cancelled
+      - expired
+    description: >
+      Trạng thái giao dịch:
+      - `initiated`: Khởi tạo  
+      - `pending`: Đang chờ xử lý  
+      - `success`: Thành công  
+      - `failed`: Thất bại  
+      - `cancelled`: Đã hủy  
+      - `expired`: Hết hạn
+    example: 'success'
+required:
+  - id
+  - order_id
+  - amount
+  - type
+  - status

@@ -31,7 +31,6 @@ paths:
         - name: query
           in: query
           description: Search keyword
-          default: ''
           schema:
             type: string
             example: 'tai nghe'
@@ -62,8 +61,6 @@ paths:
                                 type: array
                                 items:
                                   $ref: '../components/schemas/category/category_public.yaml'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
 
   /manage/categories/{id}:
     get:
@@ -73,6 +70,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -94,8 +92,8 @@ paths:
                         $ref: '../components/schemas/category/category.yaml'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     put:
       summary: Update a category
@@ -104,6 +102,8 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
         - name: id
           in: path
           required: true
@@ -131,12 +131,10 @@ paths:
                         $ref: '../components/schemas/category/category.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     delete:
       summary: Delete a category
@@ -145,6 +143,8 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
         - name: id
           in: path
           required: true
@@ -166,12 +166,10 @@ paths:
                         $ref: '../components/schemas/category/category.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
   /manage/categories:
     post:
@@ -180,6 +178,9 @@ paths:
       tags: [Category]
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
       requestBody:
         required: true
         content:
@@ -200,12 +201,10 @@ paths:
                         $ref: '../components/schemas/category/category.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     get:
       summary: Search categories for admin
@@ -214,6 +213,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
         - name: page
           in: query
           required: true
@@ -238,6 +238,12 @@ paths:
             type: string
             format: '<sort_field>:<order>'
             example: 'created_at:desc'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
         - name: level
           in: query
           required: true
@@ -265,7 +271,5 @@ paths:
                                 type: array
                                 items:
                                   $ref: '../components/schemas/category/category.yaml'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'

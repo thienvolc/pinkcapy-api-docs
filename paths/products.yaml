@@ -26,8 +26,6 @@ paths:
                         $ref: '../components/schemas/product/product_public.yaml'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
 
   /products:
     get:
@@ -56,20 +54,32 @@ paths:
           description: Sort order
           schema:
             type: string
-            format: '<sort_field>:<order>'
+            format: '<sortable_criteria>:<order>'
             example: 'created_at:desc'
         - name: query
           in: query
           description: Search keyword
           schema:
             type: string
-            example: "tai nghe"
+            example: 'tai nghe'
         - name: category
           in: query
           description: Category ID of the products
           schema:
             type: integer
             example: 3
+        - name: price_min
+          in: query
+          description: Minimum price of the products
+          schema:
+            type: integer
+            example: 100000
+        - name: price_max
+          in: query
+          description: Maximum price of the products
+          schema:
+            type: integer
+            example: 500000
       responses:
         '200':
           description: Success
@@ -88,8 +98,6 @@ paths:
                               data:
                                 items:
                                   $ref: '../components/schemas/product/product_public.yaml'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
 
   /manage/products/{id}:
     get:
@@ -99,6 +107,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -120,8 +129,8 @@ paths:
                         $ref: '../components/schemas/product/product.yaml'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     put:
       summary: Update a product
@@ -130,6 +139,8 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
         - name: id
           in: path
           required: true
@@ -157,12 +168,10 @@ paths:
                         $ref: '../components/schemas/product/product.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     delete:
       summary: Delete a product
@@ -171,6 +180,8 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
         - name: id
           in: path
           required: true
@@ -192,12 +203,10 @@ paths:
                         $ref: '../components/schemas/product/product.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
   /manage/products:
     post:
@@ -206,6 +215,9 @@ paths:
       tags: [Product]
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
       requestBody:
         required: true
         content:
@@ -226,12 +238,10 @@ paths:
                         $ref: '../components/schemas/product/product.yaml'
         '400':
           $ref: '../components/responses/error.yaml#/BadRequest'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
         '404':
           $ref: '../components/responses/error.yaml#/NotFound'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
 
     get:
       summary: Search products for admin
@@ -240,6 +250,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
         - name: page
           in: query
           required: true
@@ -269,13 +280,25 @@ paths:
           description: Search keyword
           schema:
             type: string
-            example: "tai nghe"
+            example: 'tai nghe'
         - name: category
           in: query
           description: Category ID of the products
           schema:
             type: integer
             example: 3
+        - name: price_min
+          in: query
+          description: Minimum price of the products
+          schema:
+            type: integer
+            example: 100000
+        - name: price_max
+          in: query
+          description: Maximum price of the products
+          schema:
+            type: integer
+            example: 500000
       responses:
         '200':
           description: Success
@@ -295,7 +318,47 @@ paths:
                                 type: array
                                 items:
                                   $ref: '../components/schemas/product/product.yaml'
-        '401':
-          $ref: '../components/responses/error.yaml#/Unauthorized'
-        '500':
-          $ref: '../components/responses/error.yaml#/InternalServerError'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'
+
+  /manage/products/{id}/inventories:
+    patch:
+      summary: Update a product stock
+      description: Admin to update an stock of existing product in the system.
+      tags: [Product]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../components/schemas/core/parameters.yaml#/components/parameters/IdempotencyKeyHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to update
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/product/product_adjust_inventory.yaml'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas/core/response.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/product/product.yaml'
+        '400':
+          $ref: '../components/responses/error.yaml#/BadRequest'
+        '404':
+          $ref: '../components/responses/error.yaml#/NotFound'
+        '403':
+          $ref: '../components/responses/error.yaml#/Forbidden'

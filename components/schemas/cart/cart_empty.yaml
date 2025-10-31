@@ -1,0 +1,12 @@
+type: object
+required:
+  - total_count
+  - items
+description: A shopping cart containing items selected by the user
+properties:
+  total_count:
+    value: 0
+    type: integer
+  items:
+    type: array
+    items: []
