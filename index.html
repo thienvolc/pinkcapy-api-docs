@@ -12,7 +12,8 @@
     <script>
       window.onload = () => {
         window.ui = SwaggerUIBundle({
-          url: "./openapi.yaml",
+          url: "./dist/openapi-bundled.json",
+          // url: "./openapi.yaml",
           dom_id: '#swagger-ui',
           deepLinking: true,
           layout: "BaseLayout"

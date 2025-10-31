@@ -1,0 +1,40 @@
+schemas:
+  Pagination:
+    type: object
+    properties:
+      total_page:
+        type: integer
+        example: 1
+      current_page:
+        type: integer
+        example: 1
+      total_count:
+        type: integer
+        example: 2
+      has_more:
+        type: boolean
+        example: false
+      data:
+        type: array
+        items:
+          type: object
+
+parameters:
+  PageParam:
+    name: page
+    in: query
+    required: true
+    description: Page number to retrieve
+    default: 1
+    schema:
+      type: integer
+      example: 1
+  SizeParam:
+    name: size
+    in: query
+    required: true
+    description: Number of results per page
+    default: 10
+    schema:
+      type: integer
+      example: 10

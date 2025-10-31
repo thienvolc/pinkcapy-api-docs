@@ -1,0 +1,9 @@
+paths:
+  /admin/users:
+    $ref: './paths/users_admin.yaml#/paths/~1admin~1users'
+  /admin/users/{id}/profile:
+    $ref: './paths/users_admin.yaml#/paths/~1admin~1users~1{id}~1profile'
+  /admin/users/{id}/status:
+    $ref: './paths/users_admin.yaml#/paths/~1admin~1users~1{id}~1status'
+  /me/profile:
+    $ref: './paths/users.yaml#/paths/~1me~1profile'

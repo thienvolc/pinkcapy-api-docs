@@ -1,0 +1,3933 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PinkCapy API",
+    "version": "1.0.0",
+    "description": "API documentation for PinkCapy Retail E-commerce System"
+  },
+  "servers": [
+    {
+      "url": "https://pinkcapy.dev/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:8000/v1",
+      "description": "Local development"
+    }
+  ],
+  "paths": {
+    "/products/{id}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieve a product by its ID.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/ProductPublic"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Search products",
+        "description": "Retrieve a list of products based on search criteria.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category ID of the products",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "description": "Minimum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 100000
+            }
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "description": "Maximum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 500000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "items": {
+                                    "$ref": "#/components/schemas/ProductPublic"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/products/{id}": {
+      "get": {
+        "summary": "Get product for admin",
+        "description": "Retrieve a product by its ID for admin.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Product"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product",
+        "description": "Admin to update an existing product in the system.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "description": "Admin to delete an existing product in the system.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/status": {
+      "patch": {
+        "summary": "Update a product status",
+        "description": "Admin to update the status of an existing product in the system.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/ProductStatus"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products": {
+      "post": {
+        "summary": "Create a product",
+        "description": "Admin to add a new product to the system.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search products for admin",
+        "description": "Retrieve a list of products based on search criteria.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category ID of the products",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "description": "Minimum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 100000
+            }
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "description": "Maximum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 500000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Pagination"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Product"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/inventories": {
+      "patch": {
+        "summary": "Update a product stock",
+        "description": "Admin to update an stock of existing product in the system.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductAdjustInventory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Search categories",
+        "description": "Retrieve a list of categories.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": true,
+            "description": "Level of categories to retrieve",
+            "default": 1,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/CategoryPublic"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/categories/{id}": {
+      "get": {
+        "summary": "Get category for admin",
+        "description": "Retrieve a category by its ID for admin.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a category",
+        "description": "Admin to update an existing category in the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1categories~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a category",
+        "description": "Admin to delete an existing category in the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1categories~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/categories": {
+      "post": {
+        "summary": "Create a category",
+        "description": "Admin to add a new category to the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search categories for admin",
+        "description": "Retrieve a list of categories.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": true,
+            "description": "Level of categories to retrieve",
+            "default": 1,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Pagination"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Category"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/me/carts": {
+      "get": {
+        "summary": "Get user cart",
+        "description": "Retrieve the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Cart"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/carts/items": {
+      "post": {
+        "summary": "Add item to cart",
+        "description": "Add a new item to the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCartItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CartItem"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/carts/items/{id}": {
+      "patch": {
+        "summary": "Update a cart item",
+        "description": "Update an existing item in the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the cart item to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCartItemQuantity"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CartItem"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a cart item",
+        "description": "User to delete an existing cart item in user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the cart item to delete",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CartItem"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/carts/clear": {
+      "delete": {
+        "summary": "Clear all cart items in user's cart",
+        "description": "User to clear all cart items in user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/EmptyCart"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders": {
+      "get": {
+        "summary": "Get user orders history",
+        "description": "Retrieve a list of the user's past orders.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "optional": true,
+            "description": "Filter orders by their status",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "example": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "items": {
+                                    "$ref": "#/components/schemas/ShortOrder"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a order",
+        "description": "Create a new order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Order"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}": {
+      "get": {
+        "summary": "Get order details",
+        "description": "Retrieve the details of a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Order"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/status": {
+      "get": {
+        "summary": "Get the status of a specific order",
+        "description": "Retrieve the current status of a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order to retrieve status for",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Order"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/delivery": {
+      "patch": {
+        "summary": "Update a order delivery information",
+        "description": "Update delivery information for a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderDelivery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Order"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/cancel": {
+      "delete": {
+        "summary": "Cancel an order",
+        "description": "User to cancel an existing order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order to cancel",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OrderStatus"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders": {
+      "get": {
+        "summary": "Search user orders for admin",
+        "description": "Retrieve a list of the user's past orders.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "optional": true,
+            "description": "Filter orders by their status",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "example": 3
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter orders by user ID",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Order start date (upper bound)",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-01-01"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Order end date (lower bound)",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-12-01"
+            }
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "description": "Order minimum price",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 100
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Order maximum price",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Pagination"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "items": {
+                                    "$ref": "#/components/schemas/ShortOrder"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}": {
+      "get": {
+        "summary": "Get order details",
+        "description": "Retrieve the details of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Order"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}/status": {
+      "get": {
+        "summary": "Get the status of a specific order",
+        "description": "Retrieve the current status of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order to retrieve status for",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OrderStatus"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update the status of a specific order",
+        "description": "Update the current status of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OrderStatus"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}/cancel": {
+      "delete": {
+        "summary": "Cancel an order",
+        "description": "User to cancel an existing order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order to cancel",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OrderStatus"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/transactions": {
+      "get": {
+        "summary": "Search transactions for admin",
+        "description": "Retrieve a list of transactions based on search criteria.",
+        "tags": [
+          "Transaction_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter by user ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by transaction status",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Pagination"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Transaction"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/admin/dashboard/overview": {
+      "get": {
+        "summary": "Get dashboard overview",
+        "description": "Retrieve the overview statistics for the dashboard.",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DashboardOverview"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/revenue": {
+      "get": {
+        "summary": "Lấy dữ liệu doanh thu theo thời gian",
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "Trả về thống kê doanh thu theo ngày, tuần, hoặc tháng.  \nDữ liệu được sử dụng để hiển thị biểu đồ doanh thu, số đơn hàng, và doanh thu trung bình.\n",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Khoảng thời gian thống kê (`day`, `week`, `month`)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "week",
+                "month"
+              ],
+              "default": "month"
+            },
+            "example": "month"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Năm cần thống kê (nếu period = month)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 2025
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Tháng cần thống kê (nếu period = day)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DashboardRevenue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/orders/stats": {
+      "get": {
+        "summary": "Lấy thống kê đơn hàng theo trạng thái",
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "API trả về số lượng đơn hàng được nhóm theo các trạng thái như:\n- `pending`\n- `processing`\n- `completed`\n- `cancelled`\n- `refunded`\n\nDữ liệu được sử dụng để hiển thị biểu đồ tròn hoặc biểu đồ thanh trong phần thống kê đơn hàng của Dashboard.\n",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DashboardOrdersStats"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/products/top": {
+      "get": {
+        "summary": "Lấy danh sách sản phẩm bán chạy nhất",
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "Trả về danh sách các sản phẩm có **doanh số hoặc số lượng bán cao nhất** trong kỳ gần đây.\nDữ liệu được dùng để hiển thị bảng hoặc biểu đồ “Top Selling Products” trên Dashboard.\n",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng sản phẩm tối đa cần lấy (mặc định 5)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 5
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DashboardProductTop"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "InfiniteScroll": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 1
+          },
+          "offset": {
+            "type": "integer",
+            "example": 1
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 2
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": false
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "total_page": {
+            "type": "integer",
+            "example": 1
+          },
+          "current_page": {
+            "type": "integer",
+            "example": 1
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 2
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": false
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "ResponseBase": {
+        "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+      },
+      "AuditFields": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "format": "date-time",
+            "example": "2025-10-30T08:45:12Z",
+            "description": "Thời điểm tạo"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-10-30T09:10:34Z",
+            "description": "Thời điểm cập nhật gần nhất"
+          },
+          "created_by": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1,
+            "description": "ID người tạo"
+          },
+          "updated_by": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1,
+            "description": "ID người cập nhật"
+          }
+        }
+      },
+      "Product": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ProductBase"
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          }
+        ]
+      },
+      "ProductPublic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ProductBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "starts_at": null,
+              "published_at": null,
+              "meta_title": null,
+              "sku": null
+            }
+          }
+        ]
+      },
+      "ProductBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1,
+            "description": "ID duy nhất của sản phẩm (tự động sinh)"
+          },
+          "category_id": {
+            "type": "integer",
+            "example": 3,
+            "description": "ID danh mục mà sản phẩm thuộc về"
+          },
+          "title": {
+            "type": "string",
+            "example": "Tai nghe Bluetooth Sony WH-1000XM5",
+            "description": "Tên sản phẩm"
+          },
+          "meta_title": {
+            "type": "string",
+            "example": "Tai nghe chống ồn Sony WH-1000XM5 - Âm thanh đỉnh cao | PinkCapy",
+            "description": "Tiêu đề SEO (hiển thị trên trình duyệt và kết quả tìm kiếm)"
+          },
+          "slug": {
+            "type": "string",
+            "example": "tai-nghe-bluetooth-sony-wh-1000xm5",
+            "description": "Đường dẫn thân thiện (slug) của sản phẩm"
+          },
+          "thumb": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://cdn.pinkcapy.vn/products/sony-wh1000xm5-thumb.jpg",
+            "description": "Ảnh sản phẩm (đường dẫn đến ảnh thumbnail)"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Sony WH-1000XM5 là thế hệ tai nghe chống ồn cao cấp, pin 30 giờ, sạc nhanh, Bluetooth 5.2.",
+            "description": "Mô tả chi tiết sản phẩm"
+          },
+          "summary": {
+            "type": "string",
+            "example": "Tai nghe chống ồn cao cấp, pin 30 giờ, âm thanh Hi-Res, Bluetooth 5.2",
+            "description": "Tóm tắt ngắn gọn nội dung mô tả sản phẩm"
+          },
+          "type": {
+            "type": "string",
+            "example": "headphone",
+            "description": "Loại sản phẩm (ví dụ: smartphone, laptop, headphone, accessory)"
+          },
+          "sku": {
+            "type": "string",
+            "example": "WH1000XM5-BLK",
+            "description": "Mã sản phẩm (SKU - mã định danh nội bộ duy nhất)"
+          },
+          "price": {
+            "type": "string",
+            "example": "8990000",
+            "description": "Giá bán (đơn vị VNĐ, lưu ở dạng chuỗi để bảo toàn định dạng)"
+          },
+          "quantity": {
+            "type": "string",
+            "readOnly": true,
+            "example": "25",
+            "description": "Số lượng tồn (số sản phẩm còn trong kho)"
+          },
+          "published_at": {
+            "type": "string",
+            "readOnly": true,
+            "format": "date-time",
+            "example": "2025-10-30T09:00:00Z",
+            "description": "Ngày đăng bán (thời điểm sản phẩm được công khai)"
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "example": 1,
+            "description": "Trạng thái của sản phẩm:\n  - **active** (1): Đang hoạt động và hiển thị\n  - **out_of_stock** (2): Hết hàng\n  - **inactive** (3): Tạm ngưng bán\n  - **discontinued** (4): Ngừng sản xuất\n  - **archive** (5): Lưu trữ (không hiển thị trên website)\n"
+          },
+          "discount": {
+            "type": "float",
+            "example": 10,
+            "description": "Giảm giá (tính theo phần trăm hoặc giá trị cụ thể)"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-10-25T00:00:00Z",
+            "description": "Ngày bắt đầu áp dụng giảm giá hoặc chương trình khuyến mãi"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-11-10T23:59:59Z",
+            "description": "Ngày kết thúc áp dụng giảm giá hoặc chương trình khuyến mãi"
+          }
+        },
+        "required": [
+          "id",
+          "category_id",
+          "title",
+          "slug",
+          "price",
+          "quantity",
+          "status"
+        ]
+      },
+      "ProductStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Mã sản phẩm",
+            "example": 1001
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "example": 1,
+            "description": "Trạng thái của sản phẩm:\n  - **active** (1): Đang hoạt động và hiển thị\n  - **out_of_stock** (2): Hết hàng\n  - **inactive** (3): Tạm ngưng bán\n  - **discontinued** (4): Ngừng sản xuất\n"
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ]
+      },
+      "ProductAdjustInventory": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "example": 10,
+            "description": "Quantity to adjust."
+          },
+          "operationType": {
+            "type": "string",
+            "enum": [
+              "increase",
+              "decrease"
+            ],
+            "example": "increase",
+            "description": "Type of adjustment operation."
+          },
+          "reason": {
+            "type": "string",
+            "example": "Restocking after inventory audit",
+            "description": "Reason for the inventory adjustment."
+          }
+        },
+        "required": [
+          "amount",
+          "operationType",
+          "reason"
+        ]
+      },
+      "Category": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CategoryBase"
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          }
+        ]
+      },
+      "CategoryPublic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CategoryBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "meta_title": null
+            }
+          }
+        ]
+      },
+      "CategoryBase": {
+        "type": "object",
+        "description": "Danh mục sản phẩm",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 3,
+            "description": "Mã danh mục"
+          },
+          "parent_id": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1,
+            "description": "Mã danh mục cha"
+          },
+          "level": {
+            "type": "integer",
+            "example": 2,
+            "description": "Cấp độ của danh mục (ví dụ: 1 = cấp cha, 2 = cấp con)"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Tai nghe Bluetooth",
+            "description": "Tên danh mục hiển thị"
+          },
+          "meta_title": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Tai nghe Bluetooth - Âm thanh đỉnh cao | PinkCapy",
+            "description": "Tiêu đề SEO cho danh mục"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "tai-nghe-bluetooth",
+            "description": "Đường dẫn thân thiện"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Danh mục các loại tai nghe không dây, chống ồn, pin lâu.",
+            "description": "Mô tả danh mục"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "slug"
+        ]
+      },
+      "Cart": {
+        "type": "object",
+        "required": [
+          "id",
+          "total_count",
+          "items"
+        ],
+        "description": "A shopping cart containing items selected by the user",
+        "properties": {
+          "id": {
+            "description": "The unique identifier for the cart",
+            "type": "integer",
+            "example": 1
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 2
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 101,
+            "description": "Mã chi tiết giỏ hàng"
+          },
+          "cart_id": {
+            "type": "integer",
+            "example": 5,
+            "description": "Mã giỏ hàng"
+          },
+          "product_id": {
+            "type": "integer",
+            "example": 23,
+            "description": "Mã sản phẩm"
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true,
+            "description": "Trạng thái hoạt động của item trong giỏ hàng"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 8990000,
+            "description": "Giá sản phẩm tại thời điểm thêm vào giỏ"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 2,
+            "description": "Số lượng sản phẩm trong giỏ"
+          },
+          "discount": {
+            "type": "number",
+            "format": "float",
+            "description": "Số tiền giảm giá áp dụng cho sản phẩm",
+            "example": 500000
+          },
+          "note": {
+            "type": "string",
+            "nullable": true,
+            "example": "Gói quà sinh nhật",
+            "description": "Ghi chú thêm của người dùng"
+          }
+        },
+        "required": [
+          "id",
+          "cart_id",
+          "product_id",
+          "sku",
+          "is_active",
+          "price",
+          "quantity"
+        ]
+      },
+      "EmptyCart": {
+        "type": "object",
+        "required": [
+          "total_count",
+          "items"
+        ],
+        "description": "A shopping cart containing items selected by the user",
+        "properties": {
+          "total_count": {
+            "value": 0,
+            "type": "integer"
+          },
+          "items": {
+            "type": "array",
+            "items": []
+          }
+        }
+      },
+      "AddCartItem": {
+        "type": "object",
+        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
+        "required": [
+          "product_id",
+          "quantity"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "example": 23,
+            "description": "Mã sản phẩm"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 2,
+            "description": "Số lượng sản phẩm trong giỏ"
+          }
+        }
+      },
+      "UpdateCartItemQuantity": {
+        "type": "object",
+        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
+        "required": [
+          "quantity"
+        ],
+        "properties": {
+          "quantity": {
+            "type": "integer",
+            "example": 2,
+            "description": "Số lượng sản phẩm trong giỏ"
+          }
+        }
+      },
+      "Order": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderBase"
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "Danh sách chi tiết đơn hàng",
+                "items": {
+                  "$ref": "#/components/schemas/OrderItemBase"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "OrderBase": {
+        "type": "object",
+        "description": "Đơn hàng (Order)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Mã đơn hàng",
+            "example": 1001
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "Mã người dùng",
+            "example": 25
+          },
+          "subtotal": {
+            "type": "number",
+            "format": "float",
+            "description": "Tổng tiền hàng (chưa thuế, phí)",
+            "example": 12990000
+          },
+          "tax": {
+            "type": "number",
+            "format": "float",
+            "description": "Thuế",
+            "example": 1299000
+          },
+          "shipping": {
+            "type": "number",
+            "format": "float",
+            "description": "Phí vận chuyển",
+            "example": 30000
+          },
+          "total": {
+            "type": "number",
+            "format": "float",
+            "description": "Tổng cộng (subtotal + tax + shipping)",
+            "example": 14319000
+          },
+          "discount_total": {
+            "type": "number",
+            "format": "float",
+            "description": "Tổng giảm giá",
+            "example": 500000
+          },
+          "promo": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Mã khuyến mãi áp dụng",
+            "example": "SUMMER2025"
+          },
+          "discount": {
+            "type": "number",
+            "format": "float",
+            "description": "Giảm giá được áp dụng từ mã khuyến mãi",
+            "example": 500000
+          },
+          "grand_total": {
+            "type": "number",
+            "format": "float",
+            "description": "Thành tiền cuối (sau giảm giá)",
+            "example": 13819000
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Họ người nhận",
+            "example": "Nguyễn"
+          },
+          "middle_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Tên đệm",
+            "example": "Văn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Tên người nhận",
+            "example": "A"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Số điện thoại người nhận",
+            "example": "0987654321"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "description": "Email người nhận",
+            "example": "nguyenvana@example.com"
+          },
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Địa chỉ 1",
+            "example": "123 Nguyễn Trãi"
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Địa chỉ 2 (tuỳ chọn)",
+            "example": "Phường 4, Quận 5"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Thành phố",
+            "example": "TP. Hồ Chí Minh"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Tỉnh / Thành phố",
+            "example": "Hồ Chí Minh"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Quốc gia",
+            "example": "Việt Nam"
+          },
+          "orders_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Thời điểm đặt hàng",
+            "example": "2025-10-31T09:30:00Z"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
+            "example": "processing"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Ghi chú của khách hàng",
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "total",
+          "grand_total",
+          "status"
+        ]
+      },
+      "ShortOrder": {
+        "type": "object",
+        "description": "Đơn hàng (Order)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Mã đơn hàng (khóa chính)",
+            "example": 1001
+          },
+          "total": {
+            "type": "number",
+            "format": "float",
+            "description": "Tổng cộng (subtotal + tax + shipping)",
+            "example": 14319000
+          },
+          "grand_total": {
+            "type": "number",
+            "format": "float",
+            "description": "Thành tiền cuối (sau giảm giá)",
+            "example": 13819000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
+            "example": "paid"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "total",
+          "grand_total",
+          "status"
+        ]
+      },
+      "OrderItemBase": {
+        "type": "object",
+        "description": "Chi tiết sản phẩm trong đơn hàng (Order Item)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Mã chi tiết đơn hàng",
+            "example": 10001
+          },
+          "order_id": {
+            "type": "integer",
+            "description": "Mã đơn hàng",
+            "example": 1001
+          },
+          "product_id": {
+            "type": "integer",
+            "description": "Mã sản phẩm",
+            "example": 23
+          },
+          "sku": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Mã SKU của sản phẩm",
+            "example": "WH1000XM5-BLK"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Trạng thái hiệu lực của sản phẩm trong đơn",
+            "example": true
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Giá bán của sản phẩm tại thời điểm đặt hàng",
+            "example": 8990000
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Số lượng sản phẩm",
+            "example": 2
+          },
+          "discount": {
+            "type": "number",
+            "format": "float",
+            "description": "Số tiền giảm giá áp dụng cho sản phẩm",
+            "example": 500000
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "nullable": true,
+            "description": "Ghi chú cho sản phẩm trong đơn (nếu có)",
+            "example": "Gói quà sinh nhật"
+          }
+        },
+        "required": [
+          "order_id",
+          "product_id",
+          "price",
+          "quantity"
+        ]
+      },
+      "OrderStatus": {
+        "type": "object",
+        "description": "Trạng thái đơn hàng (Order Status)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Mã đơn hàng",
+            "example": 1001
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
+            "example": "3"
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ]
+      },
+      "OrderDelivery": {
+        "type": "object",
+        "description": "Thông tin giao hàng của đơn hàng",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Số điện thoại người nhận",
+            "example": "0987654321"
+          },
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Địa chỉ 1",
+            "example": "123 Nguyễn Trãi"
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Địa chỉ 2 (tuỳ chọn)",
+            "example": "Phường 4, Quận 5"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Thành phố",
+            "example": "TP. Hồ Chí Minh"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Tỉnh / Thành phố",
+            "example": "Hồ Chí Minh"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Quốc gia",
+            "example": "Việt Nam"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Ghi chú của khách hàng",
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          }
+        }
+      },
+      "CreateOrder": {
+        "type": "object",
+        "description": "Đơn hàng (Order)",
+        "properties": {
+          "promo": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Mã khuyến mãi áp dụng",
+            "example": "SUMMER2025"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Ghi chú của khách hàng",
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          },
+          "items": {
+            "type": "array",
+            "description": "Danh sách sản phẩm trong đơn hàng",
+            "items": {
+              "type": "integer",
+              "description": "ID của sản phẩm"
+            },
+            "example": 1
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "UserOrder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "user_id": null,
+              "items": {
+                "type": "array",
+                "description": "Danh sách sản phẩm trong đơn hàng",
+                "items": {
+                  "$ref": "#/components/schemas/UserOrderItem"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UserOrderItem": {
+        "type": "object",
+        "description": "Chi tiết sản phẩm trong đơn hàng (Order Item)",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderItemBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sku": null
+            }
+          }
+        ],
+        "required": [
+          "order_id",
+          "product_id",
+          "price",
+          "quantity"
+        ]
+      },
+      "Transaction": {
+        "type": "object",
+        "description": "Giao dịch thanh toán hoặc hoàn tiền (Transaction)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Mã giao dịch (khóa chính)",
+            "example": 5001
+          },
+          "order_id": {
+            "type": "integer",
+            "description": "Mã đơn hàng liên quan (FK → Order.id)",
+            "example": 1001
+          },
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "Số tiền giao dịch",
+            "example": 13819000
+          },
+          "content": {
+            "type": "string",
+            "description": "Nội dung hoặc ghi chú giao dịch (ví dụ: mô tả thanh toán hoặc hoàn tiền)",
+            "example": "Thanh toán đơn hàng #1001 qua cổng VNPay"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Mã giao dịch (từ cổng thanh toán hoặc hệ thống nội bộ)",
+            "example": "TXN-VNPAY-20251031-0001"
+          },
+          "type": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ],
+            "description": "Loại giao dịch: - `payment`: Thanh toán   - `refund`: Hoàn tiền\n",
+            "example": 1
+          },
+          "mode": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Phương thức thanh toán hoặc hoàn tiền (ví dụ: VNPay, MoMo, COD, Bank Transfer)",
+            "example": "VNPay"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "description": "Trạng thái giao dịch: - `initiated`: Khởi tạo   - `pending`: Đang chờ xử lý   - `success`: Thành công   - `failed`: Thất bại   - `cancelled`: Đã hủy   - `expired`: Hết hạn\n",
+            "example": 1
+          }
+        },
+        "required": [
+          "id",
+          "order_id",
+          "amount",
+          "type",
+          "status"
+        ]
+      },
+      "DashboardOverview": {
+        "type": "object",
+        "properties": {
+          "total_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 253900000,
+            "description": "Tổng doanh thu toàn hệ thống"
+          },
+          "total_orders": {
+            "type": "integer",
+            "example": 128,
+            "description": "Tổng số đơn hàng"
+          },
+          "total_customers": {
+            "type": "integer",
+            "example": 74,
+            "description": "Tổng số khách hàng"
+          },
+          "total_products": {
+            "type": "integer",
+            "example": 312,
+            "description": "Tổng số sản phẩm đang bán"
+          },
+          "today_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 18900000,
+            "description": "Doanh thu trong ngày hiện tại"
+          },
+          "month_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 203000000,
+            "description": "Doanh thu trong tháng hiện tại"
+          },
+          "growth_rate": {
+            "type": "number",
+            "format": "float",
+            "example": 12.5,
+            "description": "Tỷ lệ tăng trưởng doanh thu so với kỳ trước (%)"
+          }
+        },
+        "required": [
+          "total_revenue",
+          "total_orders",
+          "total_customers",
+          "total_products",
+          "today_revenue",
+          "month_revenue",
+          "growth_rate"
+        ]
+      },
+      "DashboardRevenue": {
+        "type": "object",
+        "properties": {
+          "series": {
+            "type": "array",
+            "description": "Danh sách dữ liệu doanh thu theo mốc thời gian",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2025-10-01",
+                  "description": "Ngày hoặc mốc thời gian"
+                },
+                "revenue": {
+                  "type": "number",
+                  "format": "double",
+                  "example": 3500000,
+                  "description": "Tổng doanh thu tại mốc thời gian"
+                },
+                "orders": {
+                  "type": "integer",
+                  "example": 6,
+                  "description": "Số lượng đơn hàng tại mốc thời gian"
+                }
+              },
+              "required": [
+                "date",
+                "revenue",
+                "orders"
+              ]
+            }
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "total_revenue": {
+                "type": "number",
+                "format": "double",
+                "example": 203000000,
+                "description": "Tổng doanh thu trong toàn bộ kỳ"
+              },
+              "avg_order_value": {
+                "type": "number",
+                "format": "double",
+                "example": 1580000,
+                "description": "Giá trị trung bình mỗi đơn hàng"
+              },
+              "top_day": {
+                "type": "string",
+                "format": "date",
+                "example": "2025-10-24",
+                "description": "Ngày có doanh thu cao nhất"
+              }
+            },
+            "required": [
+              "total_revenue",
+              "avg_order_value",
+              "top_day"
+            ]
+          }
+        }
+      },
+      "DashboardOrdersStats": {
+        "type": "object",
+        "description": "Thống kê số lượng đơn hàng theo trạng thái",
+        "properties": {
+          "pending": {
+            "type": "integer",
+            "example": 5,
+            "description": "Số đơn hàng mới tạo, chưa xử lý"
+          },
+          "processing": {
+            "type": "integer",
+            "example": 12,
+            "description": "Số đơn hàng đang xử lý hoặc chuẩn bị giao"
+          },
+          "completed": {
+            "type": "integer",
+            "example": 89,
+            "description": "Số đơn hàng đã hoàn tất"
+          },
+          "cancelled": {
+            "type": "integer",
+            "example": 7,
+            "description": "Số đơn hàng bị hủy"
+          },
+          "refunded": {
+            "type": "integer",
+            "example": 3,
+            "description": "Số đơn hàng được hoàn tiền"
+          }
+        },
+        "required": [
+          "pending",
+          "processing",
+          "completed",
+          "cancelled",
+          "refunded"
+        ]
+      },
+      "DashboardProductTop": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 101,
+            "description": "ID của sản phẩm"
+          },
+          "title": {
+            "type": "string",
+            "example": "iPhone 16 Pro Max",
+            "description": "Tên sản phẩm"
+          },
+          "sku": {
+            "type": "string",
+            "example": "IPH16PMAX256",
+            "description": "Mã SKU của sản phẩm"
+          },
+          "thumb": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://cdn.pinkcapy.vn/products/iphone16pro-thumb.jpg",
+            "description": "Ảnh thumbnail của sản phẩm"
+          },
+          "sold": {
+            "type": "integer",
+            "example": 74,
+            "description": "Tổng số lượng đã bán"
+          },
+          "revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 2590000000,
+            "description": "Tổng doanh thu mang lại từ sản phẩm"
+          },
+          "category": {
+            "type": "string",
+            "example": "Smartphone",
+            "description": "Danh mục chính của sản phẩm"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "archived"
+            ],
+            "example": "published",
+            "description": "Trạng thái hiển thị của sản phẩm"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "sold",
+          "revenue"
+        ]
+      }
+    },
+    "parameters": {
+      "SortParam": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "description": "Sort order",
+        "schema": {
+          "type": "string",
+          "format": "<sort_field>:<order>",
+          "example": "created_at:desc"
+        }
+      },
+      "AuthorizationHeader": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "Auth token, ex: `admin` | `customer` | `Bearer <JWT>`",
+        "schema": {
+          "type": "string",
+          "example": "admin"
+        }
+      },
+      "IdempotencyKeyHeader": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Key helper for recognize duplicate request (Idempotent)",
+        "schema": {
+          "type": "string",
+          "example": "oc8tKg1P2FV44hpj"
+        }
+      },
+      "PageParam": {
+        "name": "page",
+        "in": "query",
+        "required": true,
+        "description": "Page number to retrieve",
+        "default": 1,
+        "schema": {
+          "type": "integer",
+          "example": 1
+        }
+      },
+      "SizeParam": {
+        "name": "size",
+        "in": "query",
+        "required": true,
+        "description": "Number of results per page",
+        "default": 10,
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      },
+      "OffsetParam": {
+        "name": "offset",
+        "in": "query",
+        "required": true,
+        "description": "Currect offset to retrieve",
+        "default": 1,
+        "schema": {
+          "type": "integer",
+          "example": 1
+        }
+      },
+      "LimitParam": {
+        "name": "limit",
+        "in": "query",
+        "required": true,
+        "description": "Limit number of results",
+        "default": 10,
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request (400)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "400000",
+                "type": "BAD_REQUEST",
+                "message": "Data invalid or incorrect request.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized (401)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "400001",
+                "type": "UNAUTHORIZED",
+                "message": "User is not authenticated.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error (422)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "400002",
+                "type": "VALIDATION_ERROR",
+                "message": "Data invalid or missing required fields.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden (403)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "400003",
+                "type": "FORBIDDEN",
+                "message": "User does not have permission to access this resource.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found (404)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "Meta": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "type",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "example": "200000",
+                    "description": "Business code"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "SUCCESS"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Success"
+                  },
+                  "extra_meta": {
+                    "type": "object",
+                    "description": "Extra metadata"
+                  }
+                }
+              },
+              "Response": {
+                "type": "object",
+                "required": [
+                  "meta",
+                  "data"
+                ],
+                "properties": {
+                  "meta": {
+                    "$ref": "#/components/responses/NotFound/content/application~1json/schema/Meta"
+                  },
+                  "data": {
+                    "nullable": true,
+                    "description": "The data that was returned from the API",
+                    "oneOf": [
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "example": {
+              "meta": {
+                "code": "400004",
+                "type": "NOT_FOUND",
+                "message": "Resource not found.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict (409)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "400009",
+                "type": "CONFLICT",
+                "message": "Resource already exists.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error (500)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "500000",
+                "type": "INTERNAL_SERVER_ERROR",
+                "message": "An unexpected error occurred on the server.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "NoContent": {
+        "description": "No content (204)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema"
+            },
+            "example": {
+              "meta": {
+                "code": "200004",
+                "type": "NO_CONTENT",
+                "message": "No content.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

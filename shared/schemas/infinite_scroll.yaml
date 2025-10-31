@@ -1,0 +1,50 @@
+schemas:
+  InfiniteScroll:
+    type: object
+    properties:
+      limit:
+        type: integer
+        example: 1
+      offset:
+        type: integer
+        example: 1
+      total_count:
+        type: integer
+        example: 2
+      has_more:
+        type: boolean
+        example: false
+      data:
+        type: array
+        items:
+          type: object
+
+parameters:
+  OffsetParam:
+    name: offset
+    in: query
+    required: true
+    description: Currect offset to retrieve
+    default: 1
+    schema:
+      type: integer
+      example: 1
+
+  LimitParam:
+    name: limit
+    in: query
+    required: true
+    description: Limit number of results
+    default: 10
+    schema:
+      type: integer
+      example: 10
+
+  SortParam:
+    name: sort
+    in: query
+    description: Sort order
+    schema:
+      type: string
+      format: '<sortable_criteria>:<order>'
+      example: 'created_at:desc'

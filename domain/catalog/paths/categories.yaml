@@ -1,0 +1,43 @@
+paths:
+  /categories:
+    get:
+      summary: Search categories
+      description: Retrieve a list of categories.
+      tags: [Category_Public]
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/OffsetParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/LimitParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: level
+          in: query
+          required: true
+          description: Level of categories to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../../../openapi.yaml#/components/schemas/InfiniteScroll'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../schemas/category.yaml#/schemas/CategoryPublic'

@@ -1,0 +1,272 @@
+parameters:
+  ProductId:
+    name: id
+    in: path
+    required: true
+    description: ID of the product
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /admin/products/{id}:
+    get:
+      summary: Get product for admin
+      description: Retrieve a product by its ID for admin.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/ProductId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../schemas/product.yaml#/schemas/Product'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+    put:
+      summary: Update a product
+      description: Admin to update an existing product in the system.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/product.yaml#/schemas/Product'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../schemas/product.yaml#/schemas/Product'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+    delete:
+      summary: Delete a product
+      description: Admin to delete an existing product in the system.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/ProductId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../schemas/product.yaml#/schemas/Product'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+  /admin/products/{id}/status:
+    patch:
+      summary: Update a product status
+      description: Admin to update the status of an existing product in the system.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/product.yaml#/schemas/ProductStatus'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../schemas/product.yaml#/schemas/ProductStatus'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+  /admin/products:
+    post:
+      summary: Create a product
+      description: Admin to add a new product to the system.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/product.yaml#/schemas/Product'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../schemas/product.yaml#/schemas/Product'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+    get:
+      summary: Search products for admin
+      description: Retrieve a list of products based on search criteria.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: category
+          in: query
+          description: Category ID of the products
+          schema:
+            type: integer
+            example: 3
+        - name: price_min
+          in: query
+          description: Minimum price of the products
+          schema:
+            type: integer
+            example: 100000
+        - name: price_max
+          in: query
+          description: Maximum price of the products
+          schema:
+            type: integer
+            example: 500000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../schemas/product.yaml#/schemas/Product'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+  /admin/products/{id}/inventories:
+    patch:
+      summary: Update a product stock
+      description: Admin to update an stock of existing product in the system.
+      tags: [Product_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to update
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/product.yaml#/schemas/ProductAdjustInventory'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../schemas/product.yaml#/schemas/Product'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'

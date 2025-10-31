@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "bundle": "swagger-cli bundle openapi.yaml --outfile dist/openapi-bundled.json --type json "
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4"
+  }
+}

@@ -1,0 +1,13 @@
+NoContent:
+  description: No content (204)
+  content:
+    application/json:
+      schema:
+        $ref: ../schemas/response.yaml
+      example:
+        meta:
+          code: '200004'
+          type: NO_CONTENT
+          message: No content.
+          extra_meta: {}
+        data: null

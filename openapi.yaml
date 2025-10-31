@@ -2,81 +2,83 @@ openapi: 3.1.0
 info:
   title: PinkCapy API
   version: 1.0.0
-  description: Tài liệu API cho hệ thống bán lẻ điện tử PinkCapy
+  description: API documentation for PinkCapy Retail E-commerce System
+
 servers:
   - url: https://pinkcapy.dev/v1
+    description: Production server
+  - url: http://localhost:8000/v1
+    description: Local development
+
+# tags:
+
 
 paths:
+  # Catalog API : ./domain/catalog/domain.yaml
   /products/{id}:
-    $ref: './paths/products.yaml#/paths/~1products~1{id}'
+    $ref: './domain/catalog/domain.yaml#/paths/~1products~1{id}'
   /products:
-    $ref: './paths/products.yaml#/paths/~1products'
+    $ref: './domain/catalog/domain.yaml#/paths/~1products'
 
-  /manage/products/{id}:
-    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}'
-  /manage/products/{id}/status:
-    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}~1status'
-  /manage/products:
-    $ref: './paths/products_admin.yaml#/paths/~1manage~1products'
-  /manage/products/{id}/inventories:
-    $ref: './paths/products_admin.yaml#/paths/~1manage~1products~1{id}~1inventories'
+  /admin/products/{id}:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}'
+  /admin/products/{id}/status:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}~1status'
+  /admin/products:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products'
+  /admin/products/{id}/inventories:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}~1inventories'
 
   /categories:
-    $ref: './paths/categories.yaml#/paths/~1categories'
-  /manage/categories/{id}:
-    $ref: './paths/categories.yaml#/paths/~1manage~1categories~1{id}'
-  /manage/categories:
-    $ref: './paths/categories.yaml#/paths/~1manage~1categories'
+    $ref: './domain/catalog/domain.yaml#/paths/~1categories'
 
+  /admin/categories/{id}:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1categories~1{id}'
+  /admin/categories:
+    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1categories'
+
+  # Sales Domain : ./domain/sales/domain.yaml
   /me/carts:
-    $ref: './paths/carts.yaml#/paths/~1me~1carts'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts'
   /me/carts/items:
-    $ref: './paths/carts.yaml#/paths/~1me~1carts~1items'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1items'
   /me/carts/items/{id}:
-    $ref: './paths/carts.yaml#/paths/~1me~1carts~1items~1{id}'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1items~1{id}'
   /me/carts/clear:
-    $ref: './paths/carts.yaml#/paths/~1me~1carts~1clear'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1clear'
 
   /me/orders:
-    $ref: './paths/orders.yaml#/paths/~1me~1orders'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders'
   /me/orders/{id}:
-    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}'
   /me/orders/{id}/status:
-    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1status'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1status'
   /me/orders/{id}/delivery:
-    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1delivery'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1delivery'
   /me/orders/{id}/cancel:
-    $ref: './paths/orders.yaml#/paths/~1me~1orders~1{id}~1cancel'
+    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1cancel'
 
-  /manage/orders:
-    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders'
-  /manage/orders/{id}:
-    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}'
-  /manage/orders/{id}/status:
-    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}~1status'
-  /manage/orders/{id}/cancel:
-    $ref: './paths/orders_admin.yaml#/paths/~1manage~1orders~1{id}~1cancel'
+  /admin/orders:
+    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders'
+  /admin/orders/{id}:
+    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}'
+  /admin/orders/{id}/status:
+    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}~1status'
+  /admin/orders/{id}/cancel:
+    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}~1cancel'
 
-  /manage/users:
-    $ref: './paths/users_admin.yaml#/paths/~1manage~1users'
-  /manage/users/{id}/profile:
-    $ref: './paths/users_admin.yaml#/paths/~1manage~1users~1{id}~1profile'
-  /manage/users/{id}/status:
-    $ref: './paths/users_admin.yaml#/paths/~1manage~1users~1{id}~1status'
-  /me/profile:
-    $ref: './paths/users.yaml#/paths/~1me~1profile'
+  /admin/transactions:
+    $ref: './domain/sales/domain.yaml#/paths/~1admin~1transactions'
 
-  /manage/transactions:
-    $ref: './paths/transactions.yaml#/paths/~1manage~1transactions'
-
-  /manage/dashboard/overview:
-    $ref: './paths/dashboard.yaml#/paths/~1overview'
-  /manage/dashboard/revenue:
-    $ref: './paths/dashboard.yaml#/paths/~1revenue'
-  /manage/dashboard/orders/stats:
-    $ref: './paths/dashboard.yaml#/paths/~1orders~1stats'
-  /manage/dashboard/products/top:
-    $ref: './paths/dashboard.yaml#/paths/~1products~1top'
+  # Analytics Domain : ./domain/analytics/domain.yaml
+  /admin/dashboard/overview:
+    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1overview'
+  /admin/dashboard/revenue:
+    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1revenue'
+  /admin/dashboard/orders/stats:
+    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1orders~1stats'
+  /admin/dashboard/products/top:
+    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1products~1top'
 
 components:
   securitySchemes:
@@ -86,38 +88,107 @@ components:
       bearerFormat: JWT
 
   schemas:
+    InfiniteScroll:
+      $ref: './shared/schemas/infinite_scroll.yaml#/schemas/InfiniteScroll'
+    Pagination:
+      $ref: './shared/schemas/pagination.yaml#/schemas/Pagination'
+    ResponseBase:
+      $ref: './shared/schemas/response.yaml#/Response'
+    AuditFields:
+      $ref: './shared/schemas/audit_fields.yaml'
+    # Catalog Domain Schemas
     Product:
-      $ref: './components/schemas/product/product.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/Product'
     ProductPublic:
-      $ref: './components/schemas/product/product_public.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductPublic'
     ProductBase:
-      $ref: './components/schemas/product/product_base.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductBase'
+    ProductStatus:
+      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductStatus'
+    ProductAdjustInventory:
+      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductAdjustInventory'
 
     Category:
-      $ref: './components/schemas/category/category.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/Category'
     CategoryPublic:
-      $ref: './components/schemas/category/category_public.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/CategoryPublic'
     CategoryBase:
-      $ref: './components/schemas/category/category_base.yaml'
+      $ref: './domain/catalog/domain.yaml#/components/schemas/CategoryBase'
 
+    # Sales Domain Schemas
     Cart:
-      $ref: './components/schemas/cart/cart.yaml'
+      $ref: './domain/sales/schemas/cart.yaml#/schemas/Cart'
     CartItem:
-      $ref: './components/schemas/cart/cart_item.yaml'
+      $ref: './domain/sales/schemas/cart.yaml#/schemas/CartItem'
+    EmptyCart:
+      $ref: './domain/sales/schemas/cart.yaml#/schemas/EmptyCart'
+    AddCartItem:
+      $ref: './domain/sales/schemas/cart.yaml#/schemas/AddCartItem'
+    UpdateCartItemQuantity:
+      $ref: './domain/sales/schemas/cart.yaml#/schemas/UpdateCartItemQuantity'
 
     Order:
-      $ref: './components/schemas/order/order.yaml'
-    OrderItem:
-      $ref: './components/schemas/order/order_item.yaml'
-    OrderAdmin:
-      $ref: './components/schemas/order/order_admin.yaml'
-    OrderItemAdmin:
-      $ref: './components/schemas/order/order_item_admin.yaml'
+      $ref: './domain/sales/schemas/order.yaml#/schemas/Order'
+    OrderBase:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderBase'
+    ShortOrder:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/ShortOrder'
+    OrderItemBase:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderItemBase'
+    OrderStatus:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderStatus'
+    OrderDelivery:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderDelivery'
+    CreateOrder:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/CreateOrder'
+    UserOrder:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/UserOrder'
+    UserOrderItem:
+      $ref: './domain/sales/schemas/order.yaml#/schemas/UserOrderItem'
+
+    Transaction:
+      $ref: './domain/sales/schemas/transaction.yaml#/schemas/Transaction'
+
+    # Analytics Domain Schemas
+    DashboardOverview:
+      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardOverview'
+    DashboardRevenue:
+      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardRevenue'
+    DashboardOrdersStats:
+      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardOrdersStats'
+    DashboardProductTop:
+      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardProductTop'
+
+  parameters:
+    SortParam:
+      $ref: './shared/schemas/parameters.yaml#/SortParam'
+    AuthorizationHeader:
+      $ref: './shared/schemas/parameters.yaml#/AuthorizationHeader'
+    IdempotencyKeyHeader:
+      $ref: './shared/schemas/parameters.yaml#/IdempotencyKeyHeader'
+    PageParam:
+      $ref: './shared/schemas/pagination.yaml#/parameters/PageParam'
+    SizeParam:
+      $ref: './shared/schemas/pagination.yaml#/parameters/SizeParam'
+    OffsetParam:
+      $ref: './shared/schemas/infinite_scroll.yaml#/parameters/OffsetParam'
+    LimitParam:
+      $ref: './shared/schemas/infinite_scroll.yaml#/parameters/LimitParam'
 
   responses:
-    Error:
-      $ref: './components/responses/error.yaml'
-
-tags:
-  - name: Product
-    description: Quản lý sản phẩm
+    BadRequest:
+      $ref: './shared/responses/error.yaml#/BadRequest'
+    Unauthorized:
+      $ref: './shared/responses/error.yaml#/Unauthorized'
+    ValidationError:
+      $ref: './shared/responses/error.yaml#/ValidationError'
+    Forbidden:
+      $ref: './shared/responses/error.yaml#/Forbidden'
+    NotFound:
+      $ref: './shared/responses/error.yaml#/NotFound'
+    Conflict:
+      $ref: './shared/responses/error.yaml#/Conflict'
+    InternalServerError:
+      $ref: './shared/responses/error.yaml#/InternalServerError'
+    NoContent:
+      $ref: './shared/responses/success.yaml#/NoContent'

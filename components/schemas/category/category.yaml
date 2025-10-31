@@ -1,3 +1,0 @@
-allOf:
-  - $ref: './category_base.yaml'
-  - $ref: '../core/audit_fields.yaml'

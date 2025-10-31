@@ -1,0 +1,196 @@
+paths:
+  /admin/users/{id}/profile:
+    get:
+      summary: Get user for admin
+      description: Retrieve a user by its ID for admin.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to retrieve
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/user/user_profile_admin.yaml'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+  /admin/users/{id}/status:
+    patch:
+      summary: Update a user status
+      description: Admin to update a status of an existing user in the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/user/user_status.yaml'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/user/user_status.yaml'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+    delete:
+      summary: Delete a user
+      description: Admin to delete an existing user in the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/user/user_admin.yaml'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+  /admin/users:
+    post:
+      summary: Create a new user
+      description: Admin to add a new user to the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/user/user_create.yaml'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/schemas/user/user_admin.yaml'
+        '400':
+          $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../../openapi.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'
+
+    get:
+      summary: Search users for admin
+      description: Retrieve a list of users based on search criteria.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+        - $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: is_admin
+          in: query
+          description: Filter by admin status
+          schema:
+            type: boolean
+            example: true
+        - name: status
+          in: query
+          description: Filter by user status
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../components/schemas/user/user_admin.yaml'
+        '403':
+          $ref: '../../../openapi.yaml#/components/responses/Forbidden'

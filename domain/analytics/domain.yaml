@@ -1,0 +1,20 @@
+paths:
+  /admin/dashboard/overview:
+    $ref: './paths/dashboard.yaml#/paths/~1overview'
+  /admin/dashboard/revenue:
+    $ref: './paths/dashboard.yaml#/paths/~1revenue'
+  /admin/dashboard/orders/stats:
+    $ref: './paths/dashboard.yaml#/paths/~1orders~1stats'
+  /admin/dashboard/products/top:
+    $ref: './paths/dashboard.yaml#/paths/~1products~1top'
+
+components:
+  schemas:
+    DashboardOverview:
+      $ref: './schemas/overview.yaml'
+    DashboardRevenue:
+      $ref: './schemas/revenue.yaml#/components/schemas/Revenue'
+    DashboardOrdersStats:
+      $ref: './schemas/orders_stats.yaml'
+    DashboardProductTop:
+      $ref: './schemas/product_top.yaml#/components/schemas/ProductTop'

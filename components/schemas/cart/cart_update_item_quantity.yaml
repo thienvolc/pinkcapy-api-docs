@@ -1,9 +1,0 @@
-type: object
-description: 'Chi tiết sản phẩm trong giỏ hàng (Cart Item)'
-required:
-  - quantity
-properties:
-  quantity:
-    type: integer
-    example: 2
-    description: 'Số lượng sản phẩm trong giỏ'

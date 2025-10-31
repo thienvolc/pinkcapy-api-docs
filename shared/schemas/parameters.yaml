@@ -1,0 +1,27 @@
+AuthorizationHeader:
+  name: Authorization
+  in: header
+  required: true
+  description: 'Auth token, ex: `admin` | `customer` | `Bearer <JWT>`'
+  schema:
+    type: string
+    example: 'admin'
+
+IdempotencyKeyHeader:
+  name: Idempotency-Key
+  in: header
+  required: true
+  description: 'Key helper for recognize duplicate request (Idempotent)'
+  schema:
+    type: string
+    example: 'oc8tKg1P2FV44hpj'
+
+SortParam:
+  name: sort
+  in: query
+  required: false
+  description: Sort order
+  schema:
+    type: string
+    format: '<sort_field>:<order>'
+    example: 'created_at:desc'
