@@ -7,6 +7,14 @@ parameters:
     schema:
       type: integer
       example: 1
+  MetaId:
+    name: meta_id
+    in: path
+    required: true
+    description: ID of the product meta
+    schema:
+      type: integer
+      example: 1
 
 paths:
   /admin/products/{id}:
@@ -92,6 +100,182 @@ paths:
                         $ref: '../index.yaml#/components/schemas/Product'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/products/{id}/metas:
+    post:
+      summary: Create product meta
+      description: Create a new product meta.
+      tags: [Product_Meta_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/ProductMeta'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../index.yaml#/components/schemas/Product'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/products/{id}/metas/{meta_id}:
+    delete:
+      summary: Delete a product meta
+      description: Delete a product meta.
+      tags: [Product_Meta_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/ProductId'
+        - $ref: '#/parameters/MetaId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../index.yaml#/components/schemas/ProductMeta'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    put:
+      summary: Update a product meta
+      description: Update a product meta.
+      tags: [Product_Meta_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/ProductId'
+        - $ref: '#/parameters/MetaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/ProductMeta'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../index.yaml#/components/schemas/ProductMeta'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/products/{id}/tags:
+    patch:
+      summary: Update tags for a product
+      description: Update tags for a product.
+      tags: [Product_Tag_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag_ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - type: object
+                            properties:
+                              product_id:
+                                type: integer
+                                example: 1
+                              tags:
+                                type: array
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/Tag'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/products/{id}/categories:
+    put:
+      summary: Update categories of a product
+      description: Update categories of a product.
+      tags: [Product_Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../index.yaml#/components/schemas/Product'
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 

@@ -31,6 +31,58 @@ paths:
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
+  /products/{slug}:
+    get:
+      summary: Get product
+      description: Retrieve a product by its slug.
+      tags: [Product_Public]
+      parameters:
+        - $ref: '#/parameters/ProductId'
+        - name: slug
+          in: path
+          required: true
+          description: Slug of the product
+          schema:
+            type: string
+            example: tai-nghe-1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/ProductPublic'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /products/{id}/related:
+    get:
+      summary: Get related products
+      description: Retrieve a list of products related to the specified product.
+      tags: [Product_Public]
+      parameters:
+        - $ref: '#/parameters/ProductId'
+        - $ref: '../shared.yaml#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '../index.yaml#/components/schemas/ProductPublic'
+
   /products:
     get:
       summary: Search products

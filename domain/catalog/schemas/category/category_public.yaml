@@ -1,6 +1,18 @@
-type: object
-allOf:
-  - $ref: './category_base.yaml'
-  - type: object
-    properties:
-      meta_title:
+CategoryPublic:
+  type: object
+  allOf:
+    - $ref: './category_base.yaml'
+    - type: object
+      properties:
+        meta_title:
+
+CategoryPublicHierarchy:
+  type: object
+  allOf:
+    - $ref: '#/CategoryPublic'
+    - type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/CategoryPublic'

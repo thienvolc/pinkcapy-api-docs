@@ -7,3 +7,4 @@ allOf:
       published_at:
       meta_title:
       sku:
+  - $ref: './product_extra.yaml'

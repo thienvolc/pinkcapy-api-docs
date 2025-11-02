@@ -87,6 +87,101 @@
         }
       }
     },
+    "/products/{slug}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieve a product by its slug.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1products~1%7Bid%7D/get/parameters/0"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Slug of the product",
+            "schema": {
+              "type": "string",
+              "example": "tai-nghe-1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/ProductPublic"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/products/{id}/related": {
+      "get": {
+        "summary": "Get related products",
+        "description": "Retrieve a list of products related to the specified product.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1products~1%7Bid%7D/get/parameters/0"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/ProductPublic"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/products": {
       "get": {
         "summary": "Search products",
@@ -350,6 +445,363 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/metas": {
+      "post": {
+        "summary": "Create product meta",
+        "description": "Create a new product meta.",
+        "tags": [
+          "Product_Meta_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductMeta"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Product"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/metas/{meta_id}": {
+      "delete": {
+        "summary": "Delete a product meta",
+        "description": "Delete a product meta.",
+        "tags": [
+          "Product_Meta_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D~1metas~1%7Bmeta_id%7D/put/parameters/2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/ProductMeta"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product meta",
+        "description": "Update a product meta.",
+        "tags": [
+          "Product_Meta_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          },
+          {
+            "name": "meta_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product meta",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductMeta"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/ProductMeta"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/categories": {
+      "put": {
+        "summary": "Update categories of a product",
+        "description": "Update categories of a product.",
+        "tags": [
+          "Product_Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Product"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/tags": {
+      "patch": {
+        "summary": "Update tags for a product",
+        "description": "Update tags for a product.",
+        "tags": [
+          "Product_Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "product_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "tags": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Tag"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -653,6 +1105,237 @@
         }
       }
     },
+    "/admin/tags": {
+      "get": {
+        "summary": "Get all tags",
+        "description": "Retrieve a list of all tags.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Tag"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new tag",
+        "description": "Create a new tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Tag"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/tags/{id}": {
+      "delete": {
+        "summary": "Delete a tag",
+        "description": "Delete a tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1tags~1%7Bid%7D/put/parameters/1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Tag"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a tag",
+        "description": "Update a tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tag",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Tag"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "summary": "Search categories",
@@ -705,6 +1388,95 @@
                       "type": "object",
                       "properties": {
                         "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/CategoryPublicHierarchy"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{slug}": {
+      "get": {
+        "summary": "Get category",
+        "description": "Retrieve a category by its slug.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Slug of the category to retrieve",
+            "schema": {
+              "type": "string",
+              "example": "tai-nghe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CategoryPublicHierarchy"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/categories/{slug}/products": {
+      "get": {
+        "summary": "Get products by category slug",
+        "description": "Retrieve a list of products belonging to a category by its slug.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1categories~1%7Bslug%7D/get/parameters/0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
                           "allOf": [
                             {
                               "$ref": "#/components/schemas/InfiniteScroll"
@@ -715,7 +1487,7 @@
                                 "data": {
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/components/schemas/CategoryPublic"
+                                    "$ref": "#/components/schemas/ProductPublic"
                                   }
                                 }
                               }
@@ -773,7 +1545,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Category"
+                          "$ref": "#/components/schemas/CategoryHierarchy"
                         }
                       }
                     }
@@ -814,7 +1586,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "$ref": "#/components/schemas/UpdateCategoryRequest"
               }
             }
           }
@@ -833,7 +1605,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Category"
+                          "$ref": "#/components/schemas/CategoryHierarchy"
                         }
                       }
                     }
@@ -886,7 +1658,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Category"
+                          "$ref": "#/components/schemas/CategoryHierarchy"
                         }
                       }
                     }
@@ -929,7 +1701,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateCategoryRequest"
+                  }
+                ]
               }
             }
           }
@@ -948,7 +1724,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Category"
+                          "$ref": "#/components/schemas/CategoryHierarchy"
                         }
                       }
                     }
@@ -959,9 +1735,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -988,15 +1761,6 @@
           },
           {
             "$ref": "#/components/parameters/SortParam"
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "description": "Search keyword",
-            "schema": {
-              "type": "string",
-              "example": "tai nghe"
-            }
           },
           {
             "name": "level",
@@ -1032,9 +1796,8 @@
                               "type": "object",
                               "properties": {
                                 "data": {
-                                  "type": "array",
                                   "items": {
-                                    "$ref": "#/components/schemas/Category"
+                                    "$ref": "#/components/schemas/CategoryHierarchy"
                                   }
                                 }
                               }
@@ -2895,8 +3658,72 @@
           },
           {
             "$ref": "#/components/schemas/AuditFields"
+          },
+          {
+            "$ref": "#/components/schemas/ProductExtra"
           }
         ]
+      },
+      "ProductExtra": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Tai nghe"
+                },
+                "slug": {
+                  "type": "string",
+                  "example": "tai-nghe"
+                }
+              }
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Hot_Trend"
+                },
+                "slug": {
+                  "type": "string",
+                  "example": "hot-trend"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "example": "color"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "red"
+                }
+              }
+            }
+          }
+        }
       },
       "ProductPublic": {
         "type": "object",
@@ -2912,6 +3739,9 @@
               "meta_title": null,
               "sku": null
             }
+          },
+          {
+            "$ref": "#/components/schemas/ProductExtra"
           }
         ]
       },
@@ -3083,6 +3913,78 @@
           "reason"
         ]
       },
+      "ProductMeta": {
+        "type": "object",
+        "description": "Thuộc tính chi tiết của sản phẩm (Product Attribute)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Mã thuộc tính",
+            "example": 1
+          },
+          "product_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Mã sản phẩm",
+            "example": 101
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Tên thuộc tính",
+            "example": "Màu sắc"
+          },
+          "content": {
+            "type": "string",
+            "description": "Giá trị của thuộc tính",
+            "example": "Đen nhám"
+          }
+        },
+        "required": [
+          "product_id",
+          "key",
+          "content"
+        ]
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1,
+            "description": "Tag ID"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Phụ kiện điện tử",
+            "description": "Tên thẻ"
+          },
+          "meta_title": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Phụ kiện điện tử chính hãng giá tốt",
+            "description": "Tiêu đề SEO"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "phu-kien-dien-tu",
+            "description": "Đường dẫn thân thiện"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Tổng hợp các sản phẩm phụ kiện điện tử chất lượng cao.",
+            "description": "Mô tả thẻ"
+          }
+        },
+        "required": [
+          "title",
+          "slug"
+        ]
+      },
       "Category": {
         "type": "object",
         "allOf": [
@@ -3157,6 +4059,67 @@
           "id",
           "title",
           "slug"
+        ]
+      },
+      "CategoryPublicHierarchy": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CategoryPublic"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CategoryPublic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CategoryHierarchy": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Category"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UpdateCategoryRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Category"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "example": [
+                  1,
+                  2,
+                  3
+                ],
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
         ]
       },
       "Cart": {

@@ -3,10 +3,12 @@ description: 'Thuộc tính chi tiết của sản phẩm (Product Attribute)'
 properties:
   id:
     type: integer
+    readOnly: true
     description: 'Mã thuộc tính'
     example: 1
   product_id:
     type: integer
+    readOnly: true
     description: 'Mã sản phẩm'
     example: 101
   key:

@@ -30,7 +30,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ../index.yaml#/components/schemas/Category
+                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
@@ -49,7 +49,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../index.yaml#/components/schemas/Category'
+              $ref: '../index.yaml#/components/schemas/UpdateCategoryRequest'
       responses:
         '200':
           description: Success
@@ -61,7 +61,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Category'
+                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
@@ -88,7 +88,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Category'
+                        $ref: '../index.yaml#/components/schemas/CategoryHierarchy'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
@@ -109,7 +109,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../index.yaml#/components/schemas/Category'
+              allOf:
+                - $ref: '../index.yaml#/components/schemas/UpdateCategoryRequest'
       responses:
         '201':
           description: Success
@@ -121,11 +122,9 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Category'
+                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
 
     get:
       summary: Search categories for admin
@@ -138,12 +137,6 @@ paths:
         - $ref: '../shared.yaml#/components/parameters/PageParam'
         - $ref: '../shared.yaml#/components/parameters/SizeParam'
         - $ref: '../shared.yaml#/components/parameters/SortParam'
-        - name: query
-          in: query
-          description: Search keyword
-          schema:
-            type: string
-            example: 'tai nghe'
         - name: level
           in: query
           required: true
@@ -168,6 +161,5 @@ paths:
                           - type: object
                             properties:
                               data:
-                                type: array
                                 items:
-                                  $ref: '../index.yaml#/components/schemas/Category'
+                                  $ref: '../index.yaml#/components/schemas/CategoryHierarchy'

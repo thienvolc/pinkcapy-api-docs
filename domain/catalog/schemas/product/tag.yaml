@@ -1,0 +1,29 @@
+type: object
+properties:
+  id:
+    type: integer
+    readOnly: true
+    example: 1
+    description: Tag ID
+  title:
+    type: string
+    maxLength: 150
+    example: 'Phụ kiện điện tử'
+    description: Tên thẻ
+  meta_title:
+    type: string
+    maxLength: 150
+    example: 'Phụ kiện điện tử chính hãng giá tốt'
+    description: Tiêu đề SEO
+  slug:
+    type: string
+    maxLength: 150
+    example: 'phu-kien-dien-tu'
+    description: Đường dẫn thân thiện
+  desc:
+    type: string
+    example: 'Tổng hợp các sản phẩm phụ kiện điện tử chất lượng cao.'
+    description: Mô tả thẻ
+required:
+  - title
+  - slug

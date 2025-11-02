@@ -23,11 +23,23 @@ paths:
   # Catalog API : ./domain/catalog/index.yaml
   /products/{id}:
     $ref: './domain/catalog/index.yaml#/paths/~1products~1{id}'
+  /products/{slug}:
+    $ref: './domain/catalog/index.yaml#/paths/~1products~1{slug}'
+  /products/{id}/related:
+    $ref: './domain/catalog/index.yaml#/paths/~1products~1{id}~1related'
   /products:
     $ref: './domain/catalog/index.yaml#/paths/~1products'
 
   /admin/products/{id}:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}'
+  /admin/products/{id}/metas:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1metas'
+  /admin/products/{id}/metas/{meta_id}:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1metas~1{meta_id}'
+  /admin/products/{id}/categories:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1categories'
+  /admin/products/{id}/tags:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1tags'
   /admin/products/{id}/status:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1status'
   /admin/products:
@@ -35,8 +47,18 @@ paths:
   /admin/products/{id}/inventories:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1inventories'
 
+  /admin/tags:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1tags'
+  /admin/tags/{id}:
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1tags~1{id}'
+
   /categories:
     $ref: './domain/catalog/index.yaml#/paths/~1categories'
+
+  /categories/{slug}:
+    $ref: './domain/catalog/index.yaml#/paths/~1categories~1{slug}'
+  /categories/{slug}/products:
+    $ref: './domain/catalog/index.yaml#/paths/~1categories~1{slug}~1products'
 
   /admin/categories/{id}:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1categories~1{id}'
@@ -116,6 +138,8 @@ components:
     # Catalog Domain Schemas
     Product:
       $ref: './domain/catalog/index.yaml#/components/schemas/Product'
+    ProductExtra:
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductExtra'
     ProductPublic:
       $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublic'
     ProductBase:
@@ -124,6 +148,10 @@ components:
       $ref: './domain/catalog/index.yaml#/components/schemas/UpdateProductStatusRequest'
     ProductAdjustInventory:
       $ref: './domain/catalog/index.yaml#/components/schemas/ProductAdjustInventory'
+    ProductMeta:
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductMeta'
+    Tag:
+      $ref: './domain/catalog/index.yaml#/components/schemas/Tag'
 
     Category:
       $ref: './domain/catalog/index.yaml#/components/schemas/Category'
@@ -131,6 +159,15 @@ components:
       $ref: './domain/catalog/index.yaml#/components/schemas/CategoryPublic'
     CategoryBase:
       $ref: './domain/catalog/index.yaml#/components/schemas/CategoryBase'
+
+    CategoryPublicHierarchy:
+      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryPublicHierarchy'
+    CategoryHierarchy:
+      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryHierarchy'
+
+    UpdateCategoryRequest:
+      $ref: './domain/catalog/index.yaml#/components/schemas/UpdateCategoryRequest'
+
 
     # Sales Domain Schemas
     Cart:
