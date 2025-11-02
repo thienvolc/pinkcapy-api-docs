@@ -151,6 +151,12 @@
           },
           {
             "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
           }
         ],
         "responses": {
@@ -167,10 +173,21 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/ProductPublic"
-                          }
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "items": {
+                                    "$ref": "#/components/schemas/ProductPublic"
+                                  }
+                                }
+                              }
+                            }
+                          ]
                         }
                       }
                     }

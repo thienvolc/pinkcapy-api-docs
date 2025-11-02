@@ -68,6 +68,8 @@ paths:
       parameters:
         - $ref: '#/parameters/ProductId'
         - $ref: '../shared.yaml#/components/parameters/LimitParam'
+        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
+        - $ref: '../shared.yaml#/components/parameters/SortParam'
       responses:
         '200':
           description: Success
@@ -79,9 +81,13 @@ paths:
                   - type: object
                     properties:
                       data:
-                        type: array
-                        items:
-                          $ref: '../index.yaml#/components/schemas/ProductPublic'
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
+                          - type: object
+                            properties:
+                              data:
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/ProductPublic'
 
   /products:
     get:
