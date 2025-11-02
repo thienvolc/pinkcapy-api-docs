@@ -1,0 +1,12 @@
+type: object
+description: 'Order item of a user order.'
+allOf:
+  - $ref: './order_item_base.yaml'
+  - type: object
+    properties:
+      sku:
+required:
+  - order_id
+  - product_id
+  - price
+  - quantity

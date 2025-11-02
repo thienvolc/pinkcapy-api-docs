@@ -1,0 +1,178 @@
+parameters:
+  UserIdParam:
+    name: id
+    in: path
+    required: true
+    description: ID of the product to retrieve
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /admin/users/{id}/profile:
+    get:
+      summary: Get user for admin
+      description: Retrieve a user by its ID for admin.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/UserIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UserProfileAdmin'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/users/{id}/status:
+    patch:
+      summary: Update a user status
+      description: Admin to update a status of an existing user in the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/UserIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/UpdateUserStatusRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UpdateUserStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    delete:
+      summary: Delete a user
+      description: Admin to delete an existing user in the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/UserIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UserAdmin'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/users:
+    post:
+      summary: Create a new user
+      description: Admin to add a new user to the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UserAdmin'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    get:
+      summary: Search users for admin
+      description: Retrieve a list of users based on search criteria.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/PageParam'
+        - $ref: '../shared.yaml#/components/parameters/SizeParam'
+        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: is_admin
+          in: query
+          description: Filter by admin status
+          schema:
+            type: boolean
+            example: true
+        - name: status
+          in: query
+          description: Filter by user status
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/Pagination'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/UserAdmin'

@@ -1,0 +1,22 @@
+type: object
+description: 'Place order request'
+properties:
+  promo:
+    type: string
+    maxLength: 255
+    description: 'Promo code applied for this order'
+    example: 'SUMMER2025'
+  note:
+    type: string
+    maxLength: 255
+    description: 'Note for the order'
+    example: 'Giao buổi sáng, gọi trước khi tới'
+  items:
+    type: array
+    description: 'List of product ids to order'
+    items:
+      type: integer
+      description: 'Product id'
+    example: [101, 102, 103]
+required:
+  - items

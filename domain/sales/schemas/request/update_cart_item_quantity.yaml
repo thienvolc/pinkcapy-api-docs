@@ -1,0 +1,10 @@
+type: object
+description: Update cart item quantity request
+properties:
+  quantity:
+    type: integer
+    description: The new quantity for the cart item.
+    example: 2
+    minimum: 1
+required:
+  - quantity

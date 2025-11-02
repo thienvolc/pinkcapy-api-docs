@@ -1,0 +1,44 @@
+components:
+  schemas:
+    InfiniteScroll:
+      $ref: '../../openapi.yaml#/components/schemas/InfiniteScroll'
+    Pagination:
+      $ref: '../../openapi.yaml#/components/schemas/Pagination'
+    ResponseBase:
+      $ref: '../../openapi.yaml#/components/schemas/ResponseBase'
+    AuditFields:
+      $ref: '../../openapi.yaml#/components/schemas/AuditFields'
+
+  parameters:
+    SortParam:
+      $ref: '../../openapi.yaml#/components/parameters/SortParam'
+    AuthorizationHeader:
+      $ref: '../../openapi.yaml#/components/parameters/AuthorizationHeader'
+    IdempotencyKeyHeader:
+      $ref: '../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+    PageParam:
+      $ref: '../../openapi.yaml#/components/parameters/PageParam'
+    SizeParam:
+      $ref: '../../openapi.yaml#/components/parameters/SizeParam'
+    OffsetParam:
+      $ref: '../../openapi.yaml#/components/parameters/OffsetParam'
+    LimitParam:
+      $ref: '../../openapi.yaml#/components/parameters/LimitParam'
+
+  responses:
+    BadRequest:
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    Unauthorized:
+      $ref: '../../openapi.yaml#/components/responses/Unauthorized'
+    ValidationError:
+      $ref: '../../openapi.yaml#/components/responses/ValidationError'
+    Forbidden:
+      $ref: '../../openapi.yaml#/components/responses/Forbidden'
+    NotFound:
+      $ref: '../../openapi.yaml#/components/responses/NotFound'
+    Conflict:
+      $ref: '../../openapi.yaml#/components/responses/Conflict'
+    InternalServerError:
+      $ref: '../../openapi.yaml#/components/responses/InternalServerError'
+    NoContent:
+      $ref: '../../openapi.yaml#/components/responses/NoContent'

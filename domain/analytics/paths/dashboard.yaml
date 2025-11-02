@@ -7,7 +7,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
       responses:
         '200':
           description: Success
@@ -15,23 +15,23 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
                   - type: object
                     properties:
                       data:
-                        $ref: '../schemas/overview.yaml'
+                        $ref: '../index.yaml#/components/schemas/DashboardOverview'
 
   /revenue:
     get:
-      summary: Lấy dữ liệu doanh thu theo thời gian
+      summary: Statistics of revenue
       tags: [Dashboard]
       description: |
-        Trả về thống kê doanh thu theo ngày, tuần, hoặc tháng.  
-        Dữ liệu được sử dụng để hiển thị biểu đồ doanh thu, số đơn hàng, và doanh thu trung bình.
+        Return revenue statistics by day, week, or month.
+        Data is used to display revenue charts, order counts, and average revenue.
       parameters:
         - name: period
           in: query
-          description: Khoảng thời gian thống kê (`day`, `week`, `month`)
+          description: The period (`day`, `week`, `month`)
           required: false
           schema:
             type: string
@@ -40,14 +40,14 @@ paths:
           example: month
         - name: year
           in: query
-          description: Năm cần thống kê (nếu period = month)
+          description: The year to filter (if period = month)
           required: false
           schema:
             type: integer
             example: 2025
         - name: month
           in: query
-          description: Tháng cần thống kê (nếu period = day)
+          description: The month to filter (if period = day)
           required: false
           schema:
             type: integer
@@ -61,7 +61,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
                   - type: object
                     properties:
                       data:
@@ -69,18 +69,17 @@ paths:
 
   /orders/stats:
     get:
-      summary: Lấy thống kê đơn hàng theo trạng thái
+      summary: Get order statistics by status
       tags:
         - Dashboard
       description: |
-        API trả về số lượng đơn hàng được nhóm theo các trạng thái như:
+        API returns the number of orders grouped by statuses such as:
         - `pending`
         - `processing`
         - `completed`
         - `cancelled`
         - `refunded`
-
-        Dữ liệu được sử dụng để hiển thị biểu đồ tròn hoặc biểu đồ thanh trong phần thống kê đơn hàng của Dashboard.
+        Data is used to display pie charts or bar charts in the order statistics section of the Dashboard.
       responses:
         '200':
           description: Success
@@ -88,24 +87,24 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
                   - type: object
                     properties:
                       data:
-                        $ref: '../schemas/orders_stats.yaml'
+                        $ref: '../index.yaml#/components/schemas/DashboardOrdersStats'
 
   /products/top:
     get:
-      summary: Lấy danh sách sản phẩm bán chạy nhất
+      summary: Get top selling products
       tags:
         - Dashboard
       description: |
-        Trả về danh sách các sản phẩm có **doanh số hoặc số lượng bán cao nhất** trong kỳ gần đây.
-        Dữ liệu được dùng để hiển thị bảng hoặc biểu đồ “Top Selling Products” trên Dashboard.
+        API returns a list of products with **sales or quantity sold** in the last year.
+        Data is used to display the "Top Selling Products" table or chart on the Dashboard.
       parameters:
         - name: limit
           in: query
-          description: Số lượng sản phẩm tối đa cần lấy (mặc định 5)
+          description: Maximum number of products to retrieve (default is 5)
           required: false
           schema:
             type: integer
@@ -120,8 +119,8 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../../../openapi.yaml#/components/schemas/ResponseBase'
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
                   - type: object
                     properties:
                       data:
-                        $ref: '../schemas/product_top.yaml#/components/schemas/ProductTop'
+                        $ref: '../index.yaml#/components/schemas/DashboardProductTop'

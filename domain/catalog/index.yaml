@@ -1,0 +1,50 @@
+openapi: 3.1.0
+info:
+  title: Catalog Domain
+  version: 1.0.0
+
+paths:
+  /products/{id}:
+    $ref: './paths/product.yaml#/paths/~1products~1{id}'
+  /products:
+    $ref: './paths/product.yaml#/paths/~1products'
+
+  /admin/products/{id}:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}'
+  /admin/products/{id}/status:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1status'
+  /admin/products:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products'
+  /admin/products/{id}/inventories:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1inventories'
+
+  /categories:
+    $ref: './paths/category.yaml#/paths/~1categories'
+
+  /admin/categories/{id}:
+    $ref: './paths/admin_category.yaml#/paths/~1admin~1categories~1{id}'
+  /admin/categories:
+    $ref: './paths/admin_category.yaml#/paths/~1admin~1categories'
+
+components:
+  schemas:
+    CategoryBase:
+      $ref: './schemas/category/category_base.yaml'
+    CategoryPublic:
+      $ref: './schemas/category/category_public.yaml'
+    Category:
+      $ref: './schemas/category/category.yaml'
+
+    ProductBase:
+      $ref: './schemas/product/product_base.yaml'
+    ProductPublic:
+      $ref: './schemas/product/product_public.yaml'
+    Product:
+      $ref: './schemas/product/product.yaml'
+    ProductMeta:
+      $ref: './schemas/product/product_meta.yaml'
+
+    UpdateProductStatusRequest:
+      $ref: './schemas/request/update_product_status.yaml'
+    ProductAdjustInventory:
+      $ref: './schemas/request/adjust_product_inventory.yaml'

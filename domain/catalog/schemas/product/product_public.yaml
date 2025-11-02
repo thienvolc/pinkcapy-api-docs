@@ -1,0 +1,9 @@
+type: object
+allOf:
+  - $ref: './product_base.yaml'
+  - type: object
+    properties:
+      starts_at:
+      published_at:
+      meta_title:
+      sku:

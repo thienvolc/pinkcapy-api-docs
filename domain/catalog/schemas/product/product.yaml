@@ -1,3 +1,4 @@
+type: object
 allOf:
-  - $ref: './user.yaml'
+  - $ref: './product_base.yaml'
   - $ref: '../../shared.yaml#/components/schemas/AuditFields'

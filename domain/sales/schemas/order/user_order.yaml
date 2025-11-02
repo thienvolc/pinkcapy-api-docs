@@ -1,0 +1,11 @@
+type: object
+allOf:
+  - $ref: './order_base.yaml'
+  - type: object
+    properties:
+      user_id:
+      items:
+        type: array
+        description: 'List of order items'
+        items:
+          $ref: './user_order_item.yaml'

@@ -10,75 +10,91 @@ servers:
   - url: http://localhost:8000/v1
     description: Local development
 
-# tags:
-
+tags:
+  - name: Product_Public
+  - name: Product_Admin
+  - name: Category_Public
+  - name: Cart
+  - name: Order_Admin
+  - name: Transaction
+  - name: Dashboard
 
 paths:
-  # Catalog API : ./domain/catalog/domain.yaml
+  # Catalog API : ./domain/catalog/index.yaml
   /products/{id}:
-    $ref: './domain/catalog/domain.yaml#/paths/~1products~1{id}'
+    $ref: './domain/catalog/index.yaml#/paths/~1products~1{id}'
   /products:
-    $ref: './domain/catalog/domain.yaml#/paths/~1products'
+    $ref: './domain/catalog/index.yaml#/paths/~1products'
 
   /admin/products/{id}:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}'
   /admin/products/{id}/status:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}~1status'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1status'
   /admin/products:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products'
   /admin/products/{id}/inventories:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1products~1{id}~1inventories'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1inventories'
 
   /categories:
-    $ref: './domain/catalog/domain.yaml#/paths/~1categories'
+    $ref: './domain/catalog/index.yaml#/paths/~1categories'
 
   /admin/categories/{id}:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1categories~1{id}'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1categories~1{id}'
   /admin/categories:
-    $ref: './domain/catalog/domain.yaml#/paths/~1admin~1categories'
+    $ref: './domain/catalog/index.yaml#/paths/~1admin~1categories'
 
-  # Sales Domain : ./domain/sales/domain.yaml
+  # Sales Domain : ./domain/sales/index.yaml
   /me/carts:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1carts'
   /me/carts/items:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1items'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1items'
   /me/carts/items/{id}:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1items~1{id}'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1items~1{id}'
   /me/carts/clear:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1carts~1clear'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1clear'
 
   /me/orders:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders'
   /me/orders/{id}:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}'
   /me/orders/{id}/status:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1status'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1status'
   /me/orders/{id}/delivery:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1delivery'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1delivery'
   /me/orders/{id}/cancel:
-    $ref: './domain/sales/domain.yaml#/paths/~1me~1orders~1{id}~1cancel'
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1cancel'
 
   /admin/orders:
-    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders'
+    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders'
   /admin/orders/{id}:
-    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}'
+    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}'
   /admin/orders/{id}/status:
-    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}~1status'
+    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}~1status'
   /admin/orders/{id}/cancel:
-    $ref: './domain/sales/domain.yaml#/paths/~1admin~1orders~1{id}~1cancel'
+    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}~1cancel'
 
   /admin/transactions:
-    $ref: './domain/sales/domain.yaml#/paths/~1admin~1transactions'
+    $ref: './domain/sales/index.yaml#/paths/~1admin~1transactions'
 
-  # Analytics Domain : ./domain/analytics/domain.yaml
+  /me/profile:
+    $ref: './domain/identity/index.yaml#/paths/~1me~1profile'
+
+  /admin/users:
+    $ref: './domain/identity/index.yaml#/paths/~1admin~1users'
+  /admin/users/{id}/profile:
+    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1profile'
+  /admin/users/{id}/status:
+    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1status'
+
+  # Analytics Domain
   /admin/dashboard/overview:
-    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1overview'
+    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1overview'
   /admin/dashboard/revenue:
-    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1revenue'
+    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1revenue'
   /admin/dashboard/orders/stats:
-    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1orders~1stats'
+    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1orders~1stats'
   /admin/dashboard/products/top:
-    $ref: './domain/analytics/domain.yaml#/paths/~1admin~1dashboard~1products~1top'
+    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1products~1top'
 
 components:
   securitySchemes:
@@ -96,68 +112,84 @@ components:
       $ref: './shared/schemas/response.yaml#/Response'
     AuditFields:
       $ref: './shared/schemas/audit_fields.yaml'
+
     # Catalog Domain Schemas
     Product:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/Product'
+      $ref: './domain/catalog/index.yaml#/components/schemas/Product'
     ProductPublic:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductPublic'
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublic'
     ProductBase:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductBase'
-    ProductStatus:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductStatus'
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductBase'
+    UpdateProductStatusRequest:
+      $ref: './domain/catalog/index.yaml#/components/schemas/UpdateProductStatusRequest'
     ProductAdjustInventory:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/ProductAdjustInventory'
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductAdjustInventory'
 
     Category:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/Category'
+      $ref: './domain/catalog/index.yaml#/components/schemas/Category'
     CategoryPublic:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/CategoryPublic'
+      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryPublic'
     CategoryBase:
-      $ref: './domain/catalog/domain.yaml#/components/schemas/CategoryBase'
+      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryBase'
 
     # Sales Domain Schemas
     Cart:
-      $ref: './domain/sales/schemas/cart.yaml#/schemas/Cart'
+      $ref: './domain/sales/index.yaml#/components/schemas/Cart'
     CartItem:
-      $ref: './domain/sales/schemas/cart.yaml#/schemas/CartItem'
+      $ref: './domain/sales/index.yaml#/components/schemas/CartItem'
     EmptyCart:
-      $ref: './domain/sales/schemas/cart.yaml#/schemas/EmptyCart'
-    AddCartItem:
-      $ref: './domain/sales/schemas/cart.yaml#/schemas/AddCartItem'
-    UpdateCartItemQuantity:
-      $ref: './domain/sales/schemas/cart.yaml#/schemas/UpdateCartItemQuantity'
+      $ref: './domain/sales/index.yaml#/components/schemas/EmptyCart'
+    AddToCartRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/AddToCartRequest'
+    UpdateCartItemQuantityRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/UpdateCartItemQuantityRequest'
 
     Order:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/Order'
+      $ref: './domain/sales/index.yaml#/components/schemas/Order'
     OrderBase:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderBase'
+      $ref: './domain/sales/index.yaml#/components/schemas/OrderBase'
     ShortOrder:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/ShortOrder'
+      $ref: './domain/sales/index.yaml#/components/schemas/ShortOrder'
     OrderItemBase:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderItemBase'
-    OrderStatus:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderStatus'
-    OrderDelivery:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/OrderDelivery'
-    CreateOrder:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/CreateOrder'
+      $ref: './domain/sales/index.yaml#/components/schemas/OrderItemBase'
+    UpdateOrderStatusRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderStatusRequest'
+    UpdateOrderDeliveryRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderDeliveryRequest'
+    PlaceOrderRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/PlaceOrderRequest'
     UserOrder:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/UserOrder'
+      $ref: './domain/sales/index.yaml#/components/schemas/UserOrder'
     UserOrderItem:
-      $ref: './domain/sales/schemas/order.yaml#/schemas/UserOrderItem'
+      $ref: './domain/sales/index.yaml#/components/schemas/UserOrderItem'
 
     Transaction:
-      $ref: './domain/sales/schemas/transaction.yaml#/schemas/Transaction'
+      $ref: './domain/sales/index.yaml#/components/schemas/Transaction'
+
+    User:
+      $ref: './domain/identity/index.yaml#/components/schemas/User'
+    UserProfile:
+      $ref: './domain/identity/index.yaml#/components/schemas/UserProfile'
+    UserProfileBase:
+      $ref: './domain/identity/index.yaml#/components/schemas/UserProfileBase'
+    UserAdmin:
+      $ref: './domain/identity/index.yaml#/components/schemas/UserAdmin'
+    UserProfileAdmin:
+      $ref: './domain/identity/index.yaml#/components/schemas/UserProfileAdmin'
+    CreateUserRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/CreateUserRequest'
+    UpdateUserStatusRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/UpdateUserStatusRequest'
 
     # Analytics Domain Schemas
     DashboardOverview:
-      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardOverview'
+      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardOverview'
     DashboardRevenue:
-      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardRevenue'
+      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardRevenue'
     DashboardOrdersStats:
-      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardOrdersStats'
+      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardOrdersStats'
     DashboardProductTop:
-      $ref: './domain/analytics/domain.yaml#/components/schemas/DashboardProductTop'
+      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardProductTop'
 
   parameters:
     SortParam:

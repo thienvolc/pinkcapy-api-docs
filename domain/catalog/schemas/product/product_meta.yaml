@@ -1,0 +1,24 @@
+type: object
+description: 'Thuộc tính chi tiết của sản phẩm (Product Attribute)'
+properties:
+  id:
+    type: integer
+    description: 'Mã thuộc tính'
+    example: 1
+  product_id:
+    type: integer
+    description: 'Mã sản phẩm'
+    example: 101
+  key:
+    type: string
+    maxLength: 150
+    description: 'Tên thuộc tính'
+    example: 'Màu sắc'
+  content:
+    type: string
+    description: 'Giá trị của thuộc tính'
+    example: 'Đen nhám'
+required:
+  - product_id
+  - key
+  - content

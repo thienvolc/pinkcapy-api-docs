@@ -1,0 +1,70 @@
+paths:
+  /me/carts:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts'
+  /me/carts/items:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts~1items'
+  /me/carts/items/{id}:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts~1items~1{id}'
+  /me/carts/clear:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts~1clear'
+
+  /me/orders:
+    $ref: './paths/order.yaml#/paths/~1me~1orders'
+  /me/orders/{id}:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}'
+  /me/orders/{id}/status:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1status'
+  /me/orders/{id}/delivery:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1delivery'
+  /me/orders/{id}/cancel:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1cancel'
+
+  /admin/orders:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders'
+  /admin/orders/{id}:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}'
+  /admin/orders/{id}/status:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}~1status'
+  /admin/orders/{id}/cancel:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}~1cancel'
+
+  /admin/transactions:
+    $ref: './paths/transaction.yaml#/paths/~1admin~1transactions'
+
+components:
+  schemas:
+    Cart:
+      $ref: './schemas/cart/cart.yaml'
+    CartItem:
+      $ref: './schemas/cart/cart_item.yaml'
+    EmptyCart:
+      $ref: './schemas/cart/empty_cart.yaml'
+
+    AddToCartRequest:
+      $ref: './schemas/request/add_to_cart.yaml'
+    UpdateCartItemQuantityRequest:
+      $ref: './schemas/request/update_cart_item_quantity.yaml'
+
+    Order:
+      $ref: './schemas/order/order.yaml'
+    OrderBase:
+      $ref: './schemas/order/order_base.yaml'
+    ShortOrder:
+      $ref: './schemas/order/short_order.yaml'
+    OrderItemBase:
+      $ref: './schemas/order/order_item_base.yaml'
+
+    UpdateOrderStatusRequest:
+      $ref: './schemas/request/update_order_status.yaml'
+    UpdateOrderDeliveryRequest:
+      $ref: './schemas/request/update_order_delivery.yaml'
+    PlaceOrderRequest:
+      $ref: './schemas/request/place_order.yaml'
+
+    UserOrder:
+      $ref: './schemas/order/user_order.yaml'
+    UserOrderItem:
+      $ref: './schemas/order/user_order_item.yaml'
+
+    Transaction:
+      $ref: './schemas/transaction/transaction.yaml'

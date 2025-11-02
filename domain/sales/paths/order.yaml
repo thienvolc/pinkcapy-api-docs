@@ -1,0 +1,194 @@
+parameters:
+  OrderIdParam:
+    name: id
+    in: path
+    required: true
+    description: ID of the order
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /me/orders:
+    get:
+      summary: Get user orders history
+      description: Retrieve a list of the user's past orders.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - name: status
+          in: query
+          optional: true
+          description: Filter orders by their status
+          schema:
+            type: integer
+            enum: [1, 2, 3, 4, 5, 6, 7, 8]
+          example: 3
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
+                          - type: object
+                            properties:
+                              data:
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/ShortOrder'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+    post:
+      summary: Create a order
+      description: Create a new order.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/PlaceOrderRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Order'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+  /me/orders/{id}:
+    get:
+      summary: Get order details
+      description: Retrieve the details of a specific order.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Order'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /me/orders/{id}/status:
+    get:
+      summary: Get the status of a specific order
+      description: Retrieve the current status of a specific order.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Order'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /me/orders/{id}/delivery:
+    patch:
+      summary: Update a order delivery information
+      description: Update delivery information for a specific order.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/UpdateOrderDeliveryRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Order'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /me/orders/{id}/cancel:
+    delete:
+      summary: Cancel an order
+      description: User to cancel an existing order.
+      tags: [Order]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'

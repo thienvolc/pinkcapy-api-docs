@@ -1,0 +1,30 @@
+paths:
+  /me/profile:
+    $ref: './paths/user.yaml#/paths/~1me~1profile'
+
+  /admin/users:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users'
+  /admin/users/{id}/profile:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{id}~1profile'
+  /admin/users/{id}/status:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{id}~1status'
+
+components:
+  schemas:
+    User:
+      $ref: './schemas/user/user.yaml'
+    UserProfile:
+      $ref: './schemas/user/user_profile.yaml'
+
+    UserProfileBase:
+      $ref: './schemas/user/user_profile_base.yaml'
+
+    UserAdmin:
+      $ref: './schemas/user/user_admin.yaml'
+    UserProfileAdmin:
+      $ref: './schemas/user/user_profile_admin.yaml'
+
+    CreateUserRequest:
+      $ref: './schemas/request/create_user.yaml'
+    UpdateUserStatusRequest:
+      $ref: './schemas/request/update_user_status.yaml'

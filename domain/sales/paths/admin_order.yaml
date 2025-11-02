@@ -1,0 +1,240 @@
+parameters:
+  OrderIdParam:
+    name: id
+    in: path
+    required: true
+    description: ID of the order
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /admin/orders:
+    get:
+      summary: Search user orders for admin
+      description: Retrieve a list of the user's past orders.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/PageParam'
+        - $ref: '../shared.yaml#/components/parameters/SizeParam'
+        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: status
+          in: query
+          description: >
+            Filter orders by their status
+            - `1`: Pending payment
+            - `2`: Paid
+            - `3`: Processing
+            - `4`: Shipped
+            - `5`: Delivered
+            - `6`: Refunded
+            - `7`: Returned
+            - `8`: Cancelled
+          schema:
+            type: integer
+            enum: [1, 2, 3, 4, 5, 6, 7, 8]
+          example: 3
+        - name: user_id
+          in: query
+          description: Filter orders by user ID
+          schema:
+            type: integer
+          example: 1
+        - name: start
+          in: query
+          description: Order start date (upper bound)
+          schema:
+            type: string
+            format: date
+            example: '2025-01-01'
+        - name: end
+          in: query
+          description: Order end date (lower bound)
+          schema:
+            type: string
+            format: date
+            example: '2025-12-01'
+        - name: min
+          in: query
+          description: Order minimum price
+          schema:
+            type: number
+            format: float
+            example: 100.0
+        - name: max
+          in: query
+          description: Order maximum price
+          schema:
+            type: number
+            format: float
+            example: 200.0
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/Pagination'
+                          - type: object
+                            properties:
+                              data:
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/ShortOrder'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+  /admin/orders/{id}/confirm:
+    post:
+      summary: Confirm a new order
+      description: Confirm a new order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/schemas/UpdateOrderStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+  /admin/orders/{id}:
+    get:
+      summary: Get order details
+      description: Retrieve the details of a specific order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Order'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/orders/{id}/status:
+    get:
+      summary: Get the status of a specific order
+      description: Retrieve the current status of a specific order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    put:
+      summary: Update the status of a specific order
+      description: Update the current status of a specific order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/orders/{id}/cancel:
+    delete:
+      summary: Cancel an order
+      description: User to cancel an existing order.
+      tags: [Order_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/OrderIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'

@@ -1,0 +1,30 @@
+type: object
+description: 'Short view of an order'
+allOf:
+  - $ref: './order_base.yaml'
+  - type: object
+    properties:
+      user_id:
+      subtotal:
+      tax:
+      shipping:
+      discount_total:
+      promo:
+      discount:
+      first_name:
+      middle_name:
+      last_name:
+      email:
+      phone:
+      line1:
+      line2:
+      city:
+      province:
+      country:
+      orders_at:
+      note:
+required:
+  - id
+  - total
+  - grand_total
+  - status

@@ -7,16 +7,16 @@ components:
           type: string
           format: date
           example: '2025-10-01'
-          description: Ngày hoặc mốc thời gian
+          description: Revenue at specific date
         revenue:
           type: number
           format: double
           example: 3500000
-          description: Tổng doanh thu tại mốc thời gian
+          description: Revenue at specific date
         orders:
           type: integer
           example: 6
-          description: Số lượng đơn hàng tại mốc thời gian
+          description: Number of orders at specific date
       required:
         - date
         - revenue
@@ -29,27 +29,28 @@ components:
           type: number
           format: double
           example: 203000000
-          description: Tổng doanh thu trong toàn bộ kỳ
+          description: Total revenue in the selected period
         avg_order_value:
           type: number
           format: double
           example: 1580000
-          description: Giá trị trung bình mỗi đơn hàng
+          description: Average order value
         top_day:
           type: string
           format: date
           example: '2025-10-24'
-          description: Ngày có doanh thu cao nhất
+          description: Day with the highest revenue
       required:
         - total_revenue
         - avg_order_value
         - top_day
+
     Revenue:
       type: object
       properties:
         series:
           type: array
-          description: Danh sách dữ liệu doanh thu theo mốc thời gian
+          description: Revenue data over time
           items:
             $ref: '#/components/schemas/DashboardRevenueItem'
         summary:

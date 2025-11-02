@@ -1,0 +1,49 @@
+type: object
+description: Order Item
+properties:
+  id:
+    type: integer
+    description: 'Order item id'
+    example: 10001
+  order_id:
+    type: integer
+    description: 'Order id'
+    example: 1001
+  product_id:
+    type: integer
+    description: 'Product id'
+    example: 23
+  sku:
+    type: string
+    maxLength: 150
+    description: 'SKU code of the product'
+    example: 'WH1000XM5-BLK'
+  is_active:
+    type: boolean
+    description: 'Activation status of the product in the order'
+    example: true
+  price:
+    type: number
+    format: float
+    description: 'Selling price of the product at the time of order'
+    example: 8990000.00
+  quantity:
+    type: integer
+    description: 'Quantity of the product'
+    example: 2
+  discount:
+    type: number
+    format: float
+    description: 'Discount amount applied to the product'
+    example: 500000.00
+  note:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: 'Note for the product in the order (if any)'
+    example: 'Gói quà sinh nhật'
+required:
+  - order_id
+  - product_id
+  - price
+  - quantity

@@ -1,0 +1,173 @@
+parameters:
+  CategoryId:
+    name: id
+    in: path
+    required: true
+    description: ID of the category to retrieve
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /admin/categories/{id}:
+    get:
+      summary: Get category for admin
+      description: Retrieve a category by its ID for admin.
+      tags: [Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/CategoryId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: ../index.yaml#/components/schemas/Category
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    put:
+      summary: Update a category
+      description: Admin to update an existing category in the system.
+      tags: [Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/CategoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/Category'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Category'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    delete:
+      summary: Delete a category
+      description: Admin to delete an existing category in the system.
+      tags: [Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/CategoryId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Category'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /admin/categories:
+    post:
+      summary: Create a category
+      description: Admin to add a new category to the system.
+      tags: [Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/Category'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Category'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    get:
+      summary: Search categories for admin
+      description: Retrieve a list of categories.
+      tags: [Category_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/PageParam'
+        - $ref: '../shared.yaml#/components/parameters/SizeParam'
+        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - name: query
+          in: query
+          description: Search keyword
+          schema:
+            type: string
+            example: 'tai nghe'
+        - name: level
+          in: query
+          required: true
+          description: Level of categories to retrieve
+          default: 1
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/Pagination'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/Category'

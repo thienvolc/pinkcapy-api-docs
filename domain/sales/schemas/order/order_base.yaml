@@ -1,0 +1,133 @@
+type: object
+description: Order Base
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: 'Order id'
+    example: 1001
+  user_id:
+    type: integer
+    description: 'User id'
+    example: 25
+  subtotal:
+    type: number
+    format: float
+    description: 'Total amount not include tax, shipping'
+    example: 12990000.00
+  tax:
+    type: number
+    format: float
+    description: 'Tax'
+    example: 1299000.00
+  shipping:
+    type: number
+    format: float
+    description: 'Shippign fee'
+    example: 30000.00
+  total:
+    type: number
+    format: float
+    description: 'Total amount (subtotal + tax + shipping)'
+    example: 14319000.00
+  discount_total:
+    type: number
+    format: float
+    description: 'Total discount amount'
+    example: 500000.00
+  promo:
+    type: string
+    maxLength: 255
+    description: 'Promo code applied for this order'
+    example: 'SUMMER2025'
+  discount:
+    type: number
+    format: float
+    description: 'Discount amount applied by promo'
+    example: 500000.00
+  grand_total:
+    type: number
+    format: float
+    description: 'The final total amount (applied promo)'
+    example: 13819000.00
+  first_name:
+    type: string
+    maxLength: 150
+    description: 'First name of receiver'
+    example: 'Nguyễn'
+  middle_name:
+    type: string
+    maxLength: 150
+    description: 'Middle name of receiver (optional)'
+    example: 'Văn'
+  last_name:
+    type: string
+    maxLength: 150
+    description: 'Last name of receiver'
+    example: 'A'
+  phone:
+    type: string
+    maxLength: 20
+    description: 'Phone number of receiver'
+    example: '0987654321'
+  email:
+    type: string
+    format: email
+    maxLength: 100
+    description: 'Email of receiver'
+    example: 'nguyenvana@example.com'
+  line1:
+    type: string
+    maxLength: 255
+    description: 'Address line 1'
+    example: '123 Nguyễn Trãi'
+  line2:
+    type: string
+    maxLength: 255
+    description: 'Address line 2 (optional)'
+    example: 'Phường 4, Quận 5'
+  city:
+    type: string
+    maxLength: 255
+    description: 'City'
+    example: 'TP. Hồ Chí Minh'
+  province:
+    type: string
+    maxLength: 255
+    description: 'Province / City'
+    example: 'Hồ Chí Minh'
+  country:
+    type: string
+    maxLength: 255
+    description: 'Country'
+    example: 'Việt Nam'
+  orders_at:
+    type: string
+    format: date-time
+    description: 'Order placed at timestamp'
+    example: '2025-10-31T09:30:00Z'
+  status:
+    type: integer
+    enum: [1, 2, 3, 4, 5, 6, 7, 8]
+    description: >
+      Order status:
+      - `1`: Pending payment
+      - `2`: Paid
+      - `3`: Processing
+      - `4`: Shipped
+      - `5`: Delivered
+      - `6`: Refunded
+      - `7`: Returned
+      - `8`: Cancelled
+    example: 3
+  note:
+    type: string
+    maxLength: 255
+    description: 'Note for the order'
+    example: 'Giao buổi sáng, gọi trước khi tới'
+required:
+  - id
+  - user_id
+  - total
+  - grand_total
+  - status

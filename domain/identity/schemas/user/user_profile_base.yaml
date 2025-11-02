@@ -1,0 +1,46 @@
+type: object
+description: 'User Profile'
+properties:
+  first_name:
+    type: string
+    maxLength: 150
+    description: 'First name of the user'
+    example: 'Nguyễn'
+  middle_name:
+    type: string
+    maxLength: 150
+    nullable: true
+    description: 'Middle name of the user'
+    example: 'Văn'
+  last_name:
+    type: string
+    maxLength: 150
+    description: 'Last name of the user'
+    example: 'A'
+  avatar:
+    type: string
+    maxLength: 255
+    format: uri
+    description: 'URL of the user avatar image'
+    example: 'https://cdn.pinkcapy.vn/avatars/user1.jpg'
+  profile:
+    type: string
+    description: 'Introduction or biography of the user'
+    example: 'Loves technology, enjoys music, and exploring new products.'
+  registered_at:
+    type: string
+    format: date-time
+    readOnly: true
+    description: 'Time when the user registered their account'
+    example: '2025-01-15T08:30:00Z'
+  last_login:
+    type: string
+    format: date-time
+    readOnly: true
+    nullable: true
+    description: 'Time of the users last login'
+    example: '2025-10-31T09:00:00Z'
+required:
+  - first_name
+  - last_name
+  - registered_at

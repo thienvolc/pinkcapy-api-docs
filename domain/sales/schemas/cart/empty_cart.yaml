@@ -1,0 +1,13 @@
+type: object
+description: A cart containing items selected by the user
+properties:
+  total_count:
+    description: The number of items in the cart
+    type: integer
+    example: 0
+  items:
+    type: array
+    example: []
+required:
+  - total_count
+  - items

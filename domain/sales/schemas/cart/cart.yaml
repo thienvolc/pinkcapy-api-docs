@@ -1,0 +1,20 @@
+type: object
+description: A shopping cart containing items selected by the user
+properties:
+  id:
+    description: Cart ID
+    type: integer
+    example: 1
+  total_count:
+    description: Total number of items in the cart
+    type: integer
+    example: 2
+  items:
+    type: array
+    description: List of items in the cart
+    items:
+      $ref: './cart_item.yaml'
+required:
+  - id
+  - total_count
+  - items

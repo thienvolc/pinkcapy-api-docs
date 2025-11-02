@@ -1,0 +1,10 @@
+allOf:
+  - $ref: './order_base.yaml'
+  - $ref: '../../shared.yaml#/components/schemas/AuditFields'
+  - type: object
+    properties:
+      items:
+        type: array
+        description: 'List of order items'
+        items:
+          $ref: './order_item_base.yaml'

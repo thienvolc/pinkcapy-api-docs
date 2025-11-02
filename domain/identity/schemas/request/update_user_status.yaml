@@ -1,0 +1,22 @@
+type: object
+description: 'User status dto'
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: 'id of user'
+    example: 1
+  status:
+    type: integer
+    readOnly: true
+    enum: [1, 2, 3, 4]
+    description: >
+      Status of the user:
+      - `1`: active  
+      - `2`: inactive
+      - `3`: suspend
+      - `4`: banned
+    example: 1
+required:
+  - id
+  - status

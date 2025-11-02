@@ -15,6 +15,29 @@
       "description": "Local development"
     }
   ],
+  "tags": [
+    {
+      "name": "Product_Public"
+    },
+    {
+      "name": "Product_Admin"
+    },
+    {
+      "name": "Category_Public"
+    },
+    {
+      "name": "Cart"
+    },
+    {
+      "name": "Order_Admin"
+    },
+    {
+      "name": "Transaction"
+    },
+    {
+      "name": "Dashboard"
+    }
+  ],
   "paths": {
     "/products/{id}": {
       "get": {
@@ -160,8 +183,8 @@
     },
     "/admin/products/{id}": {
       "get": {
-        "summary": "Get product for admin",
-        "description": "Retrieve a product by its ID for admin.",
+        "summary": "Get product",
+        "description": "Retrieve a product by its ID.",
         "tags": [
           "Product_Admin"
         ],
@@ -212,9 +235,6 @@
               }
             }
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -222,7 +242,7 @@
       },
       "put": {
         "summary": "Update a product",
-        "description": "Admin to update an existing product in the system.",
+        "description": "Update a product.",
         "tags": [
           "Product_Admin"
         ],
@@ -278,9 +298,6 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -288,7 +305,7 @@
       },
       "delete": {
         "summary": "Delete a product",
-        "description": "Admin to delete an existing product in the system.",
+        "description": "Delete a product.",
         "tags": [
           "Product_Admin"
         ],
@@ -334,9 +351,6 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -346,7 +360,7 @@
     "/admin/products/{id}/status": {
       "patch": {
         "summary": "Update a product status",
-        "description": "Admin to update the status of an existing product in the system.",
+        "description": "Update a product status.",
         "tags": [
           "Product_Admin"
         ],
@@ -371,7 +385,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductStatus"
+                "$ref": "#/components/schemas/UpdateProductStatusRequest"
               }
             }
           }
@@ -390,7 +404,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/ProductStatus"
+                          "$ref": "#/components/schemas/UpdateProductStatusRequest"
                         }
                       }
                     }
@@ -402,9 +416,6 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -413,8 +424,8 @@
     },
     "/admin/products": {
       "post": {
-        "summary": "Create a product",
-        "description": "Admin to add a new product to the system.",
+        "summary": "Create a new product",
+        "description": "Create a new product.",
         "tags": [
           "Product_Admin"
         ],
@@ -476,7 +487,7 @@
         }
       },
       "get": {
-        "summary": "Search products for admin",
+        "summary": "Search products",
         "description": "Retrieve a list of products based on search criteria.",
         "tags": [
           "Product_Admin"
@@ -573,9 +584,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
@@ -583,7 +591,7 @@
     "/admin/products/{id}/inventories": {
       "patch": {
         "summary": "Update a product stock",
-        "description": "Admin to update an stock of existing product in the system.",
+        "description": "Admin to update an stock of product.",
         "tags": [
           "Product_Admin"
         ],
@@ -600,14 +608,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the product to update",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1admin~1products~1%7Bid%7D/get/parameters/1"
           }
         ],
         "requestBody": {
@@ -645,9 +646,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -784,9 +782,6 @@
               }
             }
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -850,9 +845,6 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -905,9 +897,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -970,9 +959,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1061,17 +1047,14 @@
                 }
               }
             }
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
     },
     "/me/carts": {
       "get": {
-        "summary": "Get user cart",
-        "description": "Retrieve the user's cart.",
+        "summary": "Get current user cart",
+        "description": "Retrieve the current user's cart.",
         "tags": [
           "Cart"
         ],
@@ -1139,7 +1122,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddCartItem"
+                "$ref": "#/components/schemas/AddToCartRequest"
               }
             }
           }
@@ -1208,7 +1191,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCartItemQuantity"
+                "$ref": "#/components/schemas/UpdateCartItemQuantityRequest"
               }
             }
           }
@@ -1263,14 +1246,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the cart item to delete",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1me~1carts~1items~1%7Bid%7D/patch/parameters/2"
           }
         ],
         "responses": {
@@ -1460,7 +1436,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrder"
+                "$ref": "#/components/schemas/PlaceOrderRequest"
               }
             }
           }
@@ -1509,6 +1485,16 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
           }
         ],
         "responses": {
@@ -1560,14 +1546,7 @@
             "$ref": "#/components/parameters/AuthorizationHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order to retrieve status for",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1me~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "responses": {
@@ -1622,14 +1601,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order to update",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1me~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "requestBody": {
@@ -1637,7 +1609,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderDelivery"
+                "$ref": "#/components/schemas/UpdateOrderDeliveryRequest"
               }
             }
           }
@@ -1694,14 +1666,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order to cancel",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1me~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "responses": {
@@ -1718,7 +1683,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/OrderStatus"
+                          "$ref": "#/components/schemas/UpdateOrderStatusRequest"
                         }
                       }
                     }
@@ -1773,8 +1738,7 @@
           {
             "name": "status",
             "in": "query",
-            "optional": true,
-            "description": "Filter orders by their status",
+            "description": "Filter orders by their status - `1`: Pending payment - `2`: Paid - `3`: Processing - `4`: Shipped - `5`: Delivered - `6`: Refunded - `7`: Returned - `8`: Cancelled\n",
             "schema": {
               "type": "integer",
               "enum": [
@@ -1879,9 +1843,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
@@ -1901,6 +1862,16 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
           }
         ],
         "responses": {
@@ -1929,9 +1900,6 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -1955,14 +1923,7 @@
             "$ref": "#/components/parameters/AuthorizationHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order to retrieve status for",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1admin~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "responses": {
@@ -1979,7 +1940,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/OrderStatus"
+                          "$ref": "#/components/schemas/UpdateOrderStatusRequest"
                         }
                       }
                     }
@@ -1990,9 +1951,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -2018,14 +1976,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1admin~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "requestBody": {
@@ -2033,7 +1984,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderStatus"
+                "$ref": "#/components/schemas/UpdateOrderStatusRequest"
               }
             }
           }
@@ -2052,7 +2003,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/OrderStatus"
+                          "$ref": "#/components/schemas/UpdateOrderStatusRequest"
                         }
                       }
                     }
@@ -2063,9 +2014,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -2093,14 +2041,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the order to cancel",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "$ref": "#/paths/~1admin~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
         "responses": {
@@ -2117,7 +2058,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/OrderStatus"
+                          "$ref": "#/components/schemas/UpdateOrderStatusRequest"
                         }
                       }
                     }
@@ -2128,9 +2069,6 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -2219,9 +2157,437 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/me/profile": {
+      "get": {
+        "summary": "Get current user",
+        "description": "Retrieve the current user information.",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserProfile"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user profile",
+        "description": "Admin to update an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
           },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserProfile"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Admin to add a new user to the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserAdmin"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search users for admin",
+        "description": "Retrieve a list of users based on search criteria.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "is_admin",
+            "in": "query",
+            "description": "Filter by admin status",
+            "schema": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by user status",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Pagination"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/UserAdmin"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/users/{id}/profile": {
+      "get": {
+        "summary": "Get user for admin",
+        "description": "Retrieve a user by its ID for admin.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserProfileAdmin"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/users/{id}/status": {
+      "patch": {
+        "summary": "Update a user status",
+        "description": "Admin to update a status of an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1users~1%7Bid%7D~1profile/get/parameters/1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UpdateUserStatusRequest"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "description": "Admin to delete an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1users~1%7Bid%7D~1profile/get/parameters/1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserAdmin"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -2271,16 +2637,16 @@
     },
     "/admin/dashboard/revenue": {
       "get": {
-        "summary": "Lấy dữ liệu doanh thu theo thời gian",
+        "summary": "Statistics of revenue",
         "tags": [
           "Dashboard"
         ],
-        "description": "Trả về thống kê doanh thu theo ngày, tuần, hoặc tháng.  \nDữ liệu được sử dụng để hiển thị biểu đồ doanh thu, số đơn hàng, và doanh thu trung bình.\n",
+        "description": "Return revenue statistics by day, week, or month.\nData is used to display revenue charts, order counts, and average revenue.\n",
         "parameters": [
           {
             "name": "period",
             "in": "query",
-            "description": "Khoảng thời gian thống kê (`day`, `week`, `month`)",
+            "description": "The period (`day`, `week`, `month`)",
             "required": false,
             "schema": {
               "type": "string",
@@ -2296,7 +2662,7 @@
           {
             "name": "year",
             "in": "query",
-            "description": "Năm cần thống kê (nếu period = month)",
+            "description": "The year to filter (if period = month)",
             "required": false,
             "schema": {
               "type": "integer",
@@ -2306,7 +2672,7 @@
           {
             "name": "month",
             "in": "query",
-            "description": "Tháng cần thống kê (nếu period = day)",
+            "description": "The month to filter (if period = day)",
             "required": false,
             "schema": {
               "type": "integer",
@@ -2344,11 +2710,11 @@
     },
     "/admin/dashboard/orders/stats": {
       "get": {
-        "summary": "Lấy thống kê đơn hàng theo trạng thái",
+        "summary": "Get order statistics by status",
         "tags": [
           "Dashboard"
         ],
-        "description": "API trả về số lượng đơn hàng được nhóm theo các trạng thái như:\n- `pending`\n- `processing`\n- `completed`\n- `cancelled`\n- `refunded`\n\nDữ liệu được sử dụng để hiển thị biểu đồ tròn hoặc biểu đồ thanh trong phần thống kê đơn hàng của Dashboard.\n",
+        "description": "API returns the number of orders grouped by statuses such as:\n- `pending`\n- `processing`\n- `completed`\n- `cancelled`\n- `refunded`\nData is used to display pie charts or bar charts in the order statistics section of the Dashboard.\n",
         "responses": {
           "200": {
             "description": "Success",
@@ -2377,16 +2743,16 @@
     },
     "/admin/dashboard/products/top": {
       "get": {
-        "summary": "Lấy danh sách sản phẩm bán chạy nhất",
+        "summary": "Get top selling products",
         "tags": [
           "Dashboard"
         ],
-        "description": "Trả về danh sách các sản phẩm có **doanh số hoặc số lượng bán cao nhất** trong kỳ gần đây.\nDữ liệu được dùng để hiển thị bảng hoặc biểu đồ “Top Selling Products” trên Dashboard.\n",
+        "description": "API returns a list of products with **sales or quantity sold** in the last year.\nData is used to display the \"Top Selling Products\" table or chart on the Dashboard.\n",
         "parameters": [
           {
             "name": "limit",
             "in": "query",
-            "description": "Số lượng sản phẩm tối đa cần lấy (mặc định 5)",
+            "description": "Maximum number of products to retrieve (default is 5)",
             "required": false,
             "schema": {
               "type": "integer",
@@ -2522,6 +2888,7 @@
         }
       },
       "Product": {
+        "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/ProductBase"
@@ -2532,6 +2899,7 @@
         ]
       },
       "ProductPublic": {
+        "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/ProductBase"
@@ -2661,7 +3029,7 @@
           "status"
         ]
       },
-      "ProductStatus": {
+      "UpdateProductStatusRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -2716,6 +3084,7 @@
         ]
       },
       "Category": {
+        "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/CategoryBase"
@@ -2726,6 +3095,7 @@
         ]
       },
       "CategoryPublic": {
+        "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/CategoryBase"
@@ -2791,77 +3161,79 @@
       },
       "Cart": {
         "type": "object",
-        "required": [
-          "id",
-          "total_count",
-          "items"
-        ],
         "description": "A shopping cart containing items selected by the user",
         "properties": {
           "id": {
-            "description": "The unique identifier for the cart",
+            "description": "Cart ID",
             "type": "integer",
             "example": 1
           },
           "total_count": {
+            "description": "Total number of items in the cart",
             "type": "integer",
             "example": 2
           },
           "items": {
             "type": "array",
+            "description": "List of items in the cart",
             "items": {
               "$ref": "#/components/schemas/CartItem"
             }
           }
-        }
+        },
+        "required": [
+          "id",
+          "total_count",
+          "items"
+        ]
       },
       "CartItem": {
         "type": "object",
-        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
+        "description": "Cart item detail",
         "properties": {
           "id": {
             "type": "integer",
             "readOnly": true,
             "example": 101,
-            "description": "Mã chi tiết giỏ hàng"
+            "description": "Cart item ID"
           },
           "cart_id": {
             "type": "integer",
             "example": 5,
-            "description": "Mã giỏ hàng"
+            "description": "Cart ID"
           },
           "product_id": {
             "type": "integer",
             "example": 23,
-            "description": "Mã sản phẩm"
+            "description": "Product ID"
           },
           "is_active": {
             "type": "boolean",
             "example": true,
-            "description": "Trạng thái hoạt động của item trong giỏ hàng"
+            "description": "Item active status in cart"
           },
           "price": {
             "type": "number",
             "format": "float",
             "example": 8990000,
-            "description": "Giá sản phẩm tại thời điểm thêm vào giỏ"
+            "description": "Product price at the time of adding to cart"
           },
           "quantity": {
             "type": "integer",
             "example": 2,
-            "description": "Số lượng sản phẩm trong giỏ"
+            "description": "Product quantity in cart"
           },
           "discount": {
             "type": "number",
             "format": "float",
-            "description": "Số tiền giảm giá áp dụng cho sản phẩm",
+            "description": "Discount amount applied to product",
             "example": 500000
           },
           "note": {
             "type": "string",
             "nullable": true,
             "example": "Gói quà sinh nhật",
-            "description": "Ghi chú thêm của người dùng"
+            "description": "User additional notes"
           }
         },
         "required": [
@@ -2876,25 +3248,26 @@
       },
       "EmptyCart": {
         "type": "object",
-        "required": [
-          "total_count",
-          "items"
-        ],
-        "description": "A shopping cart containing items selected by the user",
+        "description": "A cart containing items selected by the user",
         "properties": {
           "total_count": {
-            "value": 0,
-            "type": "integer"
+            "description": "The number of items in the cart",
+            "type": "integer",
+            "example": 0
           },
           "items": {
             "type": "array",
-            "items": []
+            "example": []
           }
-        }
+        },
+        "required": [
+          "total_count",
+          "items"
+        ]
       },
-      "AddCartItem": {
+      "AddToCartRequest": {
         "type": "object",
-        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
+        "description": "Add item to cart request",
         "required": [
           "product_id",
           "quantity"
@@ -2903,28 +3276,29 @@
           "product_id": {
             "type": "integer",
             "example": 23,
-            "description": "Mã sản phẩm"
+            "description": "Product ID"
           },
           "quantity": {
             "type": "integer",
             "example": 2,
-            "description": "Số lượng sản phẩm trong giỏ"
+            "description": "Product quantity in cart"
           }
         }
       },
-      "UpdateCartItemQuantity": {
+      "UpdateCartItemQuantityRequest": {
         "type": "object",
-        "description": "Chi tiết sản phẩm trong giỏ hàng (Cart Item)",
-        "required": [
-          "quantity"
-        ],
+        "description": "Update cart item quantity request",
         "properties": {
           "quantity": {
             "type": "integer",
+            "description": "The new quantity for the cart item.",
             "example": 2,
-            "description": "Số lượng sản phẩm trong giỏ"
+            "minimum": 1
           }
-        }
+        },
+        "required": [
+          "quantity"
+        ]
       },
       "Order": {
         "allOf": [
@@ -2939,7 +3313,7 @@
             "properties": {
               "items": {
                 "type": "array",
-                "description": "Danh sách chi tiết đơn hàng",
+                "description": "List of order items",
                 "items": {
                   "$ref": "#/components/schemas/OrderItemBase"
                 }
@@ -2950,136 +3324,136 @@
       },
       "OrderBase": {
         "type": "object",
-        "description": "Đơn hàng (Order)",
+        "description": "Order Base",
         "properties": {
           "id": {
             "type": "integer",
             "readOnly": true,
-            "description": "Mã đơn hàng",
+            "description": "Order id",
             "example": 1001
           },
           "user_id": {
             "type": "integer",
-            "description": "Mã người dùng",
+            "description": "User id",
             "example": 25
           },
           "subtotal": {
             "type": "number",
             "format": "float",
-            "description": "Tổng tiền hàng (chưa thuế, phí)",
+            "description": "Total amount not include tax, shipping",
             "example": 12990000
           },
           "tax": {
             "type": "number",
             "format": "float",
-            "description": "Thuế",
+            "description": "Tax",
             "example": 1299000
           },
           "shipping": {
             "type": "number",
             "format": "float",
-            "description": "Phí vận chuyển",
+            "description": "Shippign fee",
             "example": 30000
           },
           "total": {
             "type": "number",
             "format": "float",
-            "description": "Tổng cộng (subtotal + tax + shipping)",
+            "description": "Total amount (subtotal + tax + shipping)",
             "example": 14319000
           },
           "discount_total": {
             "type": "number",
             "format": "float",
-            "description": "Tổng giảm giá",
+            "description": "Total discount amount",
             "example": 500000
           },
           "promo": {
             "type": "string",
             "maxLength": 255,
-            "description": "Mã khuyến mãi áp dụng",
+            "description": "Promo code applied for this order",
             "example": "SUMMER2025"
           },
           "discount": {
             "type": "number",
             "format": "float",
-            "description": "Giảm giá được áp dụng từ mã khuyến mãi",
+            "description": "Discount amount applied by promo",
             "example": 500000
           },
           "grand_total": {
             "type": "number",
             "format": "float",
-            "description": "Thành tiền cuối (sau giảm giá)",
+            "description": "The final total amount (applied promo)",
             "example": 13819000
           },
           "first_name": {
             "type": "string",
             "maxLength": 150,
-            "description": "Họ người nhận",
+            "description": "First name of receiver",
             "example": "Nguyễn"
           },
           "middle_name": {
             "type": "string",
             "maxLength": 150,
-            "description": "Tên đệm",
+            "description": "Middle name of receiver (optional)",
             "example": "Văn"
           },
           "last_name": {
             "type": "string",
             "maxLength": 150,
-            "description": "Tên người nhận",
+            "description": "Last name of receiver",
             "example": "A"
           },
           "phone": {
             "type": "string",
             "maxLength": 20,
-            "description": "Số điện thoại người nhận",
+            "description": "Phone number of receiver",
             "example": "0987654321"
           },
           "email": {
             "type": "string",
             "format": "email",
             "maxLength": 100,
-            "description": "Email người nhận",
+            "description": "Email of receiver",
             "example": "nguyenvana@example.com"
           },
           "line1": {
             "type": "string",
             "maxLength": 255,
-            "description": "Địa chỉ 1",
+            "description": "Address line 1",
             "example": "123 Nguyễn Trãi"
           },
           "line2": {
             "type": "string",
             "maxLength": 255,
-            "description": "Địa chỉ 2 (tuỳ chọn)",
+            "description": "Address line 2 (optional)",
             "example": "Phường 4, Quận 5"
           },
           "city": {
             "type": "string",
             "maxLength": 255,
-            "description": "Thành phố",
+            "description": "City",
             "example": "TP. Hồ Chí Minh"
           },
           "province": {
             "type": "string",
             "maxLength": 255,
-            "description": "Tỉnh / Thành phố",
+            "description": "Province / City",
             "example": "Hồ Chí Minh"
           },
           "country": {
             "type": "string",
             "maxLength": 255,
-            "description": "Quốc gia",
+            "description": "Country",
             "example": "Việt Nam"
           },
           "orders_at": {
             "type": "string",
             "format": "date-time",
-            "description": "Thời điểm đặt hàng",
+            "description": "Order placed at timestamp",
             "example": "2025-10-31T09:30:00Z"
           },
           "status": {
-            "type": "string",
+            "type": "integer",
             "enum": [
               1,
               2,
@@ -3090,13 +3464,13 @@
               7,
               8
             ],
-            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
-            "example": "processing"
+            "description": "Order status: - `1`: Pending payment - `2`: Paid - `3`: Processing - `4`: Shipped - `5`: Delivered - `6`: Refunded - `7`: Returned - `8`: Cancelled\n",
+            "example": 3
           },
           "note": {
             "type": "string",
             "maxLength": 255,
-            "description": "Ghi chú của khách hàng",
+            "description": "Note for the order",
             "example": "Giao buổi sáng, gọi trước khi tới"
           }
         },
@@ -3110,45 +3484,38 @@
       },
       "ShortOrder": {
         "type": "object",
-        "description": "Đơn hàng (Order)",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "readOnly": true,
-            "description": "Mã đơn hàng (khóa chính)",
-            "example": 1001
+        "description": "Short view of an order",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderBase"
           },
-          "total": {
-            "type": "number",
-            "format": "float",
-            "description": "Tổng cộng (subtotal + tax + shipping)",
-            "example": 14319000
-          },
-          "grand_total": {
-            "type": "number",
-            "format": "float",
-            "description": "Thành tiền cuối (sau giảm giá)",
-            "example": 13819000
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8
-            ],
-            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
-            "example": "paid"
+          {
+            "type": "object",
+            "properties": {
+              "user_id": null,
+              "subtotal": null,
+              "tax": null,
+              "shipping": null,
+              "discount_total": null,
+              "promo": null,
+              "discount": null,
+              "first_name": null,
+              "middle_name": null,
+              "last_name": null,
+              "email": null,
+              "phone": null,
+              "line1": null,
+              "line2": null,
+              "city": null,
+              "province": null,
+              "country": null,
+              "orders_at": null,
+              "note": null
+            }
           }
-        },
+        ],
         "required": [
           "id",
-          "user_id",
           "total",
           "grand_total",
           "status"
@@ -3156,56 +3523,56 @@
       },
       "OrderItemBase": {
         "type": "object",
-        "description": "Chi tiết sản phẩm trong đơn hàng (Order Item)",
+        "description": "Order Item",
         "properties": {
           "id": {
             "type": "integer",
-            "description": "Mã chi tiết đơn hàng",
+            "description": "Order item id",
             "example": 10001
           },
           "order_id": {
             "type": "integer",
-            "description": "Mã đơn hàng",
+            "description": "Order id",
             "example": 1001
           },
           "product_id": {
             "type": "integer",
-            "description": "Mã sản phẩm",
+            "description": "Product id",
             "example": 23
           },
           "sku": {
             "type": "string",
             "maxLength": 150,
-            "description": "Mã SKU của sản phẩm",
+            "description": "SKU code of the product",
             "example": "WH1000XM5-BLK"
           },
           "is_active": {
             "type": "boolean",
-            "description": "Trạng thái hiệu lực của sản phẩm trong đơn",
+            "description": "Activation status of the product in the order",
             "example": true
           },
           "price": {
             "type": "number",
             "format": "float",
-            "description": "Giá bán của sản phẩm tại thời điểm đặt hàng",
+            "description": "Selling price of the product at the time of order",
             "example": 8990000
           },
           "quantity": {
             "type": "integer",
-            "description": "Số lượng sản phẩm",
+            "description": "Quantity of the product",
             "example": 2
           },
           "discount": {
             "type": "number",
             "format": "float",
-            "description": "Số tiền giảm giá áp dụng cho sản phẩm",
+            "description": "Discount amount applied to the product",
             "example": 500000
           },
           "note": {
             "type": "string",
             "maxLength": 255,
             "nullable": true,
-            "description": "Ghi chú cho sản phẩm trong đơn (nếu có)",
+            "description": "Note for the product in the order (if any)",
             "example": "Gói quà sinh nhật"
           }
         },
@@ -3216,14 +3583,14 @@
           "quantity"
         ]
       },
-      "OrderStatus": {
+      "UpdateOrderStatusRequest": {
         "type": "object",
-        "description": "Trạng thái đơn hàng (Order Status)",
+        "description": "Order status dto",
         "properties": {
           "id": {
             "type": "integer",
             "readOnly": true,
-            "description": "Mã đơn hàng",
+            "description": "Order ID",
             "example": 1001
           },
           "status": {
@@ -3238,8 +3605,8 @@
               7,
               8
             ],
-            "description": "Trạng thái đơn hàng: - `pending_payment`: Chờ thanh toán   - `paid`: Đã thanh toán   - `processing`: Đang xử lý   - `shipped`: Đã giao hàng cho đơn vị vận chuyển   - `delivered`: Đã giao thành công   - `refunded`: Đã hoàn tiền   - `returned`: Khách hàng trả hàng   - `cancelled`: Đã hủy\n",
-            "example": "3"
+            "description": "Order status: - `1`: Pending payment - `2`: Paid - `3`: Processing - `4`: Shipped - `5`: Delivered - `6`: Refunded - `7`: Returned - `8`: Cancelled\n",
+            "example": 3
           }
         },
         "required": [
@@ -3247,85 +3614,97 @@
           "status"
         ]
       },
-      "OrderDelivery": {
+      "UpdateOrderDeliveryRequest": {
         "type": "object",
-        "description": "Thông tin giao hàng của đơn hàng",
+        "description": "Update order delievery request",
         "properties": {
           "phone": {
             "type": "string",
             "maxLength": 20,
-            "description": "Số điện thoại người nhận",
+            "description": "Phone number of receiver",
             "example": "0987654321"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "description": "Email of receiver",
+            "example": "nguyenvana@example.com"
           },
           "line1": {
             "type": "string",
             "maxLength": 255,
-            "description": "Địa chỉ 1",
+            "description": "Address line 1",
             "example": "123 Nguyễn Trãi"
           },
           "line2": {
             "type": "string",
             "maxLength": 255,
-            "description": "Địa chỉ 2 (tuỳ chọn)",
+            "description": "Address line 2 (optional)",
             "example": "Phường 4, Quận 5"
           },
           "city": {
             "type": "string",
             "maxLength": 255,
-            "description": "Thành phố",
+            "description": "City",
             "example": "TP. Hồ Chí Minh"
           },
           "province": {
             "type": "string",
             "maxLength": 255,
-            "description": "Tỉnh / Thành phố",
+            "description": "Province / City",
             "example": "Hồ Chí Minh"
           },
           "country": {
             "type": "string",
             "maxLength": 255,
-            "description": "Quốc gia",
+            "description": "Country",
             "example": "Việt Nam"
           },
           "note": {
             "type": "string",
             "maxLength": 255,
-            "description": "Ghi chú của khách hàng",
+            "description": "Note for the order",
             "example": "Giao buổi sáng, gọi trước khi tới"
           }
         }
       },
-      "CreateOrder": {
+      "PlaceOrderRequest": {
         "type": "object",
-        "description": "Đơn hàng (Order)",
+        "description": "Place order request",
         "properties": {
           "promo": {
             "type": "string",
             "maxLength": 255,
-            "description": "Mã khuyến mãi áp dụng",
+            "description": "Promo code applied for this order",
             "example": "SUMMER2025"
           },
           "note": {
             "type": "string",
             "maxLength": 255,
-            "description": "Ghi chú của khách hàng",
+            "description": "Note for the order",
             "example": "Giao buổi sáng, gọi trước khi tới"
           },
           "items": {
             "type": "array",
-            "description": "Danh sách sản phẩm trong đơn hàng",
+            "description": "List of product ids to order",
             "items": {
               "type": "integer",
-              "description": "ID của sản phẩm"
+              "description": "Product id"
             },
-            "example": 1
+            "example": [
+              101,
+              102,
+              103
+            ]
           }
         },
         "required": [
-          "status"
+          "items"
         ]
       },
       "UserOrder": {
+        "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/OrderBase"
@@ -3336,7 +3715,7 @@
               "user_id": null,
               "items": {
                 "type": "array",
-                "description": "Danh sách sản phẩm trong đơn hàng",
+                "description": "List of order items",
                 "items": {
                   "$ref": "#/components/schemas/UserOrderItem"
                 }
@@ -3347,7 +3726,7 @@
       },
       "UserOrderItem": {
         "type": "object",
-        "description": "Chi tiết sản phẩm trong đơn hàng (Order Item)",
+        "description": "Order item of a user order.",
         "allOf": [
           {
             "$ref": "#/components/schemas/OrderItemBase"
@@ -3368,64 +3747,72 @@
       },
       "Transaction": {
         "type": "object",
-        "description": "Giao dịch thanh toán hoặc hoàn tiền (Transaction)",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "Mã giao dịch (khóa chính)",
-            "example": 5001
+        "description": "Transaction of an order, representing payment or refund activities.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditFields"
           },
-          "order_id": {
-            "type": "integer",
-            "description": "Mã đơn hàng liên quan (FK → Order.id)",
-            "example": 1001
-          },
-          "amount": {
-            "type": "number",
-            "format": "float",
-            "description": "Số tiền giao dịch",
-            "example": 13819000
-          },
-          "content": {
-            "type": "string",
-            "description": "Nội dung hoặc ghi chú giao dịch (ví dụ: mô tả thanh toán hoặc hoàn tiền)",
-            "example": "Thanh toán đơn hàng #1001 qua cổng VNPay"
-          },
-          "code": {
-            "type": "string",
-            "maxLength": 255,
-            "description": "Mã giao dịch (từ cổng thanh toán hoặc hệ thống nội bộ)",
-            "example": "TXN-VNPAY-20251031-0001"
-          },
-          "type": {
-            "type": "integer",
-            "enum": [
-              1,
-              2
-            ],
-            "description": "Loại giao dịch: - `payment`: Thanh toán   - `refund`: Hoàn tiền\n",
-            "example": 1
-          },
-          "mode": {
-            "type": "string",
-            "maxLength": 150,
-            "description": "Phương thức thanh toán hoặc hoàn tiền (ví dụ: VNPay, MoMo, COD, Bank Transfer)",
-            "example": "VNPay"
-          },
-          "status": {
-            "type": "integer",
-            "enum": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6
-            ],
-            "description": "Trạng thái giao dịch: - `initiated`: Khởi tạo   - `pending`: Đang chờ xử lý   - `success`: Thành công   - `failed`: Thất bại   - `cancelled`: Đã hủy   - `expired`: Hết hạn\n",
-            "example": 1
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Transaction ID",
+                "example": 5001
+              },
+              "order_id": {
+                "type": "integer",
+                "description": "Related order ID",
+                "example": 1001
+              },
+              "amount": {
+                "type": "number",
+                "format": "float",
+                "description": "Transaction amount",
+                "example": 13819000
+              },
+              "content": {
+                "type": "string",
+                "description": "Content or note of the transaction (e.g., payment or refund description)",
+                "example": "Payment for order #1001 via VNPay"
+              },
+              "code": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Transaction ref (from payment gateway or internal system)",
+                "example": "TXN-VNPAY-20251031-0001"
+              },
+              "type": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2
+                ],
+                "description": "Type of transaction: - `1`: Pay action - `2`: Refund action\n",
+                "example": 1
+              },
+              "mode": {
+                "type": "string",
+                "maxLength": 150,
+                "description": "Payment or refund method (e.g., VNPay, MoMo, COD, Bank Transfer)",
+                "example": "VNPay"
+              },
+              "status": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "description": "Transaction status: - `1`: Initiated   - `2`: Pending payment   - `3`: Successful - `4`: Failed - `5`: Cancelled - `6`: Expired\n",
+                "example": 1
+              }
+            }
           }
-        },
+        ],
         "required": [
           "id",
           "order_id",
@@ -3434,47 +3821,235 @@
           "status"
         ]
       },
+      "User": {
+        "type": "object",
+        "description": "User",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "User id",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "description": "Email of the user",
+            "example": "user@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Phone number of the user",
+            "example": "0987654321"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Admin rights (true = admin, false = regular user)",
+            "example": false
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "Status of the user: - `1`: active   - `2`: inactive - `3`: suspend - `4`: banned\n",
+            "example": 1
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "status"
+        ]
+      },
+      "UserProfile": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserProfileBase"
+          },
+          {
+            "$ref": "#/components/schemas/User"
+          }
+        ]
+      },
+      "UserProfileBase": {
+        "type": "object",
+        "description": "User Profile",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "First name of the user",
+            "example": "Nguyễn"
+          },
+          "middle_name": {
+            "type": "string",
+            "maxLength": 150,
+            "nullable": true,
+            "description": "Middle name of the user",
+            "example": "Văn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Last name of the user",
+            "example": "A"
+          },
+          "avatar": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "uri",
+            "description": "URL of the user avatar image",
+            "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+          },
+          "profile": {
+            "type": "string",
+            "description": "Introduction or biography of the user",
+            "example": "Loves technology, enjoys music, and exploring new products."
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time when the user registered their account",
+            "example": "2025-01-15T08:30:00Z"
+          },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "nullable": true,
+            "description": "Time of the users last login",
+            "example": "2025-10-31T09:00:00Z"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "registered_at"
+        ]
+      },
+      "UserAdmin": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          }
+        ]
+      },
+      "UserProfileAdmin": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserAdmin"
+          },
+          {
+            "$ref": "#/components/schemas/UserProfileBase"
+          }
+        ]
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com",
+            "description": "User email address"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!",
+            "description": "User password"
+          }
+        }
+      },
+      "UpdateUserStatusRequest": {
+        "type": "object",
+        "description": "User status dto",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "id of user",
+            "example": 1
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "Status of the user: - `1`: active   - `2`: inactive - `3`: suspend - `4`: banned\n",
+            "example": 1
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ]
+      },
       "DashboardOverview": {
         "type": "object",
+        "description": "Overview profit of the entire system",
         "properties": {
           "total_revenue": {
             "type": "number",
             "format": "double",
             "example": 253900000,
-            "description": "Tổng doanh thu toàn hệ thống"
+            "description": "Total revenue of the system"
           },
           "total_orders": {
             "type": "integer",
             "example": 128,
-            "description": "Tổng số đơn hàng"
+            "description": "Total number of orders"
           },
           "total_customers": {
             "type": "integer",
             "example": 74,
-            "description": "Tổng số khách hàng"
+            "description": "Total number of customers"
           },
           "total_products": {
             "type": "integer",
             "example": 312,
-            "description": "Tổng số sản phẩm đang bán"
+            "description": "Total number of products available for sale"
           },
           "today_revenue": {
             "type": "number",
             "format": "double",
             "example": 18900000,
-            "description": "Doanh thu trong ngày hiện tại"
+            "description": "Total revenue for today"
           },
           "month_revenue": {
             "type": "number",
             "format": "double",
             "example": 203000000,
-            "description": "Doanh thu trong tháng hiện tại"
+            "description": "Total revenue for the current month"
           },
           "growth_rate": {
             "type": "number",
             "format": "float",
             "example": 12.5,
-            "description": "Tỷ lệ tăng trưởng doanh thu so với kỳ trước (%)"
+            "description": "Revenue growth rate compared to the previous period (%)"
           }
         },
         "required": [
@@ -3492,7 +4067,7 @@
         "properties": {
           "series": {
             "type": "array",
-            "description": "Danh sách dữ liệu doanh thu theo mốc thời gian",
+            "description": "Revenue data over time",
             "items": {
               "type": "object",
               "properties": {
@@ -3500,18 +4075,18 @@
                   "type": "string",
                   "format": "date",
                   "example": "2025-10-01",
-                  "description": "Ngày hoặc mốc thời gian"
+                  "description": "Revenue at specific date"
                 },
                 "revenue": {
                   "type": "number",
                   "format": "double",
                   "example": 3500000,
-                  "description": "Tổng doanh thu tại mốc thời gian"
+                  "description": "Revenue at specific date"
                 },
                 "orders": {
                   "type": "integer",
                   "example": 6,
-                  "description": "Số lượng đơn hàng tại mốc thời gian"
+                  "description": "Number of orders at specific date"
                 }
               },
               "required": [
@@ -3528,19 +4103,19 @@
                 "type": "number",
                 "format": "double",
                 "example": 203000000,
-                "description": "Tổng doanh thu trong toàn bộ kỳ"
+                "description": "Total revenue in the selected period"
               },
               "avg_order_value": {
                 "type": "number",
                 "format": "double",
                 "example": 1580000,
-                "description": "Giá trị trung bình mỗi đơn hàng"
+                "description": "Average order value"
               },
               "top_day": {
                 "type": "string",
                 "format": "date",
                 "example": "2025-10-24",
-                "description": "Ngày có doanh thu cao nhất"
+                "description": "Day with the highest revenue"
               }
             },
             "required": [
@@ -3553,32 +4128,32 @@
       },
       "DashboardOrdersStats": {
         "type": "object",
-        "description": "Thống kê số lượng đơn hàng theo trạng thái",
+        "description": "Order statistics about different statuses",
         "properties": {
           "pending": {
             "type": "integer",
             "example": 5,
-            "description": "Số đơn hàng mới tạo, chưa xử lý"
+            "description": "Number of newly created orders that are not yet processed"
           },
           "processing": {
             "type": "integer",
             "example": 12,
-            "description": "Số đơn hàng đang xử lý hoặc chuẩn bị giao"
+            "description": "Number of orders being processed or prepared for delivery"
           },
           "completed": {
             "type": "integer",
             "example": 89,
-            "description": "Số đơn hàng đã hoàn tất"
+            "description": "Number of completed orders"
           },
           "cancelled": {
             "type": "integer",
             "example": 7,
-            "description": "Số đơn hàng bị hủy"
+            "description": "Number of cancelled orders"
           },
           "refunded": {
             "type": "integer",
             "example": 3,
-            "description": "Số đơn hàng được hoàn tiền"
+            "description": "Number of refunded orders"
           }
         },
         "required": [
@@ -3595,39 +4170,39 @@
           "id": {
             "type": "integer",
             "example": 101,
-            "description": "ID của sản phẩm"
+            "description": "Product id"
           },
           "title": {
             "type": "string",
             "example": "iPhone 16 Pro Max",
-            "description": "Tên sản phẩm"
+            "description": "Product name"
           },
           "sku": {
             "type": "string",
             "example": "IPH16PMAX256",
-            "description": "Mã SKU của sản phẩm"
+            "description": "Product SKU"
           },
           "thumb": {
             "type": "string",
             "format": "uri",
             "example": "https://cdn.pinkcapy.vn/products/iphone16pro-thumb.jpg",
-            "description": "Ảnh thumbnail của sản phẩm"
+            "description": "Product thumbnail image"
           },
           "sold": {
             "type": "integer",
             "example": 74,
-            "description": "Tổng số lượng đã bán"
+            "description": "Total quantity sold"
           },
           "revenue": {
             "type": "number",
             "format": "double",
             "example": 2590000000,
-            "description": "Tổng doanh thu mang lại từ sản phẩm"
+            "description": "Total revenue generated from the product"
           },
           "category": {
             "type": "string",
             "example": "Smartphone",
-            "description": "Danh mục chính của sản phẩm"
+            "description": "Main category of the product"
           },
           "status": {
             "type": "string",
@@ -3637,7 +4212,7 @@
               "archived"
             ],
             "example": "published",
-            "description": "Trạng thái hiển thị của sản phẩm"
+            "description": "Product display status"
           }
         },
         "required": [

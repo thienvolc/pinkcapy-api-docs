@@ -1,0 +1,6 @@
+type: object
+allOf:
+  - $ref: './category_base.yaml'
+  - type: object
+    properties:
+      meta_title:
