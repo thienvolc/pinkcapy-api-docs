@@ -3122,7 +3122,7 @@
         "summary": "Register a new user",
         "description": "Register a new user in the system.",
         "tags": [
-          "User_Public"
+          "User_Auth"
         ],
         "parameters": [
           {
@@ -3173,7 +3173,7 @@
         "summary": "Login a user",
         "description": "Login a user in the system.",
         "tags": [
-          "User_Public"
+          "User_Auth"
         ],
         "requestBody": {
           "required": true,
@@ -3253,7 +3253,7 @@
         "summary": "Forgot user password request",
         "description": "Send a password reset email to the user.",
         "tags": [
-          "User_Public"
+          "User_Auth"
         ],
         "requestBody": {
           "required": true,
@@ -3280,7 +3280,7 @@
         "summary": "Reset user password",
         "description": "Reset the user's password using the provided token.",
         "tags": [
-          "User_Public"
+          "User_Auth"
         ],
         "requestBody": {
           "required": true,
@@ -3682,9 +3682,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthorizationHeader"
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
             "$ref": "#/paths/~1admin~1users~1%7Bid%7D/get/parameters/1"
@@ -4375,6 +4372,7 @@
         "properties": {
           "id": {
             "type": "integer",
+            "readOnly": true,
             "description": "Mã sản phẩm",
             "example": 1001
           },
@@ -5513,7 +5511,6 @@
           },
           "status": {
             "type": "integer",
-            "readOnly": true,
             "enum": [
               1,
               2,

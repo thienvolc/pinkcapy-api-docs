@@ -8,7 +8,6 @@ properties:
     example: 1
   status:
     type: integer
-    readOnly: true
     enum: [1, 2, 3, 4]
     description: >
       Status of the user:

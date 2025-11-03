@@ -2,6 +2,7 @@ type: object
 properties:
   id:
     type: integer
+    readOnly: true
     description: 'Mã sản phẩm'
     example: 1001
   status:

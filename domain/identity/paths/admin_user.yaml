@@ -70,7 +70,6 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
         - $ref: '#/parameters/UserId'
       requestBody:
         required: true
