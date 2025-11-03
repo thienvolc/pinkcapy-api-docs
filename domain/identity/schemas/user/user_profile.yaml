@@ -1,3 +1,0 @@
-allOf:
-  - $ref: './user_profile_base.yaml'
-  - $ref: './user.yaml'

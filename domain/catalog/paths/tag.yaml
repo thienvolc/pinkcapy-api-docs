@@ -9,18 +9,18 @@ parameters:
       example: 1
 
 paths:
-  /admin/tags:
+  /tags/{id}/products:
     get:
-      summary: Get all tags
-      description: Retrieve a list of all tags.
-      tags: [Tag_Admin]
+      summary: Get products by tag ID
+      description: Retrieve a list of products associated with a specific tag.
+      tags: [Tag_Public]
       security:
         - bearerAuth: []
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
         - $ref: '../shared.yaml#/components/parameters/LimitParam'
+        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
         - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - $ref: '#/parameters/TagId'
       responses:
         '200':
           description: Success
@@ -37,88 +37,5 @@ paths:
                           - type: object
                             properties:
                               data:
-                                type: array
                                 items:
-                                  $ref: '../index.yaml#/components/schemas/Tag'
-
-    post:
-      summary: Create a new tag
-      description: Create a new tag.
-      tags: [Tag_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/Tag'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/Tag'
-
-  /admin/tags/{id}:
-    delete:
-      summary: Delete a tag
-      description: Delete a tag.
-      tags: [Tag_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/TagId'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/Tag'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
-
-    put:
-      summary: Update a tag
-      description: Update a tag.
-      tags: [Tag_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/TagId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/Tag'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/Tag'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                                  $ref: '../index.yaml#/components/schemas/ProductPublic'

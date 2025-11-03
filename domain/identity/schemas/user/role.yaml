@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Role id
+    example: 1
+  name:
+    type: string
+    description: Role name
+    example: 'customer'

@@ -1,7 +1,7 @@
 type: object
 description: 'User status dto'
 properties:
-  id:
+  user_id:
     type: integer
     readOnly: true
     description: 'id of user'

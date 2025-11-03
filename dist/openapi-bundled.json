@@ -1122,6 +1122,79 @@
         }
       }
     },
+    "/tags/{id}/products": {
+      "get": {
+        "summary": "Get products by tag ID",
+        "description": "Retrieve a list of products associated with a specific tag.",
+        "tags": [
+          "Tag_Public"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tag",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/InfiniteScroll"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "data": {
+                                  "items": {
+                                    "$ref": "#/components/schemas/ProductPublic"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/tags": {
       "get": {
         "summary": "Get all tags",
@@ -2941,7 +3014,7 @@
         }
       }
     },
-    "/me/profile": {
+    "/me": {
       "get": {
         "summary": "Get current user",
         "description": "Retrieve the current user information.",
@@ -2972,7 +3045,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/UserProfile"
+                          "$ref": "#/components/schemas/User"
                         }
                       }
                     }
@@ -2987,7 +3060,7 @@
         "summary": "Update a user profile",
         "description": "Admin to update an existing user in the system.",
         "tags": [
-          "User_Admin"
+          "User"
         ],
         "security": [
           {
@@ -3007,7 +3080,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserProfile"
+                "$ref": "#/components/schemas/UserProfileBase"
               }
             }
           }
@@ -3026,7 +3099,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/UserProfile"
+                          "$ref": "#/components/schemas/UserProfileBase"
                         }
                       }
                     }
@@ -3040,6 +3113,293 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Register a new user in the system.",
+        "tags": [
+          "User_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/RegisterUserResponse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/users/auth/login": {
+      "post": {
+        "summary": "Login a user",
+        "description": "Login a user in the system.",
+        "tags": [
+          "User_Public"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/LoginResponse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/logout": {
+      "post": {
+        "summary": "Logout a user",
+        "description": "Admin to logout a user in the system.",
+        "tags": [
+          "User_Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot user password request",
+        "description": "Send a password reset email to the user.",
+        "tags": [
+          "User_Public"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/users/auth/reset-password": {
+      "post": {
+        "summary": "Reset user password",
+        "description": "Reset the user's password using the provided token.",
+        "tags": [
+          "User_Public"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "user_id": {
+                              "type": "integer",
+                              "description": "User id",
+                              "example": 1
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Email of the user",
+                              "example": "user@example.com"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/ResetPasswordTokenInvalid"
+          }
+        }
+      }
+    },
+    "/me/password": {
+      "put": {
+        "summary": "Update a user password",
+        "description": "Update an existing user password in the system.",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "user_id": {
+                              "type": "integer",
+                              "description": "User id",
+                              "example": 1
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Email of the user",
+                              "example": "user@example.com"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -3198,7 +3558,7 @@
         }
       }
     },
-    "/admin/users/{id}/profile": {
+    "/admin/users/{id}": {
       "get": {
         "summary": "Get user for admin",
         "description": "Retrieve a user by its ID for admin.",
@@ -3239,7 +3599,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/UserProfileAdmin"
+                          "$ref": "#/components/schemas/UserAdmin"
                         }
                       }
                     }
@@ -3247,6 +3607,59 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "description": "Admin to delete an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/paths/~1admin~1users~1%7Bid%7D/get/parameters/1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserAdmin"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -3274,7 +3687,7 @@
             "$ref": "#/components/parameters/IdempotencyKeyHeader"
           },
           {
-            "$ref": "#/paths/~1admin~1users~1%7Bid%7D~1profile/get/parameters/1"
+            "$ref": "#/paths/~1admin~1users~1%7Bid%7D/get/parameters/1"
           }
         ],
         "requestBody": {
@@ -3317,10 +3730,12 @@
             "$ref": "#/components/responses/NotFound"
           }
         }
-      },
-      "delete": {
-        "summary": "Delete a user",
-        "description": "Admin to delete an existing user in the system.",
+      }
+    },
+    "/admin/users/{id}/roles": {
+      "patch": {
+        "summary": "Update user roles",
+        "description": "Admin to update roles of an existing user in the system.",
         "tags": [
           "User_Admin"
         ],
@@ -3334,12 +3749,19 @@
             "$ref": "#/components/parameters/AuthorizationHeader"
           },
           {
-            "$ref": "#/components/parameters/IdempotencyKeyHeader"
-          },
-          {
-            "$ref": "#/paths/~1admin~1users~1%7Bid%7D~1profile/get/parameters/1"
+            "$ref": "#/paths/~1admin~1users~1%7Bid%7D/get/parameters/1"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRolesRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3354,7 +3776,10 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/UserAdmin"
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Role"
+                          }
                         }
                       }
                     }
@@ -3700,6 +4125,75 @@
                 "slug": {
                   "type": "string",
                   "example": "tai-nghe"
+                },
+                "meta_title": {
+                  "type": "string",
+                  "example": "Tai nghe - PinkCapy"
+                }
+              }
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Hot_Trend"
+                },
+                "slug": {
+                  "type": "string",
+                  "example": "hot-trend"
+                },
+                "meta_title": {
+                  "type": "string",
+                  "example": "Hot_Trend"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "example": "color"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "red"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProductPublicExtra": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Tai nghe"
+                },
+                "slug": {
+                  "type": "string",
+                  "example": "tai-nghe"
                 }
               }
             }
@@ -3758,7 +4252,7 @@
             }
           },
           {
-            "$ref": "#/components/schemas/ProductExtra"
+            "$ref": "#/components/schemas/ProductPublicExtra"
           }
         ]
       },
@@ -4801,7 +5295,7 @@
           "status"
         ]
       },
-      "User": {
+      "UserBase": {
         "type": "object",
         "description": "User",
         "properties": {
@@ -4814,6 +5308,7 @@
           "email": {
             "type": "string",
             "format": "email",
+            "readOnly": true,
             "maxLength": 100,
             "description": "Email of the user",
             "example": "user@example.com"
@@ -4849,15 +5344,30 @@
           "status"
         ]
       },
-      "UserProfile": {
+      "User": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/UserProfileBase"
+            "$ref": "#/components/schemas/UserBase"
           },
           {
-            "$ref": "#/components/schemas/User"
+            "$ref": "#/components/schemas/UserProfileBase"
           }
         ]
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Role id",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Role name",
+            "example": "customer"
+          }
+        }
       },
       "UserProfileBase": {
         "type": "object",
@@ -4923,25 +5433,28 @@
           },
           {
             "$ref": "#/components/schemas/AuditFields"
-          }
-        ]
-      },
-      "UserProfileAdmin": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/UserAdmin"
           },
           {
-            "$ref": "#/components/schemas/UserProfileBase"
+            "type": "object",
+            "properties": {
+              "profiles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserProfileBase"
+                }
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
           }
         ]
       },
       "CreateUserRequest": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
         "properties": {
           "email": {
             "type": "string",
@@ -4957,6 +5470,34 @@
             "format": "password",
             "example": "StrongP@ssw0rd!",
             "description": "User password"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "First name of the user",
+            "example": "Nguyễn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Last name of the user",
+            "example": "A"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "customer"
+                }
+              }
+            }
           }
         }
       },
@@ -4964,7 +5505,7 @@
         "type": "object",
         "description": "User status dto",
         "properties": {
-          "id": {
+          "user_id": {
             "type": "integer",
             "readOnly": true,
             "description": "id of user",
@@ -4987,6 +5528,191 @@
           "id",
           "status"
         ]
+      },
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com",
+            "description": "User email address"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!",
+            "description": "User password"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "First name of the user",
+            "example": "Nguyễn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Last name of the user",
+            "example": "A"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com",
+            "description": "User email address"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!",
+            "description": "User password"
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password_reset_token": {
+            "type": "string",
+            "example": "abcdef123456"
+          },
+          "new_password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!",
+            "description": "User password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token for authenticated requests",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "token_type": {
+            "type": "string",
+            "description": "Type of the token issued",
+            "example": "Bearer"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "User id",
+                "example": 1
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "maxLength": 100,
+                "description": "Email of the user",
+                "example": "user@example.com"
+              },
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "description": "First name of the user",
+                "example": "Nguyễn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "description": "Last name of the user",
+                "example": "A"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 255,
+                "format": "uri",
+                "description": "URL of the user avatar image",
+                "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+              }
+            }
+          }
+        }
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User id",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "description": "Email of the user",
+            "example": "user@example.com"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time when the user registered their account",
+            "example": "2025-01-15T08:30:00Z"
+          }
+        }
+      },
+      "UpdatePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "old_password": {
+            "type": "string",
+            "format": "password",
+            "description": "The current password of the user."
+          },
+          "new_password": {
+            "type": "string",
+            "format": "password",
+            "description": "The new password to set for the user."
+          }
+        }
+      },
+      "AssignRolesRequest": {
+        "type": "object",
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                }
+              }
+            }
+          }
+        }
       },
       "DashboardOverview": {
         "type": "object",
@@ -5476,6 +6202,25 @@
                 "code": "200004",
                 "type": "NO_CONTENT",
                 "message": "No content.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "ResetPasswordTokenInvalid": {
+        "description": "Reset password token is invalid or expired.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+            },
+            "example": {
+              "meta": {
+                "code": "200050",
+                "type": "RESET_PASSWORD_TOKEN_INVALID",
+                "message": "Reset password token is invalid or expired.",
                 "extra_meta": {}
               },
               "data": null

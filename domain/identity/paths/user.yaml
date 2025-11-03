@@ -1,5 +1,5 @@
 paths:
-  /me/profile:
+  /me:
     get:
       summary: Get current user
       description: Retrieve the current user information.
@@ -19,12 +19,12 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/UserProfile'
+                        $ref: '../index.yaml#/components/schemas/User'
 
     put:
       summary: Update a user profile
       description: Admin to update an existing user in the system.
-      tags: [User_Admin]
+      tags: [User]
       security:
         - bearerAuth: []
       parameters:
@@ -35,7 +35,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../index.yaml#/components/schemas/UserProfile'
+              $ref: '../index.yaml#/components/schemas/UserProfileBase'
       responses:
         '200':
           description: Success
@@ -47,8 +47,47 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/UserProfile'
+                        $ref: '../index.yaml#/components/schemas/UserProfileBase'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
+
+  /me/password:
+    put:
+      summary: Update a user password
+      description: Update an existing user password in the system.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/UpdatePasswordRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user_id:
+                            type: integer
+                            description: User id
+                            example: 1
+                          email:
+                            type: string
+                            description: Email of the user
+                            example: user@example.com
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'

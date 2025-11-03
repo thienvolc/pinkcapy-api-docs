@@ -1,0 +1,129 @@
+paths:
+  /users/auth/register:
+    post:
+      summary: Register a new user
+      description: Register a new user in the system.
+      tags: [User_Public]
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/RegisterUserRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/RegisterUserResponse'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+  /users/auth/login:
+    post:
+      summary: Login a user
+      description: Login a user in the system.
+      tags: [User_Public]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/LoginResponse'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../shared.yaml#/components/responses/Forbidden'
+
+  /users/auth/logout:
+    post:
+      summary: Logout a user
+      description: Admin to logout a user in the system.
+      tags: [User_Auth]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          $ref: '../shared.yaml#/components/responses/NoContent'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+        '403':
+          $ref: '../shared.yaml#/components/responses/Forbidden'
+
+  /users/auth/forgot-password:
+    post:
+      summary: Forgot user password request
+      description: Send a password reset email to the user.
+      tags: [User_Public]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/ForgotPasswordRequest'
+      responses:
+        '204':
+          $ref: '../shared.yaml#/components/responses/NoContent'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
+
+  /users/auth/reset-password:
+    post:
+      summary: Reset user password
+      description: Reset the user's password using the provided token.
+      tags: [User_Public]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user_id:
+                            type: integer
+                            description: User id
+                            example: 1
+                          email:
+                            type: string
+                            description: Email of the user
+                            example: user@example.com
+        '405':
+          $ref: '../index.yaml#/components/responses/ResetPasswordTokenInvalid'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'

@@ -1,3 +1,13 @@
 allOf:
   - $ref: './user.yaml'
   - $ref: '../../shared.yaml#/components/schemas/AuditFields'
+  - type: object
+    properties:
+      profiles:
+        type: array
+        items:
+          $ref: './user_profile_base.yaml'
+      roles:
+        type: array
+        items:
+          $ref: './role.yaml'

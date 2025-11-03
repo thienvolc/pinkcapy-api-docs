@@ -47,6 +47,8 @@ paths:
   /admin/products/{id}/inventories:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1inventories'
 
+  /tags/{id}/products:
+    $ref: './domain/catalog/index.yaml#/paths/~1tags~1{id}~1products'
   /admin/tags:
     $ref: './domain/catalog/index.yaml#/paths/~1admin~1tags'
   /admin/tags/{id}:
@@ -98,15 +100,29 @@ paths:
   /admin/transactions:
     $ref: './domain/sales/index.yaml#/paths/~1admin~1transactions'
 
-  /me/profile:
-    $ref: './domain/identity/index.yaml#/paths/~1me~1profile'
+  /me:
+    $ref: './domain/identity/index.yaml#/paths/~1me'
+  /users/auth/register:
+    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1register'
+  /users/auth/login:
+    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1login'
+  /users/auth/logout:
+    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1logout'
+  /users/auth/forgot-password:
+    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1forgot-password'
+  /users/auth/reset-password:
+    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1reset-password'
+  /me/password:
+    $ref: './domain/identity/index.yaml#/paths/~1me~1password'
 
   /admin/users:
     $ref: './domain/identity/index.yaml#/paths/~1admin~1users'
-  /admin/users/{id}/profile:
-    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1profile'
+  /admin/users/{id}:
+    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}'
   /admin/users/{id}/status:
     $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1status'
+  /admin/users/{id}/roles:
+    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1roles'
 
   # Analytics Domain
   /admin/dashboard/overview:
@@ -140,6 +156,8 @@ components:
       $ref: './domain/catalog/index.yaml#/components/schemas/Product'
     ProductExtra:
       $ref: './domain/catalog/index.yaml#/components/schemas/ProductExtra'
+    ProductPublicExtra:
+      $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublicExtra'
     ProductPublic:
       $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublic'
     ProductBase:
@@ -167,7 +185,6 @@ components:
 
     UpdateCategoryRequest:
       $ref: './domain/catalog/index.yaml#/components/schemas/UpdateCategoryRequest'
-
 
     # Sales Domain Schemas
     Cart:
@@ -203,20 +220,36 @@ components:
     Transaction:
       $ref: './domain/sales/index.yaml#/components/schemas/Transaction'
 
+    UserBase:
+      $ref: './domain/identity/index.yaml#/components/schemas/UserBase'
     User:
       $ref: './domain/identity/index.yaml#/components/schemas/User'
-    UserProfile:
-      $ref: './domain/identity/index.yaml#/components/schemas/UserProfile'
+    Role:
+      $ref: './domain/identity/index.yaml#/components/schemas/Role'
     UserProfileBase:
       $ref: './domain/identity/index.yaml#/components/schemas/UserProfileBase'
     UserAdmin:
       $ref: './domain/identity/index.yaml#/components/schemas/UserAdmin'
-    UserProfileAdmin:
-      $ref: './domain/identity/index.yaml#/components/schemas/UserProfileAdmin'
     CreateUserRequest:
       $ref: './domain/identity/index.yaml#/components/schemas/CreateUserRequest'
     UpdateUserStatusRequest:
       $ref: './domain/identity/index.yaml#/components/schemas/UpdateUserStatusRequest'
+    RegisterUserRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/RegisterUserRequest'
+    LoginRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/LoginRequest'
+    ForgotPasswordRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/ForgotPasswordRequest'
+    ResetPasswordRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/ResetPasswordRequest'
+    LoginResponse:
+      $ref: './domain/identity/index.yaml#/components/schemas/LoginResponse'
+    RegisterUserResponse:
+      $ref: './domain/identity/index.yaml#/components/schemas/RegisterUserResponse'
+    UpdatePasswordRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/UpdatePasswordRequest'
+    AssignRolesRequest:
+      $ref: './domain/identity/index.yaml#/components/schemas/AssignRolesRequest'
 
     # Analytics Domain Schemas
     DashboardOverview:
@@ -261,3 +294,6 @@ components:
       $ref: './shared/responses/error.yaml#/InternalServerError'
     NoContent:
       $ref: './shared/responses/success.yaml#/NoContent'
+
+    ResetPasswordTokenInvalid:
+      $ref: './domain/identity/index.yaml#/components/responses/ResetPasswordTokenInvalid'

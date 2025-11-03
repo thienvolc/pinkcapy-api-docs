@@ -1,0 +1,13 @@
+ResetPasswordTokenInvalid:
+  description: Reset password token is invalid or expired.
+  content:
+    application/json:
+      schema:
+        $ref: ./shared.yaml#/components/schemas/ResponseBase
+      example:
+        meta:
+          code: '200050'
+          type: RESET_PASSWORD_TOKEN_INVALID
+          message: Reset password token is invalid or expired.
+          extra_meta: {}
+        data: null

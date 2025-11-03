@@ -1,0 +1,124 @@
+parameters:
+  TagId:
+    name: id
+    in: path
+    required: true
+    description: ID of the tag
+    schema:
+      type: integer
+      example: 1
+
+paths:
+  /admin/tags:
+    get:
+      summary: Get all tags
+      description: Retrieve a list of all tags.
+      tags: [Tag_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
+        - $ref: '../shared.yaml#/components/parameters/LimitParam'
+        - $ref: '../shared.yaml#/components/parameters/SortParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
+                          - type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  $ref: '../index.yaml#/components/schemas/Tag'
+
+    post:
+      summary: Create a new tag
+      description: Create a new tag.
+      tags: [Tag_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/Tag'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Tag'
+
+  /admin/tags/{id}:
+    delete:
+      summary: Delete a tag
+      description: Delete a tag.
+      tags: [Tag_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/TagId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Tag'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    put:
+      summary: Update a tag
+      description: Update a tag.
+      tags: [Tag_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '#/parameters/TagId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/Tag'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/Tag'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'

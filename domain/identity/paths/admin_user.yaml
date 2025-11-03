@@ -1,5 +1,5 @@
 parameters:
-  UserIdParam:
+  UserId:
     name: id
     in: path
     required: true
@@ -9,7 +9,7 @@ parameters:
       example: 1
 
 paths:
-  /admin/users/{id}/profile:
+  /admin/users/{id}:
     get:
       summary: Get user for admin
       description: Retrieve a user by its ID for admin.
@@ -18,7 +18,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/UserIdParam'
+        - $ref: '#/parameters/UserId'
       responses:
         '200':
           description: Success
@@ -30,7 +30,34 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/UserProfileAdmin'
+                        $ref: '../index.yaml#/components/schemas/UserAdmin'
+        '404':
+          $ref: '../shared.yaml#/components/responses/NotFound'
+
+    delete:
+      summary: Delete a user
+      description: Admin to delete an existing user in the system.
+      tags: [User_Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/parameters/UserId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../index.yaml#/components/schemas/UserAdmin'
+        '400':
+          $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
@@ -44,7 +71,7 @@ paths:
       parameters:
         - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
         - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/UserIdParam'
+        - $ref: '#/parameters/UserId'
       requestBody:
         required: true
         content:
@@ -68,16 +95,22 @@ paths:
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
-    delete:
-      summary: Delete a user
-      description: Admin to delete an existing user in the system.
+  /admin/users/{id}/roles:
+    patch:
+      summary: Update user roles
+      description: Admin to update roles of an existing user in the system.
       tags: [User_Admin]
       security:
         - bearerAuth: []
       parameters:
         - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/UserIdParam'
+        - $ref: '#/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../index.yaml#/components/schemas/AssignRolesRequest'
       responses:
         '200':
           description: Success
@@ -89,7 +122,9 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/UserAdmin'
+                        type: array
+                        items:
+                          $ref: '../index.yaml#/components/schemas/Role'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':

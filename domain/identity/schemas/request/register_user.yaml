@@ -22,14 +22,3 @@ properties:
     maxLength: 150
     description: 'Last name of the user'
     example: 'A'
-  roles:
-    type: array
-    items:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: 'customer'

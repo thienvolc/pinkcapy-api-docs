@@ -30,10 +30,12 @@ paths:
   /admin/products/{id}/inventories:
     $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1inventories'
 
+  /tags/{id}/products:
+    $ref: './paths/tag.yaml#/paths/~1tags~1{id}~1products'
   /admin/tags:
-    $ref: './paths/tag.yaml#/paths/~1admin~1tags'
+    $ref: './paths/tag_admin.yaml#/paths/~1admin~1tags'
   /admin/tags/{id}:
-    $ref: './paths/tag.yaml#/paths/~1admin~1tags~1{id}'
+    $ref: './paths/tag_admin.yaml#/paths/~1admin~1tags~1{id}'
 
   /categories:
     $ref: './paths/category.yaml#/paths/~1categories'
@@ -74,6 +76,8 @@ components:
       $ref: './schemas/product/product_meta.yaml'
     ProductExtra:
       $ref: './schemas/product/product_extra.yaml'
+    ProductPublicExtra:
+      $ref: './schemas/product/product_public_extra.yaml'
     Tag:
       $ref: './schemas/product/tag.yaml'
 
