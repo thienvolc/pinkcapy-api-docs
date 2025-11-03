@@ -1,47 +1,6 @@
-type: object
-description: Cart item detail
-properties:
-  id:
-    type: integer
-    readOnly: true
-    example: 101
-    description: 'Cart item ID'
-  cart_id:
-    type: integer
-    example: 5
-    description: 'Cart ID'
-  product_id:
-    type: integer
-    example: 23
-    description: 'Product ID'
-  is_active:
-    type: boolean
-    example: true
-    description: 'Item active status in cart'
-  price:
-    type: number
-    format: float
-    example: 8990000
-    description: 'Product price at the time of adding to cart'
-  quantity:
-    type: integer
-    example: 2
-    description: 'Product quantity in cart'
-  discount:
-    type: number
-    format: float
-    description: 'Discount amount applied to product'
-    example: 500000.00
-  note:
-    type: string
-    nullable: true
-    example: 'Gói quà sinh nhật'
-    description: 'User additional notes'
-required:
-  - id
-  - cart_id
-  - product_id
-  - sku
-  - is_active
-  - price
-  - quantity
+allOf:
+  - $ref: './cart_item_base.yaml'
+  - type: object
+    properties:
+      cart_id:
+      is_active:

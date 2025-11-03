@@ -7,6 +7,8 @@ paths:
     $ref: './paths/cart.yaml#/paths/~1me~1carts~1items~1{id}'
   /me/carts/clear:
     $ref: './paths/cart.yaml#/paths/~1me~1carts~1clear'
+  /me/carts/checkout:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts~1checkout'
 
   /me/orders:
     $ref: './paths/order.yaml#/paths/~1me~1orders'
@@ -14,8 +16,8 @@ paths:
     $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}'
   /me/orders/{id}/status:
     $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1status'
-  /me/orders/{id}/delivery:
-    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1delivery'
+  /me/orders/{id}/shipping:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1shipping'
   /me/orders/{id}/cancel:
     $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1cancel'
 
@@ -35,15 +37,25 @@ components:
   schemas:
     Cart:
       $ref: './schemas/cart/cart.yaml'
+    CartItemBase:
+      $ref: './schemas/cart/cart_item_base.yaml'
     CartItem:
       $ref: './schemas/cart/cart_item.yaml'
     EmptyCart:
       $ref: './schemas/cart/empty_cart.yaml'
 
-    AddToCartRequest:
-      $ref: './schemas/request/add_to_cart.yaml'
+
+    AddCartItemRequest:
+      $ref: './schemas/request/add_cart_item.yaml'
     UpdateCartItemQuantityRequest:
       $ref: './schemas/request/update_cart_item_quantity.yaml'
+    CheckoutCartRequest:
+      $ref: './schemas/request/checkout_cart.yaml'
+    CheckoutCartResponse:
+      $ref: './schemas/response/checkout_cart.yaml'
+    AddCartItemResponse:
+      $ref: './schemas/response/add_cart_item.yaml'
+    
 
     Order:
       $ref: './schemas/order/order.yaml'
@@ -56,8 +68,8 @@ components:
 
     UpdateOrderStatusRequest:
       $ref: './schemas/request/update_order_status.yaml'
-    UpdateOrderDeliveryRequest:
-      $ref: './schemas/request/update_order_delivery.yaml'
+    UpdateOrderShippingRequest:
+      $ref: './schemas/request/update_order_shipping.yaml'
     PlaceOrderRequest:
       $ref: './schemas/request/place_order.yaml'
 

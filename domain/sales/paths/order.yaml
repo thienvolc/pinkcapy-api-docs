@@ -73,7 +73,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Order'
+                        $ref: '../index.yaml#/components/schemas/ShortOrder'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
 
@@ -98,7 +98,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Order'
+                        $ref: '../index.yaml#/components/schemas/UserOrder'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
@@ -125,29 +125,28 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Order'
+                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
-  /me/orders/{id}/delivery:
+  /me/orders/{id}/shipping:
     patch:
-      summary: Update a order delivery information
-      description: Update delivery information for a specific order.
+      summary: Update a order shipping information
+      description: Update shipping information for a specific order.
       tags: [Order]
       security:
         - bearerAuth: []
       parameters:
         - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
         - $ref: '#/parameters/OrderIdParam'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '../index.yaml#/components/schemas/UpdateOrderDeliveryRequest'
+              $ref: '../index.yaml#/components/schemas/UpdateOrderShippingRequest'
       responses:
         '200':
           description: Success
@@ -159,7 +158,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: '../index.yaml#/components/schemas/Order'
+                        $ref: '../index.yaml#/components/schemas/UserOrder'
         '400':
           $ref: '../shared.yaml#/components/responses/BadRequest'
         '404':

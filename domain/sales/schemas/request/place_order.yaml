@@ -1,22 +1,17 @@
 type: object
 description: 'Place order request'
 properties:
+  cart_id:
+    type: integer
+    description: 'ID of the cart to place order from'
+    example: 1
   promo:
     type: string
     maxLength: 255
     description: 'Promo code applied for this order'
     example: 'SUMMER2025'
-  note:
+  payment_method:
     type: string
-    maxLength: 255
-    description: 'Note for the order'
-    example: 'Giao buổi sáng, gọi trước khi tới'
-  items:
-    type: array
-    description: 'List of product ids to order'
-    items:
-      type: integer
-      description: 'Product id'
-    example: [101, 102, 103]
-required:
-  - items
+    maxLength: 150
+    description: 'Payment or refund method (e.g., VNPay, MoMo, COD, Bank Transfer)'
+    example: 'VNPay'

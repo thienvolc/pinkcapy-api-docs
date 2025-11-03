@@ -1,0 +1,47 @@
+type: object
+properties:
+  cart_id:
+    type: integer
+    readOnly: true
+    description: 'Cart ID'
+    example: 1
+  item_count:
+    type: integer
+    readOnly: true
+    description: 'Number of items in the cart'
+    example: 3
+  shipping_address:
+    type: object
+    readOnly: true
+    description: 'Shipping address details'
+    properties:
+      line1:
+        type: string
+        maxLength: 255
+        description: 'Address line 1'
+        example: '123 Nguyễn Trãi'
+      line2:
+        type: string
+        maxLength: 255
+        description: 'Address line 2 (optional)'
+        example: 'Phường 4, Quận 5'
+      city:
+        type: string
+        maxLength: 255
+        description: 'City'
+        example: 'TP. Hồ Chí Minh'
+      province:
+        type: string
+        maxLength: 255
+        description: 'Province / City'
+        example: 'Hồ Chí Minh'
+      country:
+        type: string
+        maxLength: 255
+        description: 'Country'
+        example: 'Việt Nam'
+  items:
+    type: array
+    description: List of items in the cart
+    items:
+      $ref: '../cart/cart_item.yaml'

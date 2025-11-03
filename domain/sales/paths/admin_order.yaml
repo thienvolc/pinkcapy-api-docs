@@ -178,7 +178,7 @@ paths:
         '404':
           $ref: '../shared.yaml#/components/responses/NotFound'
 
-    put:
+    patch:
       summary: Update the status of a specific order
       description: Update the current status of a specific order.
       tags: [Order_Admin]

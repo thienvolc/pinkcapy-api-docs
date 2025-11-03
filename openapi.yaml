@@ -76,6 +76,8 @@ paths:
     $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1items~1{id}'
   /me/carts/clear:
     $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1clear'
+  /me/carts/checkout:
+    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1checkout'
 
   /me/orders:
     $ref: './domain/sales/index.yaml#/paths/~1me~1orders'
@@ -83,8 +85,8 @@ paths:
     $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}'
   /me/orders/{id}/status:
     $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1status'
-  /me/orders/{id}/delivery:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1delivery'
+  /me/orders/{id}/shipping:
+    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1shipping'
   /me/orders/{id}/cancel:
     $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1cancel'
 
@@ -189,14 +191,22 @@ components:
     # Sales Domain Schemas
     Cart:
       $ref: './domain/sales/index.yaml#/components/schemas/Cart'
+    CartItemBase:
+      $ref: './domain/sales/index.yaml#/components/schemas/CartItemBase'
     CartItem:
       $ref: './domain/sales/index.yaml#/components/schemas/CartItem'
     EmptyCart:
       $ref: './domain/sales/index.yaml#/components/schemas/EmptyCart'
-    AddToCartRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/AddToCartRequest'
+    AddCartItemRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/AddCartItemRequest'
     UpdateCartItemQuantityRequest:
       $ref: './domain/sales/index.yaml#/components/schemas/UpdateCartItemQuantityRequest'
+    CheckoutCartRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/CheckoutCartRequest'
+    CheckoutCartResponse:
+      $ref: './domain/sales/index.yaml#/components/schemas/CheckoutCartResponse'
+    AddCartItemResponse:
+      $ref: './domain/sales/index.yaml#/components/schemas/AddCartItemResponse'
 
     Order:
       $ref: './domain/sales/index.yaml#/components/schemas/Order'
@@ -208,8 +218,8 @@ components:
       $ref: './domain/sales/index.yaml#/components/schemas/OrderItemBase'
     UpdateOrderStatusRequest:
       $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderStatusRequest'
-    UpdateOrderDeliveryRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderDeliveryRequest'
+    UpdateOrderShippingRequest:
+      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderShippingRequest'
     PlaceOrderRequest:
       $ref: './domain/sales/index.yaml#/components/schemas/PlaceOrderRequest'
     UserOrder:

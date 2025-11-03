@@ -1975,7 +1975,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddToCartRequest"
+                "$ref": "#/components/schemas/AddCartItemRequest"
               }
             }
           }
@@ -1994,7 +1994,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/CartItem"
+                          "$ref": "#/components/schemas/AddCartItemResponse"
                         }
                       }
                     }
@@ -2149,9 +2149,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthorizationHeader"
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKeyHeader"
           }
         ],
         "responses": {
@@ -2182,6 +2179,62 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/carts/checkout": {
+      "patch": {
+        "summary": "Checkout cart",
+        "description": "Proceed to checkout with the items in the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutCartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/responses/NotFound/content/application~1json/schema/Response"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CheckoutCartResponse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -2308,7 +2361,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Order"
+                          "$ref": "#/components/schemas/ShortOrder"
                         }
                       }
                     }
@@ -2364,7 +2417,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Order"
+                          "$ref": "#/components/schemas/UserOrder"
                         }
                       }
                     }
@@ -2416,7 +2469,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Order"
+                          "$ref": "#/components/schemas/UpdateOrderStatusRequest"
                         }
                       }
                     }
@@ -2434,10 +2487,10 @@
         }
       }
     },
-    "/me/orders/{id}/delivery": {
+    "/me/orders/{id}/shipping": {
       "patch": {
-        "summary": "Update a order delivery information",
-        "description": "Update delivery information for a specific order.",
+        "summary": "Update a order shipping information",
+        "description": "Update shipping information for a specific order.",
         "tags": [
           "Order"
         ],
@@ -2451,9 +2504,6 @@
             "$ref": "#/components/parameters/AuthorizationHeader"
           },
           {
-            "$ref": "#/components/parameters/IdempotencyKeyHeader"
-          },
-          {
             "$ref": "#/paths/~1me~1orders~1%7Bid%7D/get/parameters/1"
           }
         ],
@@ -2462,7 +2512,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateOrderDeliveryRequest"
+                "$ref": "#/components/schemas/UpdateOrderShippingRequest"
               }
             }
           }
@@ -2481,7 +2531,7 @@
                       "type": "object",
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/Order"
+                          "$ref": "#/components/schemas/UserOrder"
                         }
                       }
                     }
@@ -2810,7 +2860,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "summary": "Update the status of a specific order",
         "description": "Update the current status of a specific order.",
         "tags": [
@@ -4638,12 +4688,36 @@
           "id": {
             "description": "Cart ID",
             "type": "integer",
+            "readOnly": true,
             "example": 1
           },
-          "total_count": {
+          "user_id": {
+            "description": "User ID",
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "total_quantity": {
             "description": "Total number of items in the cart",
             "type": "integer",
             "example": 2
+          },
+          "total_price": {
+            "description": "Total price of all items in the cart",
+            "type": "number",
+            "format": "float",
+            "example": 199.99
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "example": 1,
+            "description": "Cart status:\n  - **1** (active): Đang hoạt động và hiển thị\n  - **2** (checkout_in_progress): In payment process\n  - **3** (checked_out): Paid\n"
           },
           "items": {
             "type": "array",
@@ -4652,14 +4726,9 @@
               "$ref": "#/components/schemas/CartItem"
             }
           }
-        },
-        "required": [
-          "id",
-          "total_count",
-          "items"
-        ]
+        }
       },
-      "CartItem": {
+      "CartItemBase": {
         "type": "object",
         "description": "Cart item detail",
         "properties": {
@@ -4718,26 +4787,65 @@
           "quantity"
         ]
       },
+      "CartItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CartItemBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cart_id": null,
+              "is_active": null
+            }
+          }
+        ]
+      },
       "EmptyCart": {
         "type": "object",
         "description": "A cart containing items selected by the user",
         "properties": {
-          "total_count": {
-            "description": "The number of items in the cart",
+          "id": {
+            "description": "Cart ID",
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "user_id": {
+            "description": "User ID",
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "total_quantity": {
+            "description": "Total number of items in the cart",
             "type": "integer",
             "example": 0
+          },
+          "total_price": {
+            "description": "Total price of all items in the cart",
+            "type": "number",
+            "format": "float",
+            "example": 0
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "example": 1,
+            "description": "Cart status:\n  - **1** (active): Đang hoạt động và hiển thị\n  - **2** (checkout_in_progress): In payment process\n  - **3** (checked_out): Paid\n"
           },
           "items": {
             "type": "array",
             "example": []
           }
-        },
-        "required": [
-          "total_count",
-          "items"
-        ]
+        }
       },
-      "AddToCartRequest": {
+      "AddCartItemRequest": {
         "type": "object",
         "description": "Add item to cart request",
         "required": [
@@ -4754,6 +4862,12 @@
             "type": "integer",
             "example": 2,
             "description": "Product quantity in cart"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Note for the cart item",
+            "example": "Please handle with care"
           }
         }
       },
@@ -4771,6 +4885,175 @@
         "required": [
           "quantity"
         ]
+      },
+      "CheckoutCartRequest": {
+        "type": "object",
+        "description": "A shopping cart checkout info",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "First name of receiver",
+            "example": "Nguyễn"
+          },
+          "middle_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Middle name of receiver (optional)",
+            "example": "Văn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "description": "Last name of receiver",
+            "example": "A"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Phone number of receiver",
+            "example": "0987654321"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "description": "Email of receiver",
+            "example": "nguyenvana@example.com"
+          },
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address line 1",
+            "example": "123 Nguyễn Trãi"
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address line 2 (optional)",
+            "example": "Phường 4, Quận 5"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "City",
+            "example": "TP. Hồ Chí Minh"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Province / City",
+            "example": "Hồ Chí Minh"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Country",
+            "example": "Việt Nam"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Note for the order",
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of product ids to order",
+            "items": {
+              "type": "integer",
+              "description": "Card item id"
+            },
+            "example": [
+              101,
+              102,
+              103
+            ]
+          }
+        }
+      },
+      "CheckoutCartResponse": {
+        "type": "object",
+        "properties": {
+          "cart_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Cart ID",
+            "example": 1
+          },
+          "item_count": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Number of items in the cart",
+            "example": 3
+          },
+          "shipping_address": {
+            "type": "object",
+            "readOnly": true,
+            "description": "Shipping address details",
+            "properties": {
+              "line1": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Address line 1",
+                "example": "123 Nguyễn Trãi"
+              },
+              "line2": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Address line 2 (optional)",
+                "example": "Phường 4, Quận 5"
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "City",
+                "example": "TP. Hồ Chí Minh"
+              },
+              "province": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Province / City",
+                "example": "Hồ Chí Minh"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Country",
+                "example": "Việt Nam"
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items in the cart",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          }
+        }
+      },
+      "AddCartItemResponse": {
+        "type": "object",
+        "description": "Cart item responses",
+        "properties": {
+          "item_id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 101,
+            "description": "Cart item ID"
+          },
+          "product_id": {
+            "type": "integer",
+            "example": 23,
+            "description": "Product ID"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 2,
+            "description": "Product quantity in cart"
+          }
+        }
       },
       "Order": {
         "allOf": [
@@ -4957,41 +5240,47 @@
       "ShortOrder": {
         "type": "object",
         "description": "Short view of an order",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/OrderBase"
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Order id",
+            "example": 1001
           },
-          {
-            "type": "object",
-            "properties": {
-              "user_id": null,
-              "subtotal": null,
-              "tax": null,
-              "shipping": null,
-              "discount_total": null,
-              "promo": null,
-              "discount": null,
-              "first_name": null,
-              "middle_name": null,
-              "last_name": null,
-              "email": null,
-              "phone": null,
-              "line1": null,
-              "line2": null,
-              "city": null,
-              "province": null,
-              "country": null,
-              "orders_at": null,
-              "note": null
-            }
+          "total": {
+            "type": "number",
+            "format": "float",
+            "description": "Total amount (subtotal + tax + shipping)",
+            "example": 14319000
+          },
+          "grand_total": {
+            "type": "number",
+            "format": "float",
+            "description": "The final total amount (applied promo)",
+            "example": 13819000
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "description": "Order status: - `1`: Pending payment - `2`: Paid - `3`: Processing - `4`: Shipped - `5`: Delivered - `6`: Refunded - `7`: Returned - `8`: Cancelled\n",
+            "example": 3
+          },
+          "orders_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Order placed at timestamp",
+            "example": "2025-10-31T09:30:00Z"
           }
-        ],
-        "required": [
-          "id",
-          "total",
-          "grand_total",
-          "status"
-        ]
+        }
       },
       "OrderItemBase": {
         "type": "object",
@@ -5086,7 +5375,7 @@
           "status"
         ]
       },
-      "UpdateOrderDeliveryRequest": {
+      "UpdateOrderShippingRequest": {
         "type": "object",
         "description": "Update order delievery request",
         "properties": {
@@ -5145,35 +5434,24 @@
         "type": "object",
         "description": "Place order request",
         "properties": {
+          "cart_id": {
+            "type": "integer",
+            "description": "ID of the cart to place order from",
+            "example": 1
+          },
           "promo": {
             "type": "string",
             "maxLength": 255,
             "description": "Promo code applied for this order",
             "example": "SUMMER2025"
           },
-          "note": {
+          "payment_method": {
             "type": "string",
-            "maxLength": 255,
-            "description": "Note for the order",
-            "example": "Giao buổi sáng, gọi trước khi tới"
-          },
-          "items": {
-            "type": "array",
-            "description": "List of product ids to order",
-            "items": {
-              "type": "integer",
-              "description": "Product id"
-            },
-            "example": [
-              101,
-              102,
-              103
-            ]
+            "maxLength": 150,
+            "description": "Payment or refund method (e.g., VNPay, MoMo, COD, Bank Transfer)",
+            "example": "VNPay"
           }
-        },
-        "required": [
-          "items"
-        ]
+        }
       },
       "UserOrder": {
         "type": "object",
