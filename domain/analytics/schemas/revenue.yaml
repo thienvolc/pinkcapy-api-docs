@@ -1,57 +1,76 @@
-components:
-  schemas:
-    DashboardRevenueItem:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          example: '2025-10-01'
-          description: Revenue at specific date
-        revenue:
-          type: number
-          format: double
-          example: 3500000
-          description: Revenue at specific date
-        orders:
-          type: integer
-          example: 6
-          description: Number of orders at specific date
-      required:
-        - date
-        - revenue
-        - orders
+Overview:
+  type: object
+  properties:
+    total_revenue:
+      type: number
+      format: double
+      example: 253900000
+    total_orders:
+      type: integer
+      example: 128
+    total_customers:
+      type: integer
+      example: 74
+    total_products:
+      type: integer
+      example: 312
+    today_revenue:
+      type: number
+      format: double
+      example: 18900000
+    month_revenue:
+      type: number
+      format: double
+      example: 203000000
+    growth_rate:
+      type: number
+      format: float
+      example: 12.5
+# ============================================================
 
-    DashboardRevenueSummary:
-      type: object
-      properties:
-        total_revenue:
-          type: number
-          format: double
-          example: 203000000
-          description: Total revenue in the selected period
-        avg_order_value:
-          type: number
-          format: double
-          example: 1580000
-          description: Average order value
-        top_day:
-          type: string
-          format: date
-          example: '2025-10-24'
-          description: Day with the highest revenue
-      required:
-        - total_revenue
-        - avg_order_value
-        - top_day
+DashboardRevenueItem: &dashboard_revenue_item
+  type: object
+  properties:
+    date:
+      type: string
+      format: date
+      example: '2025-10-01'
+    revenue:
+      type: number
+      format: double
+      example: 3500000
+    orders:
+      type: integer
+      example: 6
+# ============================================================
 
-    Revenue:
-      type: object
-      properties:
-        series:
-          type: array
-          description: Revenue data over time
-          items:
-            $ref: '#/components/schemas/DashboardRevenueItem'
-        summary:
-          $ref: '#/components/schemas/DashboardRevenueSummary'
+DashboardRevenueSummary: &dashboard_revenue_summary
+  type: object
+  properties:
+    total_revenue:
+      type: number
+      format: double
+      example: 203000000
+    avg_order_value:
+      type: number
+      format: double
+      example: 1580000
+    top_day:
+      type: string
+      format: date
+      example: '2025-10-24'
+  required:
+    - total_revenue
+    - avg_order_value
+    - top_day
+# ============================================================
+
+Revenue:
+  type: object
+  properties:
+    series:
+      type: array
+      items:
+        <<: *dashboard_revenue_item
+    summary:
+      <<: *dashboard_revenue_summary

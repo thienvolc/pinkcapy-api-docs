@@ -1,93 +1,97 @@
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_user: &common_user
+  tags:
+    - User
+  security:
+    - bearerAuth: []
+
+user: &user
+  $ref: '../index.yaml#/components/schemas/User'
+user_profile_base: &user_profile_base
+  $ref: '../index.yaml#/components/schemas/UserProfileBase'
+update_password_request: &update_password_request
+  $ref: '../index.yaml#/components/schemas/UpdatePasswordRequest'
+# ============================================================
+
 paths:
   /me:
     get:
       summary: Get current user
       description: Retrieve the current user information.
-      tags: [User]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_user
+      parameters: [*auth_header]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/User'
+                properties:
+                  meta: *meta
+                  data: *user
 
     put:
       summary: Update a user profile
       description: Admin to update an existing user in the system.
-      tags: [User]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UserProfileBase'
+            schema: *user_profile_base
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserProfileBase'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *user_profile_base
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/password:
     put:
       summary: Update a user password
       description: Update an existing user password in the system.
-      tags: [User]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_user
+      parameters: [*auth_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdatePasswordRequest'
+            schema: *update_password_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
+                properties:
+                  meta: *meta
+                  data:
+                    type: object
                     properties:
-                      data:
-                        type: object
-                        properties:
-                          user_id:
-                            type: integer
-                            description: User id
-                            example: 1
-                          email:
-                            type: string
-                            description: Email of the user
-                            example: user@example.com
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                      user_id:
+                        type: integer
+                        description: 'User id'
+                        example: 1
+                      email:
+                        type: string
+                        description: 'Email of the user'
+                        example: 'user@example.com'
+        '400': *bad_request

@@ -4,6 +4,7 @@ info:
   version: 1.0.0
 
 paths:
+  # @Product_Public
   /products/{id}:
     $ref: './paths/product.yaml#/paths/~1products~1{id}'
   /products/{slug}:
@@ -12,7 +13,7 @@ paths:
     $ref: './paths/product.yaml#/paths/~1products~1{id}~1related'
   /products:
     $ref: './paths/product.yaml#/paths/~1products'
-
+  # @Product_Admin
   /admin/products/{id}:
     $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}'
   /admin/products/{id}/metas:
@@ -29,59 +30,57 @@ paths:
     $ref: './paths/admin_product.yaml#/paths/~1admin~1products'
   /admin/products/{id}/inventories:
     $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1inventories'
-
+  # @Tag_Public
   /tags/{id}/products:
     $ref: './paths/tag.yaml#/paths/~1tags~1{id}~1products'
+  # @Tag_Admin
   /admin/tags:
-    $ref: './paths/tag_admin.yaml#/paths/~1admin~1tags'
+    $ref: './paths/admin_tag.yaml#/paths/~1admin~1tags'
   /admin/tags/{id}:
-    $ref: './paths/tag_admin.yaml#/paths/~1admin~1tags~1{id}'
-
+    $ref: './paths/admin_tag.yaml#/paths/~1admin~1tags~1{id}'
+  # @Category_Public
   /categories:
     $ref: './paths/category.yaml#/paths/~1categories'
   /categories/{slug}:
     $ref: './paths/category.yaml#/paths/~1categories~1{slug}'
   /categories/{slug}/products:
     $ref: './paths/category.yaml#/paths/~1categories~1{slug}~1products'
-
+  # @Category_Admin
   /admin/categories/{id}:
     $ref: './paths/admin_category.yaml#/paths/~1admin~1categories~1{id}'
   /admin/categories:
     $ref: './paths/admin_category.yaml#/paths/~1admin~1categories'
-
+  
 components:
   schemas:
     CategoryBase:
-      $ref: './schemas/category/category_base.yaml'
+      $ref: './schemas/category.yaml#/CategoryBase'
     CategoryPublic:
-      $ref: './schemas/category/category_public.yaml#/CategoryPublic'
+      $ref: './schemas/category.yaml#/CategoryPublic'
     Category:
-      $ref: './schemas/category/category.yaml#/Category'
-
+      $ref: './schemas/category.yaml#/Category'
     CategoryPublicHierarchy:
-      $ref: './schemas/category/category_public.yaml#/CategoryPublicHierarchy'
+      $ref: './schemas/category.yaml#/CategoryPublicHierarchy'
     CategoryHierarchy:
-      $ref: './schemas/category/category.yaml#/CategoryHierarchy'
+      $ref: './schemas/category.yaml#/CategoryHierarchy'
+    ProductBase:
+      $ref: './schemas/product.yaml#/ProductBase'
+    ProductPublic:
+      $ref: './schemas/product.yaml#/ProductPublic'
+    Product:
+      $ref: './schemas/product.yaml#/Product'
+    ProductMeta:
+      $ref: './schemas/product.yaml#/ProductMeta'
+    ProductExtra:
+      $ref: './schemas/product.yaml#/ProductExtra'
+    ProductPublicExtra:
+      $ref: './schemas/product.yaml#/ProductPublicExtra'
+    Tag:
+      $ref: './schemas/tag.yaml#/Tag'
 
     UpdateCategoryRequest:
-      $ref: './schemas/request/update_category.yaml'
-
-    ProductBase:
-      $ref: './schemas/product/product_base.yaml'
-    ProductPublic:
-      $ref: './schemas/product/product_public.yaml'
-    Product:
-      $ref: './schemas/product/product.yaml'
-    ProductMeta:
-      $ref: './schemas/product/product_meta.yaml'
-    ProductExtra:
-      $ref: './schemas/product/product_extra.yaml'
-    ProductPublicExtra:
-      $ref: './schemas/product/product_public_extra.yaml'
-    Tag:
-      $ref: './schemas/product/tag.yaml'
-
+      $ref: './schemas/request.yaml#/UpdateCategoryRequest'
     UpdateProductStatusRequest:
-      $ref: './schemas/request/update_product_status.yaml'
-    ProductAdjustInventory:
-      $ref: './schemas/request/adjust_product_inventory.yaml'
+      $ref: './schemas/request.yaml#/UpdateProductStatusRequest'
+    AdjustProductInventoryRequest:
+      $ref: './schemas/request.yaml#/AdjustProductInventoryRequest'

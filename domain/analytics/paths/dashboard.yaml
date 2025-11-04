@@ -1,33 +1,48 @@
+meta: &meta
+  $ref: '../shared.yaml#/components/schemas/ResponseBase'
+auth_header: &auth_header
+  $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+
+common_admin: &common_admin
+  tags: [Dashboard]
+  security:
+    - bearerAuth: []
+
+overview: &overview
+  $ref: '../index.yaml#/components/schemas/Overview'
+revenue: &revenue
+  $ref: '../index.yaml#/components/schemas/Revenue'
+orders_stats: &orders_stats
+  $ref: '../index.yaml#/components/schemas/OrdersStats'
+product_top: &product_top
+  $ref: '../index.yaml#/components/schemas/ProductTop'
+# ============================================================
+
 paths:
   /overview:
     get:
       summary: Get dashboard overview
       description: Retrieve the overview statistics for the dashboard.
-      tags: [Dashboard]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_admin
+      parameters: [*auth_header]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/DashboardOverview'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *overview
 
   /revenue:
     get:
       summary: Statistics of revenue
-      tags: [Dashboard]
       description: |
         Return revenue statistics by day, week, or month.
         Data is used to display revenue charts, order counts, and average revenue.
+      <<: *common_admin
       parameters:
         - name: period
           in: query
@@ -60,18 +75,14 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../schemas/revenue.yaml#/components/schemas/Revenue'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *revenue
 
   /orders/stats:
     get:
       summary: Get order statistics by status
-      tags:
-        - Dashboard
       description: |
         API returns the number of orders grouped by statuses such as:
         - `pending`
@@ -80,27 +91,25 @@ paths:
         - `cancelled`
         - `refunded`
         Data is used to display pie charts or bar charts in the order statistics section of the Dashboard.
+      <<: *common_admin
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/DashboardOrdersStats'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *orders_stats
 
   /products/top:
     get:
       summary: Get top selling products
-      tags:
-        - Dashboard
       description: |
         API returns a list of products with **sales or quantity sold** in the last year.
         Data is used to display the "Top Selling Products" table or chart on the Dashboard.
+      <<: *common_admin
       parameters:
         - name: limit
           in: query
@@ -118,9 +127,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/DashboardProductTop'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *product_top

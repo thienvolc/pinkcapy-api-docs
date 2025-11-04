@@ -1,149 +1,144 @@
-parameters:
-  CategoryId:
-    name: id
-    in: path
-    required: true
-    description: ID of the category to retrieve
-    schema:
-      type: integer
-      example: 1
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+pagination: &pagination
+  $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+page_param: &page_param
+  $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+size_param: &size_param
+  $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_admin: &common_admin
+  tags:
+    - Category_Admin
+  security:
+    - bearerAuth: []
+
+category_id: &category_id
+  name: id
+  in: path
+  required: true
+  description: ID of the category to retrieve
+  schema:
+    type: integer
+    example: 1
+
+category_hierarchy: &category_hierarchy
+  $ref: ../index.yaml#/components/schemas/CategoryHierarchy
+update_category_request: &update_category_request
+  $ref: '../index.yaml#/components/schemas/UpdateCategoryRequest'
+# ============================================================
 
 paths:
   /admin/categories/{id}:
     get:
       summary: Get category for admin
       description: Retrieve a category by its ID for admin.
-      tags: [Category_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/CategoryId'
+      <<: *common_admin
+      parameters: [*auth_header, *category_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_hierarchy
+        '404': *not_found
 
     put:
       summary: Update a category
       description: Admin to update an existing category in the system.
-      tags: [Category_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/CategoryId'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *category_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdateCategoryRequest'
+            schema: *update_category_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_hierarchy
+        '400': *bad_request
+        '404': *not_found
 
     delete:
       summary: Delete a category
       description: Admin to delete an existing category in the system.
-      tags: [Category_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/CategoryId'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *category_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/CategoryHierarchy'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_hierarchy
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/categories:
     post:
       summary: Create a category
       description: Admin to add a new category to the system.
-      tags: [Category_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              allOf:
-                - $ref: '../index.yaml#/components/schemas/UpdateCategoryRequest'
+            schema: *update_category_request
       responses:
         '201':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: ../index.yaml#/components/schemas/CategoryHierarchy
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_hierarchy
+        '400': *bad_request
 
     get:
       summary: Search categories for admin
       description: Retrieve a list of categories.
-      tags: [Category_Admin]
-      security:
-        - bearerAuth: []
+      <<: *common_admin
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/PageParam'
-        - $ref: '../shared.yaml#/components/parameters/SizeParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - *auth_header
+        - *page_param
+        - *size_param
+        - *sort_param
         - name: level
           in: query
           required: true
           description: Level of categories to retrieve
-          default: 1
           schema:
             type: integer
+            default: 1
             example: 1
       responses:
         '200':
@@ -151,15 +146,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/Pagination'
-                          - type: object
-                            properties:
-                              data:
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/CategoryHierarchy'
+                type: object
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *pagination
+                      - type: object
+                        properties:
+                          data:
+                            items: *category_hierarchy

@@ -1,182 +1,174 @@
-parameters:
-  CartIdParam:
-    name: id
-    in: path
-    required: true
-    description: ID of the cart item to update
-    schema:
-      type: integer
-      example: 1
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_user: &common_user
+  tags:
+    - Cart
+  security:
+    - bearerAuth: []
+
+cart_item_id: &cart_item_id
+  name: id
+  in: path
+  required: true
+  description: ID of the cart item to update
+  schema:
+    type: integer
+    example: 1
+
+cart: &cart
+  $ref: '../index.yaml#/components/schemas/Cart'
+cart_item: &cart_item
+  $ref: '../index.yaml#/components/schemas/CartItem'
+empty_cart: &empty_cart
+  $ref: '../index.yaml#/components/schemas/EmptyCart'
+add_cart_item_request: &add_cart_item_request
+  $ref: '../index.yaml#/components/schemas/AddCartItemRequest'
+add_cart_item_response: &add_cart_item_response
+  $ref: '../index.yaml#/components/schemas/AddCartItemResponse'
+update_cart_item_quantity_request: &update_cart_item_quantity_request
+  $ref: '../index.yaml#/components/schemas/UpdateCartItemQuantityRequest'
+checkout_cart_request: &checkout_cart_request
+  $ref: '../index.yaml#/components/schemas/CheckoutCartRequest'
+checkout_cart_response: &checkout_cart_response
+  $ref: '../index.yaml#/components/schemas/CheckoutCartResponse'
+# ============================================================
 
 paths:
   /me/carts:
     get:
       summary: Get current user cart
       description: Retrieve the current user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_user
+      parameters: [*auth_header]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/Cart'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *cart
+        '400': *bad_request
+  # ============================================================
 
   /me/carts/items:
     post:
       summary: Add item to cart
       description: Add a new item to the user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/AddCartItemRequest'
+            schema: *add_cart_item_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/AddCartItemResponse'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *add_cart_item_response
+        '400': *bad_request
+  # ============================================================
 
   /me/carts/items/{id}:
     patch:
       summary: Update a cart item
       description: Update an existing item in the user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/CartIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header, *cart_item_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdateCartItemQuantityRequest'
+            schema: *update_cart_item_quantity_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/CartItem'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *cart_item
+        '400': *bad_request
+        '404': *not_found
 
     delete:
       summary: Delete a cart item
       description: User to delete an existing cart item in user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/CartIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header, *cart_item_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/CartItem'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *cart_item
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/carts/clear:
     delete:
       summary: Clear all cart items in user's cart
       description: User to clear all cart items in user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_user
+      parameters: [*auth_header]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/EmptyCart'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *empty_cart
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/carts/checkout:
     patch:
       summary: Checkout cart
       description: Proceed to checkout with the items in the user's cart.
-      tags: [Cart]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+      <<: *common_user
+      parameters: [*auth_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/CheckoutCartRequest'
+            schema: *checkout_cart_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/CheckoutCartResponse'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *checkout_cart_response
+        '400': *bad_request

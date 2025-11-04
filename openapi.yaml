@@ -10,131 +10,68 @@ servers:
   - url: http://localhost:8000/v1
     description: Local development
 
-tags:
-  - name: Product_Public
-  - name: Product_Admin
-  - name: Category_Public
-  - name: Cart
-  - name: Order_Admin
-  - name: Transaction
-  - name: Dashboard
-
 paths:
-  # Catalog API : ./domain/catalog/index.yaml
-  /products/{id}:
-    $ref: './domain/catalog/index.yaml#/paths/~1products~1{id}'
-  /products/{slug}:
-    $ref: './domain/catalog/index.yaml#/paths/~1products~1{slug}'
-  /products/{id}/related:
-    $ref: './domain/catalog/index.yaml#/paths/~1products~1{id}~1related'
-  /products:
-    $ref: './domain/catalog/index.yaml#/paths/~1products'
+  # Catalog API : @catalog
+  /products/{id}: { $ref: '@catalog#/paths/~1products~1{id}' }
+  /products/{slug}: { $ref: '@catalog#/paths/~1products~1{slug}' }
+  /products/{id}/related: { $ref: '@catalog#/paths/~1products~1{id}~1related' }
+  /products: { $ref: '@catalog#/paths/~1products' }
 
-  /admin/products/{id}:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}'
-  /admin/products/{id}/metas:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1metas'
-  /admin/products/{id}/metas/{meta_id}:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1metas~1{meta_id}'
-  /admin/products/{id}/categories:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1categories'
-  /admin/products/{id}/tags:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1tags'
-  /admin/products/{id}/status:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1status'
-  /admin/products:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products'
-  /admin/products/{id}/inventories:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1products~1{id}~1inventories'
+  /admin/products/{id}: { $ref: '@catalog#/paths/~1admin~1products~1{id}' }
+  /admin/products/{id}/metas: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1metas' }
+  /admin/products/{id}/metas/{meta_id}: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1metas~1{meta_id}' }
+  /admin/products/{id}/categories: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1categories' }
+  /admin/products/{id}/tags: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1tags' }
+  /admin/products/{id}/status: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1status' }
+  /admin/products: { $ref: '@catalog#/paths/~1admin~1products' }
+  /admin/products/{id}/inventories: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1inventories' }
 
-  /tags/{id}/products:
-    $ref: './domain/catalog/index.yaml#/paths/~1tags~1{id}~1products'
-  /admin/tags:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1tags'
-  /admin/tags/{id}:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1tags~1{id}'
+  /tags/{id}/products: { $ref: '@catalog#/paths/~1tags~1{id}~1products' }
+  /admin/tags: { $ref: '@catalog#/paths/~1admin~1tags' }
+  /admin/tags/{id}: { $ref: '@catalog#/paths/~1admin~1tags~1{id}' }
+  /categories: { $ref: '@catalog#/paths/~1categories' }
+  /categories/{slug}: { $ref: '@catalog#/paths/~1categories~1{slug}' }
+  /categories/{slug}/products: { $ref: '@catalog#/paths/~1categories~1{slug}~1products' }
+  /admin/categories/{id}: { $ref: '@catalog#/paths/~1admin~1categories~1{id}' }
+  /admin/categories: { $ref: '@catalog#/paths/~1admin~1categories' }
 
-  /categories:
-    $ref: './domain/catalog/index.yaml#/paths/~1categories'
+  # Sales Domain : @sales
+  /me/carts: { $ref: '@sales#/paths/~1me~1carts' }
+  /me/carts/items: { $ref: '@sales#/paths/~1me~1carts~1items' }
+  /me/carts/items/{id}: { $ref: '@sales#/paths/~1me~1carts~1items~1{id}' }
+  /me/carts/clear: { $ref: '@sales#/paths/~1me~1carts~1clear' }
+  /me/carts/checkout: { $ref: '@sales#/paths/~1me~1carts~1checkout' }
+  /me/orders: { $ref: '@sales#/paths/~1me~1orders' }
+  /me/orders/{id}: { $ref: '@sales#/paths/~1me~1orders~1{id}' }
+  /me/orders/{id}/status: { $ref: '@sales#/paths/~1me~1orders~1{id}~1status' }
+  /me/orders/{id}/shipping: { $ref: '@sales#/paths/~1me~1orders~1{id}~1shipping' }
+  /me/orders/{id}/cancel: { $ref: '@sales#/paths/~1me~1orders~1{id}~1cancel' }
 
-  /categories/{slug}:
-    $ref: './domain/catalog/index.yaml#/paths/~1categories~1{slug}'
-  /categories/{slug}/products:
-    $ref: './domain/catalog/index.yaml#/paths/~1categories~1{slug}~1products'
+  /admin/orders: { $ref: '@sales#/paths/~1admin~1orders' }
+  /admin/orders/{id}: { $ref: '@sales#/paths/~1admin~1orders~1{id}' }
+  /admin/orders/{id}/status: { $ref: '@sales#/paths/~1admin~1orders~1{id}~1status' }
+  /admin/orders/{id}/cancel: { $ref: '@sales#/paths/~1admin~1orders~1{id}~1cancel' }
 
-  /admin/categories/{id}:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1categories~1{id}'
-  /admin/categories:
-    $ref: './domain/catalog/index.yaml#/paths/~1admin~1categories'
+  /admin/transactions: { $ref: '@sales#/paths/~1admin~1transactions' }
 
-  # Sales Domain : ./domain/sales/index.yaml
-  /me/carts:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1carts'
-  /me/carts/items:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1items'
-  /me/carts/items/{id}:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1items~1{id}'
-  /me/carts/clear:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1clear'
-  /me/carts/checkout:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1carts~1checkout'
+  /me: { $ref: '@identity#/paths/~1me' }
+  /users/auth/register: { $ref: '@identity#/paths/~1users~1auth~1register' }
+  /users/auth/login: { $ref: '@identity#/paths/~1users~1auth~1login' }
+  /users/auth/logout: { $ref: '@identity#/paths/~1users~1auth~1logout' }
+  /users/auth/forgot-password: { $ref: '@identity#/paths/~1users~1auth~1forgot-password' }
+  /users/auth/reset-password: { $ref: '@identity#/paths/~1users~1auth~1reset-password' }
+  /me/password: { $ref: '@identity#/paths/~1me~1password' }
 
-  /me/orders:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders'
-  /me/orders/{id}:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}'
-  /me/orders/{id}/status:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1status'
-  /me/orders/{id}/shipping:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1shipping'
-  /me/orders/{id}/cancel:
-    $ref: './domain/sales/index.yaml#/paths/~1me~1orders~1{id}~1cancel'
+  /admin/users: { $ref: '@identity#/paths/~1admin~1users' }
+  /admin/users/{id}: { $ref: '@identity#/paths/~1admin~1users~1{id}' }
+  /admin/users/{id}/status: { $ref: '@identity#/paths/~1admin~1users~1{id}~1status' }
+  /admin/users/{id}/roles: { $ref: '@identity#/paths/~1admin~1users~1{id}~1roles' }
 
-  /admin/orders:
-    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders'
-  /admin/orders/{id}:
-    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}'
-  /admin/orders/{id}/status:
-    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}~1status'
-  /admin/orders/{id}/cancel:
-    $ref: './domain/sales/index.yaml#/paths/~1admin~1orders~1{id}~1cancel'
-
-  /admin/transactions:
-    $ref: './domain/sales/index.yaml#/paths/~1admin~1transactions'
-
-  /me:
-    $ref: './domain/identity/index.yaml#/paths/~1me'
-  /users/auth/register:
-    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1register'
-  /users/auth/login:
-    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1login'
-  /users/auth/logout:
-    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1logout'
-  /users/auth/forgot-password:
-    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1forgot-password'
-  /users/auth/reset-password:
-    $ref: './domain/identity/index.yaml#/paths/~1users~1auth~1reset-password'
-  /me/password:
-    $ref: './domain/identity/index.yaml#/paths/~1me~1password'
-
-  /admin/users:
-    $ref: './domain/identity/index.yaml#/paths/~1admin~1users'
-  /admin/users/{id}:
-    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}'
-  /admin/users/{id}/status:
-    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1status'
-  /admin/users/{id}/roles:
-    $ref: './domain/identity/index.yaml#/paths/~1admin~1users~1{id}~1roles'
-
-  # Analytics Domain
-  /admin/dashboard/overview:
-    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1overview'
-  /admin/dashboard/revenue:
-    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1revenue'
-  /admin/dashboard/orders/stats:
-    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1orders~1stats'
-  /admin/dashboard/products/top:
-    $ref: './domain/analytics/index.yaml#/paths/~1admin~1dashboard~1products~1top'
+  # Analytics Domain: @analytics
+  /admin/dashboard/overview: { $ref: '@analytics#/paths/~1admin~1dashboard~1overview' }
+  /admin/dashboard/revenue: { $ref: '@analytics#/paths/~1admin~1dashboard~1revenue' }
+  /admin/dashboard/orders/stats: { $ref: '@analytics#/paths/~1admin~1dashboard~1orders~1stats' }
+  /admin/dashboard/products/top: { $ref: '@analytics#/paths/~1admin~1dashboard~1products~1top' } 
 
 components:
   securitySchemes:
@@ -144,166 +81,30 @@ components:
       bearerFormat: JWT
 
   schemas:
-    InfiniteScroll:
-      $ref: './shared/schemas/infinite_scroll.yaml#/schemas/InfiniteScroll'
-    Pagination:
-      $ref: './shared/schemas/pagination.yaml#/schemas/Pagination'
-    ResponseBase:
-      $ref: './shared/schemas/response.yaml#/Response'
-    AuditFields:
-      $ref: './shared/schemas/audit_fields.yaml'
-
-    # Catalog Domain Schemas
-    Product:
-      $ref: './domain/catalog/index.yaml#/components/schemas/Product'
-    ProductExtra:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductExtra'
-    ProductPublicExtra:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublicExtra'
-    ProductPublic:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductPublic'
-    ProductBase:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductBase'
-    UpdateProductStatusRequest:
-      $ref: './domain/catalog/index.yaml#/components/schemas/UpdateProductStatusRequest'
-    ProductAdjustInventory:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductAdjustInventory'
-    ProductMeta:
-      $ref: './domain/catalog/index.yaml#/components/schemas/ProductMeta'
-    Tag:
-      $ref: './domain/catalog/index.yaml#/components/schemas/Tag'
-
-    Category:
-      $ref: './domain/catalog/index.yaml#/components/schemas/Category'
-    CategoryPublic:
-      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryPublic'
-    CategoryBase:
-      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryBase'
-
-    CategoryPublicHierarchy:
-      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryPublicHierarchy'
-    CategoryHierarchy:
-      $ref: './domain/catalog/index.yaml#/components/schemas/CategoryHierarchy'
-
-    UpdateCategoryRequest:
-      $ref: './domain/catalog/index.yaml#/components/schemas/UpdateCategoryRequest'
-
-    # Sales Domain Schemas
-    Cart:
-      $ref: './domain/sales/index.yaml#/components/schemas/Cart'
-    CartItemBase:
-      $ref: './domain/sales/index.yaml#/components/schemas/CartItemBase'
-    CartItem:
-      $ref: './domain/sales/index.yaml#/components/schemas/CartItem'
-    EmptyCart:
-      $ref: './domain/sales/index.yaml#/components/schemas/EmptyCart'
-    AddCartItemRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/AddCartItemRequest'
-    UpdateCartItemQuantityRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/UpdateCartItemQuantityRequest'
-    CheckoutCartRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/CheckoutCartRequest'
-    CheckoutCartResponse:
-      $ref: './domain/sales/index.yaml#/components/schemas/CheckoutCartResponse'
-    AddCartItemResponse:
-      $ref: './domain/sales/index.yaml#/components/schemas/AddCartItemResponse'
-
-    Order:
-      $ref: './domain/sales/index.yaml#/components/schemas/Order'
-    OrderBase:
-      $ref: './domain/sales/index.yaml#/components/schemas/OrderBase'
-    ShortOrder:
-      $ref: './domain/sales/index.yaml#/components/schemas/ShortOrder'
-    OrderItemBase:
-      $ref: './domain/sales/index.yaml#/components/schemas/OrderItemBase'
-    UpdateOrderStatusRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderStatusRequest'
-    UpdateOrderShippingRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/UpdateOrderShippingRequest'
-    PlaceOrderRequest:
-      $ref: './domain/sales/index.yaml#/components/schemas/PlaceOrderRequest'
-    UserOrder:
-      $ref: './domain/sales/index.yaml#/components/schemas/UserOrder'
-    UserOrderItem:
-      $ref: './domain/sales/index.yaml#/components/schemas/UserOrderItem'
-
-    Transaction:
-      $ref: './domain/sales/index.yaml#/components/schemas/Transaction'
-
-    UserBase:
-      $ref: './domain/identity/index.yaml#/components/schemas/UserBase'
-    User:
-      $ref: './domain/identity/index.yaml#/components/schemas/User'
-    Role:
-      $ref: './domain/identity/index.yaml#/components/schemas/Role'
-    UserProfileBase:
-      $ref: './domain/identity/index.yaml#/components/schemas/UserProfileBase'
-    UserAdmin:
-      $ref: './domain/identity/index.yaml#/components/schemas/UserAdmin'
-    CreateUserRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/CreateUserRequest'
-    UpdateUserStatusRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/UpdateUserStatusRequest'
-    RegisterUserRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/RegisterUserRequest'
-    LoginRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/LoginRequest'
-    ForgotPasswordRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/ForgotPasswordRequest'
-    ResetPasswordRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/ResetPasswordRequest'
-    LoginResponse:
-      $ref: './domain/identity/index.yaml#/components/schemas/LoginResponse'
-    RegisterUserResponse:
-      $ref: './domain/identity/index.yaml#/components/schemas/RegisterUserResponse'
-    UpdatePasswordRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/UpdatePasswordRequest'
-    AssignRolesRequest:
-      $ref: './domain/identity/index.yaml#/components/schemas/AssignRolesRequest'
-
-    # Analytics Domain Schemas
-    DashboardOverview:
-      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardOverview'
-    DashboardRevenue:
-      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardRevenue'
-    DashboardOrdersStats:
-      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardOrdersStats'
-    DashboardProductTop:
-      $ref: './domain/analytics/index.yaml#/components/schemas/DashboardProductTop'
+    InfiniteScroll: { $ref: './shared/schemas.yaml#/InfiniteScroll' }
+    Pagination: { $ref: './shared/schemas.yaml#/Pagination' }
+    ResponseBase: { $ref: './shared/schemas.yaml#/ResponseBase' }
+    Meta: { $ref: './shared/schemas.yaml#/Meta' }
+    AuditFields: { $ref: './shared/schemas.yaml#/AuditFields' }
 
   parameters:
-    SortParam:
-      $ref: './shared/schemas/parameters.yaml#/SortParam'
-    AuthorizationHeader:
-      $ref: './shared/schemas/parameters.yaml#/AuthorizationHeader'
-    IdempotencyKeyHeader:
-      $ref: './shared/schemas/parameters.yaml#/IdempotencyKeyHeader'
-    PageParam:
-      $ref: './shared/schemas/pagination.yaml#/parameters/PageParam'
-    SizeParam:
-      $ref: './shared/schemas/pagination.yaml#/parameters/SizeParam'
-    OffsetParam:
-      $ref: './shared/schemas/infinite_scroll.yaml#/parameters/OffsetParam'
-    LimitParam:
-      $ref: './shared/schemas/infinite_scroll.yaml#/parameters/LimitParam'
+    SortParam: { $ref: './shared/parameters.yaml#/SortParam' }
+    AuthorizationHeader: { $ref: './shared/parameters.yaml#/AuthorizationHeader' }
+    IdempotencyKeyHeader: { $ref: './shared/parameters.yaml#/IdempotencyKeyHeader' }
+    PageParam: { $ref: './shared/parameters.yaml#/PageParam' }
+    SizeParam: { $ref: './shared/parameters.yaml#/SizeParam' }
+    OffsetParam: { $ref: './shared/parameters.yaml#/OffsetParam' }
+    LimitParam: { $ref: './shared/parameters.yaml#/LimitParam' }
 
   responses:
-    BadRequest:
-      $ref: './shared/responses/error.yaml#/BadRequest'
-    Unauthorized:
-      $ref: './shared/responses/error.yaml#/Unauthorized'
-    ValidationError:
-      $ref: './shared/responses/error.yaml#/ValidationError'
-    Forbidden:
-      $ref: './shared/responses/error.yaml#/Forbidden'
-    NotFound:
-      $ref: './shared/responses/error.yaml#/NotFound'
-    Conflict:
-      $ref: './shared/responses/error.yaml#/Conflict'
-    InternalServerError:
-      $ref: './shared/responses/error.yaml#/InternalServerError'
-    NoContent:
-      $ref: './shared/responses/success.yaml#/NoContent'
+    BadRequest: { $ref: './shared/error.yaml#/BadRequest' }
+    Unauthorized: { $ref: './shared/error.yaml#/Unauthorized' }
+    ValidationError: { $ref: './shared/error.yaml#/ValidationError' }
+    Forbidden: { $ref: './shared/error.yaml#/Forbidden' }
+    NotFound: { $ref: './shared/error.yaml#/NotFound' }
+    Conflict: { $ref: './shared/error.yaml#/Conflict' }
+    InternalServerError: { $ref: './shared/error.yaml#/InternalServerError' }
+    NoContent: { $ref: './shared/error.yaml#/NoContent' }
 
-    ResetPasswordTokenInvalid:
-      $ref: './domain/identity/index.yaml#/components/responses/ResetPasswordTokenInvalid'
+    # Identity Domain
+    # ResetPasswordTokenInvalid: { $ref: '@identity#/components/responses/ResetPasswordTokenInvalid' }

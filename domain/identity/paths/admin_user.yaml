@@ -1,3 +1,50 @@
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+pagination: &pagination
+  $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+page_param: &page_param
+  $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+size_param: &size_param
+  $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_admin: &common_admin
+  tags:
+    - User_Admin
+  security:
+    - bearerAuth: []
+
+user_id: &user_id
+  name: id
+  in: path
+  required: true
+  description: ID of the product to retrieve
+  schema:
+    type: integer
+    example: 1
+
+user_admin: &user_admin
+  $ref: '../index.yaml#/components/schemas/UserAdmin'
+role: &role
+  $ref: '../index.yaml#/components/schemas/Role'
+create_user_request: &create_user_request
+  $ref: '../index.yaml#/components/schemas/CreateUserRequest'
+update_user_status_request: &update_user_status_request
+  $ref: '../index.yaml#/components/schemas/UpdateUserStatusRequest'
+assign_roles_request: &assign_roles_request
+  $ref: '../index.yaml#/components/schemas/AssignRolesRequest'
+# ============================================================
+
 parameters:
   UserId:
     name: id
@@ -13,166 +60,119 @@ paths:
     get:
       summary: Get user for admin
       description: Retrieve a user by its ID for admin.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/UserId'
+      <<: *common_admin
+      parameters: [*auth_header, *user_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserAdmin'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *user_admin
+        '404': *not_found
 
     delete:
       summary: Delete a user
       description: Admin to delete an existing user in the system.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/UserId'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *user_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserAdmin'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *user_admin
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/users/{id}/status:
     patch:
       summary: Update a user status
       description: Admin to update a status of an existing user in the system.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/UserId'
+      <<: *common_admin
+      parameters: [*auth_header, *user_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdateUserStatusRequest'
+            schema: *update_user_status_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateUserStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *update_user_status_request
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/users/{id}/roles:
     patch:
       summary: Update user roles
       description: Admin to update roles of an existing user in the system.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/UserId'
+      <<: *common_admin
+      parameters: [*auth_header, *user_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/AssignRolesRequest'
+            schema: *assign_roles_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '../index.yaml#/components/schemas/Role'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data:
+                    type: array
+                    items: *role
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/users:
     post:
       summary: Create a new user
       description: Admin to add a new user to the system.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/CreateUserRequest'
+            schema: *create_user_request
       responses:
         '201':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserAdmin'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *user_admin
+        '400': *bad_request
+        '404': *not_found
 
     get:
       summary: Search users for admin
       description: Retrieve a list of users based on search criteria.
-      tags: [User_Admin]
-      security:
-        - bearerAuth: []
+      <<: *common_admin
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/PageParam'
-        - $ref: '../shared.yaml#/components/parameters/SizeParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - *auth_header
+        - *page_param
+        - *size_param
+        - *sort_param
         - name: query
           in: query
           description: Search keyword
@@ -197,16 +197,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/Pagination'
-                          - type: object
-                            properties:
-                              data:
-                                type: array
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/UserAdmin'
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *pagination
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *user_admin

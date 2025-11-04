@@ -1,0 +1,63 @@
+audit: &audit
+  $ref: '../../../openapi.yaml#/components/schemas/AuditFields'
+# ============================================================
+
+CategoryBase: &base
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 3
+    parent_id:
+      type: integer
+      nullable: true
+      example: 1
+    level:
+      type: integer
+      example: 2
+    title:
+      type: string
+      example: 'Tai nghe Bluetooth'
+    meta_title:
+      type: string
+      example: 'Tai nghe Bluetooth - Am thanh dinh cao | PinkCapy'
+    slug:
+      type: string
+      example: 'tai-nghe-bluetooth'
+    desc:
+      type: string
+      example: 'Danh mục các loại tai nghe không dây, chống ồn, pin lâu.'
+
+Category: &category
+  allOf:
+    - *base
+    - *audit
+# ============================================================
+
+CategoryPublic: &category_public
+  allOf:
+    - *base
+    - type: object
+      properties:
+        meta_title:
+# ============================================================
+
+CategoryPublicHierarchy:
+  allOf:
+    - *category_public
+    - type: object
+      properties:
+        children:
+          type: array
+          items: *category_public
+# ============================================================
+
+CategoryHierarchy:
+  allOf:
+    - *category
+    - type: object
+      properties:
+        children:
+          type: array
+          items: category

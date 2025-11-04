@@ -1,0 +1,49 @@
+query-required: &query-required
+  <<: *query-required
+header-required: &header-required
+  in: header
+  required: true
+# ============================================================
+
+AuthorizationHeader:
+  name: Authorization
+  <<: *header-required
+  description: 'Auth token `Bearer <JWT>`, ex: `admin` | `customer` | `public`'
+  schema: { type: string, example: 'Bearer admin' }
+
+IdempotencyKeyHeader:
+  name: Idempotency-Key
+  <<: *header-required
+  description: 'Key helper for recognize duplicate request'
+  schema: { type: string, example: 'oc8tKg1P2FV44hpj' }
+
+SortParam:
+  name: sort
+  in: query
+  required: false
+  description: Sort order
+  schema: { type: string, format: '<sort_field>:<order>', example: 'created_at:desc' }
+
+OffsetParam:
+  name: offset
+  <<: *query-required
+  description: Currect offset to retrieve
+  schemas: { type: integer, default: 1, example: 1 }
+
+LimitParam:
+  name: limit
+  <<: *query-required
+  description: Limit number of results
+  schema: { type: integer, default: 10, example: 10 }
+
+PageParam:
+  name: page
+  <<: *query-required
+  description: Page number to retrieve
+  schema: { type: integer, default: 1, example: 1 }
+
+SizeParam:
+  name: size
+  <<: *query-required
+  description: Number of results per page
+  schema: { type: integer, default: 10, example: 10 }

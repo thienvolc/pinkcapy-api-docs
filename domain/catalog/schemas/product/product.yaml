@@ -1,5 +1,0 @@
-type: object
-allOf:
-  - $ref: './product_base.yaml'
-  - $ref: '../../shared.yaml#/components/schemas/AuditFields'
-  - $ref: './product_extra.yaml'

@@ -1,0 +1,39 @@
+audit: &audit
+  $ref: '../../../openapi.yaml#/components/schemas/AuditFields'
+# ============================================================
+
+Transaction:
+  type: object
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: integer
+          example: 5001
+        order_id:
+          type: integer
+          example: 1001
+        amount:
+          type: number
+          format: float
+          example: 13819000.00
+        content:
+          type: string
+          example: 'Payment for order #1001 via VNPay'
+        code:
+          type: string
+          maxLength: 255
+          example: 'TXN-VNPAY-20251031-0001'
+        type:
+          type: integer
+          enum: [1, 2]
+          example: 1
+        mode:
+          type: string
+          maxLength: 150
+          example: 'VNPay'
+        status:
+          type: integer
+          enum: [1, 2, 3, 4, 5, 6]
+          example: 1
+    - *audit

@@ -1,0 +1,18 @@
+OrdersStats:
+  type: object
+  properties:
+    pending:
+      type: integer
+      example: 5
+    processing:
+      type: integer
+      example: 12
+    completed:
+      type: integer
+      example: 89
+    cancelled:
+      type: integer
+      example: 7
+    refunded:
+      type: integer
+      example: 3

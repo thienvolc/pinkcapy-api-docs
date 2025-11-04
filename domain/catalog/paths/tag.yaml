@@ -1,41 +1,51 @@
-parameters:
-  TagId:
-    name: id
-    in: path
-    required: true
-    description: ID of the tag
-    schema:
-      type: integer
-      example: 1
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+infinite_scroll: &infinite_scroll
+  $ref: '../../../openapi.yaml#/components/schemas/InfiniteScroll'
+offset_param: &offset_param
+  $ref: '../../../openapi.yaml#/components/parameters/OffsetParam'
+limit_param: &limit_param
+  $ref: '../../../openapi.yaml#/components/parameters/LimitParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+tags: &tags
+  - Tag_Public
+
+tag_id: &tag_id
+  name: id
+  in: path
+  required: true
+  description: ID of the tag
+  schema:
+    type: integer
+    example: 1
+
+product_public: &product_public
+  $ref: '../index.yaml#/components/schemas/ProductPublic'
+# ============================================================
 
 paths:
   /tags/{id}/products:
     get:
       summary: Get products by tag ID
       description: Retrieve a list of products associated with a specific tag.
-      tags: [Tag_Public]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/LimitParam'
-        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
-        - $ref: '#/parameters/TagId'
+      tags: *tags
+      parameters: [*limit_param, *offset_param, *sort_param, *tag_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
-                          - type: object
-                            properties:
-                              data:
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/ProductPublic'
+                type: object
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *infinite_scroll
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *product_public

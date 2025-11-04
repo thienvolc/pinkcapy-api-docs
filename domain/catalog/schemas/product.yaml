@@ -1,0 +1,202 @@
+audit: &audit
+  $ref: '../../../openapi.yaml#/components/schemas/AuditFields'
+# ============================================================
+
+ProductBase: &base
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1
+    category_id:
+      type: integer
+      example: 3
+    title:
+      type: string
+      example: 'Tai nghe Bluetooth Sony WH-1000XM5'
+    meta_title:
+      type: string
+      example: 'Tai nghe chống ồn Sony WH-1000XM5 - Âm thanh đỉnh cao | PinkCapy'
+    slug:
+      type: string
+      example: 'tai-nghe-bluetooth-sony-wh-1000xm5'
+    thumb:
+      type: string
+      format: uri
+      example: 'https://cdn.pinkcapy.vn/products/sony-wh1000xm5-thumb.jpg'
+    desc:
+      type: string
+      example: 'Sony WH-1000XM5 là thế hệ tai nghe chống ồn cao cấp, pin 30 giờ, sạc nhanh, Bluetooth 5.2.'
+    summary:
+      type: string
+      example: 'Tai nghe chống ồn cao cấp, pin 30 giờ, âm thanh Hi-Res, Bluetooth 5.2'
+    type:
+      type: string
+      example: 'headphone'
+    sku:
+      type: string
+      example: 'WH1000XM5-BLK'
+    price:
+      type: integer
+      example: 8990000
+    quantity:
+      type: integer
+      readOnly: true
+      example: 25
+    published_at:
+      type: string
+      format: date-time
+      readOnly: true
+      example: '2025-10-30T09:00:00Z'
+    status:
+      type: integer
+      readOnly: true
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+    discount:
+      type: number
+      format: float
+      example: 10.0
+    starts_at:
+      type: string
+      format: date-time
+      example: '2025-10-25T00:00:00Z'
+    ends_at:
+      type: string
+      format: date-time
+      example: '2025-11-10T23:59:59Z'
+# ============================================================
+
+ProductExtra: &product_extra
+  type: object
+  properties:
+    categories:
+      type: array
+      readOnly: true
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 3
+          title:
+            type: string
+            example: 'Tai nghe'
+          slug:
+            type: string
+            example: 'tai-nghe'
+          meta_title:
+            type: string
+            example: 'Tai nghe - PinkCapy'
+    tags:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 5
+          name:
+            type: string
+            example: 'Hot_Trend'
+          slug:
+            type: string
+            example: 'hot-trend'
+          meta_title:
+            type: string
+            example: 'Hot_Trend'
+    meta:
+      type: array
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            example: 'color'
+          content:
+            type: string
+            example: 'red'
+# ============================================================
+
+ProductMeta:
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1
+    product_id:
+      type: integer
+      readOnly: true
+      example: 101
+    key:
+      type: string
+      example: 'Màu sắc'
+    content:
+      type: string
+      example: 'Đen nhám'
+
+# ============================================================
+
+ProductPublicExtra: &product_public_extra
+  type: object
+  properties:
+    categories:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          title:
+            type: string
+          slug:
+            type: string
+          meta_title:
+            type: string
+    tags:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+          slug:
+            type: string
+          meta_title:
+            type: string
+    meta:
+      type: array
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+          content:
+            type: string
+# ============================================================
+
+Product:
+  allOf:
+    - *base
+    - *audit
+    - *product_extra
+# ============================================================
+
+ProductPublic:
+  allOf:
+    - *base
+    - *product_public_extra
+    - type: object
+      properties:
+        starts_at:
+        published_at:
+        meta_title:
+        sku:

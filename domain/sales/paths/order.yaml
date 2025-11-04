@@ -1,23 +1,52 @@
-parameters:
-  OrderIdParam:
-    name: id
-    in: path
-    required: true
-    description: ID of the order
-    schema:
-      type: integer
-      example: 1
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+infinite_scroll: &infinite_scroll
+  $ref: '../../../openapi.yaml#/components/schemas/InfiniteScroll'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_user: &common_user
+  tags:
+    - Order
+  security:
+    - bearerAuth: []
+
+order_id: &order_id
+  name: id
+  in: path
+  required: true
+  description: ID of the order
+  schema:
+    type: integer
+    example: 1
+
+short_order: &short_order
+  $ref: '../index.yaml#/components/schemas/ShortOrder'
+user_order: &user_order
+  $ref: '../index.yaml#/components/schemas/UserOrder'
+place_order_request: &place_order_request
+  $ref: '../index.yaml#/components/schemas/PlaceOrderRequest'
+update_order_status_request: &update_order_status_request
+  $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+update_order_shipping_request: &update_order_shipping_request
+  $ref: '../index.yaml#/components/schemas/UpdateOrderShippingRequest'
+# ============================================================
 
 paths:
   /me/orders:
     get:
       summary: Get user orders history
       description: Retrieve a list of the user's past orders.
-      tags: [Order]
-      security:
-        - bearerAuth: []
+      <<: *common_user
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
+        - *auth_header
         - name: status
           in: query
           optional: true
@@ -32,162 +61,122 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
-                          - type: object
-                            properties:
-                              data:
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/ShortOrder'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data:
+                    type: object
+                    allOf:
+                      - *infinite_scroll
+                      - type: object
+                        properties:
+                          data:
+                            items: *short_order
+        '400': *bad_request
 
     post:
       summary: Create a order
       description: Create a new order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/PlaceOrderRequest'
+            schema: *place_order_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/ShortOrder'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *short_order
+        '400': *bad_request
+  # ============================================================
 
   /me/orders/{id}:
     get:
       summary: Get order details
       description: Retrieve the details of a specific order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserOrder'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *user_order
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/orders/{id}/status:
     get:
       summary: Get the status of a specific order
       description: Retrieve the current status of a specific order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/orders/{id}/shipping:
     patch:
       summary: Update a order shipping information
       description: Update shipping information for a specific order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *order_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdateOrderShippingRequest'
+            schema: *update_order_shipping_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UserOrder'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *user_order
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /me/orders/{id}/cancel:
     delete:
       summary: Cancel an order
       description: User to cancel an existing order.
-      tags: [Order]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_user
+      parameters: [*auth_header, *idempotency_key_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+        '404': *not_found

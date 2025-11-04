@@ -1,0 +1,144 @@
+AddCartItemRequest:
+  type: object
+  properties:
+    product_id:
+      type: integer
+      example: 23
+    quantity:
+      type: integer
+      example: 2
+    note:
+      type: string
+      maxLength: 255
+      example: 'Please handle with care'
+# ============================================================
+
+UpdateCartItemQuantityRequest:
+  type: object
+  properties:
+    quantity:
+      type: integer
+      minimum: 1
+      example: 2
+# ============================================================
+
+CheckoutCartRequest:
+  type: object
+  properties:
+    first_name:
+      type: string
+      maxLength: 150
+      example: 'Nguyễn'
+    middle_name:
+      type: string
+      maxLength: 150
+      example: 'Văn'
+    last_name:
+      type: string
+      maxLength: 150
+      example: 'A'
+    phone:
+      type: string
+      maxLength: 20
+      example: '0987654321'
+    email:
+      type: string
+      format: email
+      maxLength: 100
+      example: 'nguyenvana@example.com'
+    line1:
+      type: string
+      maxLength: 255
+      example: '123 Nguyễn Trãi'
+    line2:
+      type: string
+      maxLength: 255
+      example: 'Phường 4, Quận 5'
+    city:
+      type: string
+      maxLength: 255
+      example: 'TP. Hồ Chí Minh'
+    province:
+      type: string
+      maxLength: 255
+      example: 'Hồ Chí Minh'
+    country:
+      type: string
+      maxLength: 255
+      example: 'Việt Nam'
+    note:
+      type: string
+      maxLength: 255
+      example: 'Giao buổi sáng, gọi trước khi tới'
+    items:
+      type: array
+      items:
+        type: integer
+      example: [101, 102, 103]
+# ============================================================
+
+PlaceOrderRequest:
+  type: object
+  properties:
+    cart_id:
+      type: integer
+      example: 1
+    promo:
+      type: string
+      maxLength: 255
+      example: 'SUMMER2025'
+    payment_method:
+      type: string
+      maxLength: 150
+      example: 'VNPay'
+# ============================================================
+
+UpdateOrderShippingRequest:
+  type: object
+  properties:
+    phone:
+      type: string
+      maxLength: 20
+      example: '0987654321'
+    email:
+      type: string
+      format: email
+      maxLength: 100
+      example: 'nguyenvana@example.com'
+    line1:
+      type: string
+      maxLength: 255
+      example: '123 Nguyễn Trãi'
+    line2:
+      type: string
+      maxLength: 255
+      example: 'Phường 4, Quận 5'
+    city:
+      type: string
+      maxLength: 255
+      example: 'TP. Hồ Chí Minh'
+    province:
+      type: string
+      maxLength: 255
+      example: 'Hồ Chí Minh'
+    country:
+      type: string
+      maxLength: 255
+      example: 'Việt Nam'
+    note:
+      type: string
+      maxLength: 255
+      example: 'Giao buổi sáng, gọi trước khi tới'
+# ============================================================
+
+UpdateOrderStatusRequest:
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1001
+    status:
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6, 7, 8]
+      example: 3

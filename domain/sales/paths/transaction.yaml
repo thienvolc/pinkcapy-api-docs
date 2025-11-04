@@ -1,16 +1,37 @@
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+pagination: &pagination
+  $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+page_param: &page_param
+  $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+size_param: &size_param
+  $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+common_admin: &common_admin
+  tags:
+    - Transaction_Admin
+  security:
+    - bearerAuth: []
+
+transaction: &transaction
+  $ref: '../index.yaml#/components/schemas/Transaction'
+# ============================================================
+
 paths:
   /admin/transactions:
     get:
       summary: Search transactions for admin
       description: Retrieve a list of transactions based on search criteria.
-      tags: [Transaction_Admin]
-      security:
-        - bearerAuth: []
+      <<: *common_admin
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/PageParam'
-        - $ref: '../shared.yaml#/components/parameters/SizeParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - *auth_header
+        - *page_param
+        - *size_param
+        - *sort_param
         - name: user_id
           in: query
           description: Filter by user ID
@@ -29,16 +50,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/Pagination'
-                          - type: object
-                            properties:
-                              data:
-                                type: array
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/Transaction'
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *pagination
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *transaction

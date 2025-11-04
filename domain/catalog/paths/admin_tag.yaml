@@ -1,0 +1,121 @@
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+infinite_scroll: &infinite_scroll
+  $ref: '../../../openapi.yaml#/components/schemas/InfiniteScroll'
+offset_param: &offset_param
+  $ref: '../../../openapi.yaml#/components/parameters/OffsetParam'
+limit_param: &limit_param
+  $ref: '../../../openapi.yaml#/components/parameters/LimitParam'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+
+common_admin: &common_admin
+  tags:
+    - Tag_Admin
+  security:
+    - bearerAuth: []
+
+tag_id: &tag_id
+  name: id
+  in: path
+  required: true
+  description: ID of the tag
+  schema:
+    type: integer
+    example: 1
+
+product_tag: &product_tag
+  $ref: '../index.yaml#/components/schemas/Tag'
+# ============================================================
+
+paths:
+  /admin/tags:
+    get:
+      summary: Get all tags
+      description: Retrieve a list of all tags.
+      <<: *common_admin
+      parameters: [*auth_header, *offset_param, *limit_param, *sort_param]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *infinite_scroll
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *product_tag
+
+    post:
+      summary: Create a new tag
+      description: Create a new tag.
+      <<: *common_admin
+      parameters: [*auth_header]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: *product_tag
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta: *meta
+                  data: *product_tag
+# ============================================================
+
+  /admin/tags/{id}:
+    delete:
+      summary: Delete a tag
+      description: Delete a tag.
+      <<: *common_admin
+      parameters: [*auth_header, *tag_id]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta: *meta
+                  data: *product_tag
+        '404': *not_found
+
+    put:
+      summary: Update a tag
+      description: Update a tag.
+      <<: *common_admin
+      parameters: [*auth_header, *tag_id]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: *product_tag
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta: *meta
+                  data: *product_tag
+        '404': *not_found

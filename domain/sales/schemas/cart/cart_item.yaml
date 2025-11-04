@@ -1,6 +1,0 @@
-allOf:
-  - $ref: './cart_item_base.yaml'
-  - type: object
-    properties:
-      cart_id:
-      is_active:

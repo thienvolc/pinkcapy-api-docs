@@ -26,37 +26,37 @@ paths:
 components:
   schemas:
     UserBase:
-      $ref: './schemas/user/user_base.yaml'
+      $ref: './schemas/user.yaml#/UserBase'
     User:
-      $ref: './schemas/user/user.yaml'
+      $ref: './schemas/user.yaml#/User'
     UserProfileBase:
-      $ref: './schemas/user/user_profile_base.yaml'
+      $ref: './schemas/user.yaml#/UserProfileBase'
     UserAdmin:
-      $ref: './schemas/user/user_admin.yaml'
+      $ref: './schemas/user.yaml#/UserAdmin'
     Role:
-      $ref: './schemas/user/role.yaml'
+      $ref: './schemas/user.yaml#/Role'
 
     CreateUserRequest:
-      $ref: './schemas/request/create_user.yaml'
+      $ref: './schemas/request.yaml#/CreateUserRequest'
     UpdateUserStatusRequest:
-      $ref: './schemas/request/update_user_status.yaml'
+      $ref: './schemas/request.yaml#/UpdateUserStatusRequest'
     RegisterUserRequest:
-      $ref: './schemas/request/register_user.yaml'
+      $ref: './schemas/request.yaml#/RegisterUserRequest'
     LoginRequest:
-      $ref: './schemas/request/login_user.yaml'
+      $ref: './schemas/request.yaml#/LoginRequest'
     ForgotPasswordRequest:
-      $ref: './schemas/request/forgot_password.yaml'
+      $ref: './schemas/request.yaml#/ForgotPasswordRequest'
     ResetPasswordRequest:
-      $ref: './schemas/request/reset_password.yaml'
+      $ref: './schemas/request.yaml#/ResetPasswordRequest'
     UpdatePasswordRequest:
-      $ref: './schemas/request/update_password.yaml'
+      $ref: './schemas/request.yaml#/UpdatePasswordRequest'
     AssignRolesRequest:
-      $ref: './schemas/request/assign_roles.yaml'
+      $ref: './schemas/request.yaml#/AssignRolesRequest'
 
     LoginResponse:
-      $ref: './schemas/response/login_user.yaml'
+      $ref: './schemas/response.yaml#/LoginResponse'
     RegisterUserResponse:
-      $ref: './schemas/response/register_user.yaml'
+      $ref: './schemas/response.yaml#/RegisterUserResponse'
 
   responses:
     ResetPasswordTokenInvalid:

@@ -1,0 +1,78 @@
+Meta: &meta
+  type: object
+  properties:
+    code:
+      type: string
+      example: '200000'
+    type:
+      type: string
+      example: 'SUCCESS'
+    message:
+      type: string
+      example: 'Success'
+    extra_meta:
+      type: object
+
+ResponseBase:
+  type: object
+  properties:
+    meta: *meta
+    data:
+      nullable: true
+      oneOf:
+        - type: object
+        - type: 'null'
+
+AuditFields:
+  type: object
+  properties:
+    created_at:
+      type: string
+      format: date-time
+      readOnly: true
+      example: '2025-10-30T09:10:34Z'
+    updated_at:
+      type: string
+      format: date-time
+      readOnly: true
+      example: '2025-10-30T09:10:34Z'
+    created_by:
+      type: integer
+      readOnly: true
+      example: 1
+    updated_by:
+      type: integer
+      readOnly: true
+      example: 1
+
+InfiniteScroll:
+  type: object
+  properties:
+    limit:
+      type: integer
+      example: 10
+    offset:
+      type: integer
+      example: 0
+    total_count:
+      type: integer
+      example: 2
+    has_more:
+      type: boolean
+      example: false
+
+Pagination:
+  type: object
+  properties:
+    total_page:
+      type: integer
+      example: 1
+    current_page:
+      type: integer
+      example: 1
+    total_count:
+      type: integer
+      example: 2
+    has_more:
+      type: boolean
+      example: false

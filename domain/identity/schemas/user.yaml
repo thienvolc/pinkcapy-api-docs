@@ -1,0 +1,99 @@
+audit: &audit
+  $ref: '../../../openapi.yaml#/components/schemas/AuditFields'
+# ============================================================
+
+UserBase: &user_base
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1
+    email:
+      type: string
+      format: email
+      readOnly: true
+      maxLength: 100
+      example: 'user@example.com'
+    phone:
+      type: string
+      maxLength: 20
+      example: '0987654321'
+    is_admin:
+      type: boolean
+      readOnly: true
+      example: false
+    status:
+      type: integer
+      readOnly: true
+      enum: [1, 2, 3, 4]
+      example: 1
+# ============================================================
+
+UserProfileBase: &user_profile_base
+  type: object
+  properties:
+    first_name:
+      type: string
+      maxLength: 150
+      example: 'Nguyễn'
+    middle_name:
+      type: string
+      maxLength: 150
+      nullable: true
+      example: 'Văn'
+    last_name:
+      type: string
+      maxLength: 150
+      example: 'A'
+    avatar:
+      type: string
+      maxLength: 255
+      format: uri
+      example: 'https://cdn.pinkcapy.vn/avatars/user1.jpg'
+    profile:
+      type: string
+      example: 'Loves technology, enjoys music, and exploring new products.'
+    registered_at:
+      type: string
+      format: date-time
+      readOnly: true
+      example: '2025-01-15T08:30:00Z'
+    last_login:
+      type: string
+      format: date-time
+      readOnly: true
+      nullable: true
+      example: '2025-10-31T09:00:00Z'
+# ============================================================
+
+Role: &role
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 1
+    name:
+      type: string
+      example: 'customer'
+# ============================================================
+
+User:
+  allOf:
+    - *user_base
+    - *user_profile_base
+# ============================================================
+
+UserAdmin:
+  allOf:
+    - *user_base
+    - *user_profile_base
+    - *audit
+    - type: object
+      properties:
+        profiles:
+          type: array
+          items: *user_profile_base
+        roles:
+          type: array
+          items: *role

@@ -1,8 +1,20 @@
 {
+  "name": "pinkcapy-api-docs",
+  "module": "index.ts",
+  "type": "module",
   "scripts": {
-    "bundle": "swagger-cli bundle openapi.yaml --outfile dist/openapi-bundled.json --type json "
+    "lint": "redocly lint openapi.yaml",
+    "alias-resolve": "python scripts/alias_resolver.py openapi.yaml openapi-resolved.yaml",
+    "redocly-bundle": "redocly bundle openapi-resolved.yaml -o dist/openapi.json",
+    "bundle": "bun run alias-resolve && bun run redocly-bundle",
+    "preview": "redocly preview-docs openapi.yaml"
   },
+  "private": true,
   "devDependencies": {
-    "@apidevtools/swagger-cli": "^4.0.4"
+    "@redocly/cli": "^2.10.0",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }

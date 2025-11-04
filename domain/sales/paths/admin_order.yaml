@@ -1,3 +1,44 @@
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+auth_header: &auth_header
+  $ref: '../../../openapi.yaml#/components/parameters/AuthorizationHeader'
+idempotency_key_header: &idempotency_key_header
+  $ref: '../../../openapi.yaml#/components/parameters/IdempotencyKeyHeader'
+pagination: &pagination
+  $ref: '../../../openapi.yaml#/components/schemas/Pagination'
+page_param: &page_param
+  $ref: '../../../openapi.yaml#/components/parameters/PageParam'
+size_param: &size_param
+  $ref: '../../../openapi.yaml#/components/parameters/SizeParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+bad_request: &bad_request
+  $ref: '../../../openapi.yaml#/components/responses/BadRequest'
+
+common_admin: &common_admin
+  tags:
+    - Order_Admin
+  security:
+    - bearerAuth: []
+
+order_id: &order_id
+  name: id
+  in: path
+  required: true
+  description: ID of the order
+  schema:
+    type: integer
+    example: 1
+
+order: &order
+  $ref: '../index.yaml#/components/schemas/Order'
+update_order_status_request: &update_order_status_request
+  $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+# ============================================================
+
 parameters:
   OrderIdParam:
     name: id
@@ -13,14 +54,12 @@ paths:
     get:
       summary: Search user orders for admin
       description: Retrieve a list of the user's past orders.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
+      <<: *common_admin
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/PageParam'
-        - $ref: '../shared.yaml#/components/parameters/SizeParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - *auth_header
+        - *page_param
+        - *size_param
+        - *sort_param
         - name: query
           in: query
           description: Search keyword
@@ -83,158 +122,111 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/Pagination'
-                          - type: object
-                            properties:
-                              data:
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/ShortOrder'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *pagination
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *order
+        '400': *bad_request
+  # ============================================================
 
   /admin/orders/{id}/confirm:
     post:
       summary: Confirm a new order
       description: Confirm a new order.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+  # ============================================================
 
   /admin/orders/{id}:
     get:
       summary: Get order details
       description: Retrieve the details of a specific order.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_admin
+      parameters: [*auth_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/Order'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *order
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/orders/{id}/status:
     get:
       summary: Get the status of a specific order
       description: Retrieve the current status of a specific order.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_admin
+      parameters: [*auth_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+        '404': *not_found
 
     patch:
       summary: Update the status of a specific order
       description: Update the current status of a specific order.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *order_id]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
+            schema: *update_order_status_request
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+        '404': *not_found
+  # ============================================================
 
   /admin/orders/{id}/cancel:
     delete:
       summary: Cancel an order
       description: User to cancel an existing order.
-      tags: [Order_Admin]
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '../shared.yaml#/components/parameters/AuthorizationHeader'
-        - $ref: '../shared.yaml#/components/parameters/IdempotencyKeyHeader'
-        - $ref: '#/parameters/OrderIdParam'
+      <<: *common_admin
+      parameters: [*auth_header, *idempotency_key_header, *order_id]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../index.yaml#/components/schemas/UpdateOrderStatusRequest'
-        '400':
-          $ref: '../shared.yaml#/components/responses/BadRequest'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                properties:
+                  meta: *meta
+                  data: *update_order_status_request
+        '400': *bad_request
+        '404': *not_found

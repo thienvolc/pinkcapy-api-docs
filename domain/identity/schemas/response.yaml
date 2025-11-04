@@ -1,0 +1,50 @@
+LoginResponse:
+  type: object
+  properties:
+    access_token:
+      type: string
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    token_type:
+      type: string
+      example: 'Bearer'
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          example: 'user@example.com'
+        first_name:
+          type: string
+          maxLength: 150
+          example: 'Nguyễn'
+        last_name:
+          type: string
+          maxLength: 150
+          example: 'A'
+        avatar:
+          type: string
+          maxLength: 255
+          format: uri
+          example: 'https://cdn.pinkcapy.vn/avatars/user1.jpg'
+# ============================================================
+
+RegisterUserResponse:
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 1
+    email:
+      type: string
+      format: email
+      maxLength: 100
+      example: 'user@example.com'
+    registered_at:
+      type: string
+      format: date-time
+      example: '2025-01-15T08:30:00Z'

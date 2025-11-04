@@ -10,11 +10,15 @@ paths:
 
 components:
   schemas:
-    DashboardOverview:
-      $ref: './schemas/overview.yaml'
-    DashboardRevenue:
-      $ref: './schemas/revenue.yaml#/components/schemas/Revenue'
-    DashboardOrdersStats:
-      $ref: './schemas/orders_stats.yaml'
-    DashboardProductTop:
-      $ref: './schemas/product_top.yaml'
+    Overview:
+      $ref: './schemas/revenue.yaml#/Overview'
+    Revenue:
+      $ref: './schemas/revenue.yaml#/Revenue'
+    DashboardRevenueItem:
+      $ref: './schemas/revenue.yaml#/DashboardRevenueItem'
+    DashboardRevenueSummary:
+      $ref: './schemas/revenue.yaml#/DashboardRevenueSummary'
+    OrdersStats:
+      $ref: './schemas/order.yaml#/OrdersStats'
+    ProductTop:
+      $ref: './schemas/product.yaml#/ProductTop'

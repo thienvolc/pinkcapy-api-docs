@@ -1,0 +1,193 @@
+audit: &audit
+  $ref: '../../../openapi.yaml#/components/schemas/AuditFields'
+# ============================================================
+
+OrderBase: &order_base
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1001
+    user_id:
+      type: integer
+      example: 25
+    subtotal:
+      type: number
+      format: float
+      example: 12990000.00
+    tax:
+      type: number
+      format: float
+      example: 1299000.00
+    shipping:
+      type: number
+      format: float
+      example: 30000.00
+    total:
+      type: number
+      format: float
+      example: 14319000.00
+    discount_total:
+      type: number
+      format: float
+      example: 500000.00
+    promo:
+      type: string
+      maxLength: 255
+      example: 'SUMMER2025'
+    discount:
+      type: number
+      format: float
+      example: 500000.00
+    grand_total:
+      type: number
+      format: float
+      example: 13819000.00
+    first_name:
+      type: string
+      maxLength: 150
+      example: 'Nguyễn'
+    middle_name:
+      type: string
+      maxLength: 150
+      example: 'Văn'
+    last_name:
+      type: string
+      maxLength: 150
+      example: 'A'
+    phone:
+      type: string
+      maxLength: 20
+      example: '0987654321'
+    email:
+      type: string
+      format: email
+      maxLength: 100
+      example: 'nguyenvana@example.com'
+    line1:
+      type: string
+      maxLength: 255
+      example: '123 Nguyễn Trãi'
+    line2:
+      type: string
+      maxLength: 255
+      example: 'Phường 4, Quận 5'
+    city:
+      type: string
+      maxLength: 255
+      example: 'TP. Hồ Chí Minh'
+    province:
+      type: string
+      maxLength: 255
+      example: 'Hồ Chí Minh'
+    country:
+      type: string
+      maxLength: 255
+      example: 'Việt Nam'
+    orders_at:
+      type: string
+      format: date-time
+      example: '2025-10-31T09:30:00Z'
+    status:
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6, 7, 8]
+      example: 3
+    note:
+      type: string
+      maxLength: 255
+      example: 'Giao buổi sáng, gọi trước khi tới'
+# ============================================================
+
+OrderItemBase: &order_item_base
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 10001
+    order_id:
+      type: integer
+      example: 1001
+    product_id:
+      type: integer
+      example: 23
+    sku:
+      type: string
+      maxLength: 150
+      example: 'WH1000XM5-BLK'
+    is_active:
+      type: boolean
+      example: true
+    price:
+      type: number
+      format: float
+      example: 8990000.00
+    quantity:
+      type: integer
+      example: 2
+    discount:
+      type: number
+      format: float
+      example: 500000.00
+    note:
+      type: string
+      maxLength: 255
+      nullable: true
+      example: 'Gói quà sinh nhật'
+# ============================================================
+
+Order:
+  allOf:
+    - *order_base
+    - *audit
+    - type: object
+      properties:
+        items:
+          type: array
+          items: *order_item_base
+# ============================================================
+
+ShortOrder:
+  type: object
+  properties:
+    id:
+      type: integer
+      readOnly: true
+      example: 1001
+    total:
+      type: number
+      format: float
+      example: 14319000.00
+    grand_total:
+      type: number
+      format: float
+      example: 13819000.00
+    status:
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6, 7, 8]
+      example: 3
+    orders_at:
+      type: string
+      format: date-time
+      example: '2025-10-31T09:30:00Z'
+# ============================================================
+
+UserOrderItem: &user_order_item
+  type: object
+  allOf:
+    - *order_item_base
+    - type: object
+      properties:
+        sku:
+# ============================================================
+
+UserOrder:
+  type: object
+  allOf:
+    - *order_base
+    - type: object
+      properties:
+        user_id:
+        items:
+          type: array
+          items: *user_order_item

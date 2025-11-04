@@ -1,9 +1,0 @@
-allOf:
-  - $ref: '../category/category.yaml#/Category'
-  - type: object
-    properties:
-      children:
-        example: [1, 2, 3]
-        type: array
-        items:
-          type: integer

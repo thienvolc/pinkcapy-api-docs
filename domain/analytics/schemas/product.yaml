@@ -1,0 +1,30 @@
+ProductTop:
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 101
+    title:
+      type: string
+      example: 'iPhone 16 Pro Max'
+    sku:
+      type: string
+      example: 'IPH16PMAX256'
+    thumb:
+      type: string
+      format: uri
+      example: 'https://cdn.pinkcapy.vn/products/iphone16pro-thumb.jpg'
+    sold:
+      type: integer
+      example: 74
+    revenue:
+      type: number
+      format: double
+      example: 2590000000
+    category:
+      type: string
+      example: 'Smartphone'
+    status:
+      type: string
+      enum: [draft, published, archived]
+      example: 'published'

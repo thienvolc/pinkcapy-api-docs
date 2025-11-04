@@ -1,23 +1,44 @@
-parameters:
-  CategorySlug:
-    name: slug
-    in: path
-    required: true
-    description: Slug of the category to retrieve
-    schema:
-      type: string
-      example: 'tai-nghe'
+meta: &meta
+  $ref: '../../../openapi.yaml#/components/schemas/Meta'
+infinite_scroll: &infinite_scroll
+  $ref: '../../../openapi.yaml#/components/schemas/InfiniteScroll'
+offset_param: &offset_param
+  $ref: '../../../openapi.yaml#/components/parameters/OffsetParam'
+limit_param: &limit_param
+  $ref: '../../../openapi.yaml#/components/parameters/LimitParam'
+sort_param: &sort_param
+  $ref: '../../../openapi.yaml#/components/parameters/SortParam'
+
+not_found: &not_found
+  $ref: '../../../openapi.yaml#/components/responses/NotFound'
+
+category_slug: &category_slug
+  name: slug
+  in: path
+  required: true
+  description: Slug of the category to retrieve
+  schema:
+    type: string
+    example: 'dien-thoai'
+
+tags: &tags
+  - Category_Public
+category_public_hierarchy: &category_public_hierarchy
+  $ref: '../index.yaml#/components/schemas/CategoryPublicHierarchy'
+product_public: &product_public
+  $ref: '../index.yaml#/components/schemas/ProductPublic'
+# ============================================================
 
 paths:
   /categories:
     get:
       summary: Search categories
       description: Retrieve a list of categories.
-      tags: [Category_Public]
+      tags: *tags
       parameters:
-        - $ref: '../shared.yaml#/components/parameters/OffsetParam'
-        - $ref: '../shared.yaml#/components/parameters/LimitParam'
-        - $ref: '../shared.yaml#/components/parameters/SortParam'
+        - *offset_param
+        - *limit_param
+        - *sort_param
         - name: query
           in: query
           description: Search keyword
@@ -28,9 +49,9 @@ paths:
           in: query
           required: true
           description: Level of categories to retrieve
-          default: 1
           schema:
             type: integer
+            default: 1
             example: 1
       responses:
         '200':
@@ -38,60 +59,51 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '../index.yaml#/components/schemas/CategoryPublicHierarchy'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_public_hierarchy
+  # ============================================================
 
   /categories/{slug}:
     get:
       summary: Get category
       description: Retrieve a category by its slug.
-      tags: [Category_Public]
-      parameters:
-        - $ref: '#/parameters/CategorySlug'
+      tags: *tags
+      parameters: [*category_slug]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                          $ref: '../index.yaml#/components/schemas/CategoryPublicHierarchy'
-        '404':
-          $ref: '../shared.yaml#/components/responses/NotFound'
+                type: object
+                properties:
+                  meta: *meta
+                  data: *category_public_hierarchy
+        '404': *not_found
+  # ============================================================
 
   /categories/{slug}/products:
     get:
       summary: Get products by category slug
       description: Retrieve a list of products belonging to a category by its slug.
-      tags: [Category_Public]
-      parameters:
-        - $ref: '#/parameters/CategorySlug'
+      tags: *tags
+      parameters: [*category_slug, *offset_param, *limit_param, *sort_param]
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../shared.yaml#/components/schemas/ResponseBase'
-                  - type: object
-                    properties:
-                      data:
-                        allOf:
-                          - $ref: '../shared.yaml#/components/schemas/InfiniteScroll'
-                          - type: object
-                            properties:
-                              data:
-                                type: array
-                                items:
-                                  $ref: '../index.yaml#/components/schemas/ProductPublic'
+                type: object
+                properties:
+                  meta: *meta
+                  data:
+                    allOf:
+                      - *infinite_scroll
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items: *product_public

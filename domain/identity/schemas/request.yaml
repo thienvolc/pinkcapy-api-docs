@@ -1,0 +1,135 @@
+CreateUserRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      example: '6A5o1@example.com'
+    phone:
+      type: string
+      example: '0987654321'
+    password:
+      type: string
+      format: password
+      example: 'StrongP@ssw0rd!'
+    first_name:
+      type: string
+      maxLength: 150
+      example: 'Nguyễn'
+    last_name:
+      type: string
+      maxLength: 150
+      example: 'A'
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: 'customer'
+# ============================================================
+
+UpdateUserStatusRequest:
+  type: object
+  properties:
+    user_id:
+      type: integer
+      readOnly: true
+      example: 1
+    status:
+      type: integer
+      enum: [1, 2, 3, 4]
+      example: 1
+  required:
+    - user_id
+    - status
+# ============================================================
+
+RegisterUserRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      example: '6A5o1@example.com'
+    phone:
+      type: string
+      example: '0987654321'
+    password:
+      type: string
+      format: password
+      example: 'StrongP@ssw0rd!'
+    first_name:
+      type: string
+      maxLength: 150
+      example: 'Nguyễn'
+    last_name:
+      type: string
+      maxLength: 150
+      example: 'A'
+# ============================================================
+
+LoginRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      example: '6A5o1@example.com'
+    password:
+      type: string
+      format: password
+      example: 'StrongP@ssw0rd!'
+# ============================================================
+
+ForgotPasswordRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      example: 'user@example.com'
+# ============================================================
+
+ResetPasswordRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      example: 'user@example.com'
+    password_reset_token:
+      type: string
+      example: 'abcdef123456'
+    new_password:
+      type: string
+      format: password
+      example: 'StrongP@ssw0rd!'
+# ============================================================
+
+UpdatePasswordRequest:
+  type: object
+  properties:
+    old_password:
+      type: string
+      format: password
+    new_password:
+      type: string
+      format: password
+# ============================================================
+
+AssignRolesRequest:
+  type: object
+  properties:
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1

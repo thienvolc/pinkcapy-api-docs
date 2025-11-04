@@ -36,47 +36,45 @@ paths:
 components:
   schemas:
     Cart:
-      $ref: './schemas/cart/cart.yaml'
+      $ref: './schemas/cart.yaml#/Cart'
     CartItemBase:
-      $ref: './schemas/cart/cart_item_base.yaml'
+      $ref: './schemas/cart.yaml#/CartItemBase'
     CartItem:
-      $ref: './schemas/cart/cart_item.yaml'
+      $ref: './schemas/cart.yaml#/CartItem'
     EmptyCart:
-      $ref: './schemas/cart/empty_cart.yaml'
-
+      $ref: './schemas/cart.yaml#/EmptyCart'
 
     AddCartItemRequest:
-      $ref: './schemas/request/add_cart_item.yaml'
+      $ref: './schemas/request.yaml#/AddCartItemRequest'
     UpdateCartItemQuantityRequest:
-      $ref: './schemas/request/update_cart_item_quantity.yaml'
+      $ref: './schemas/request.yaml#/UpdateCartItemQuantityRequest'
     CheckoutCartRequest:
-      $ref: './schemas/request/checkout_cart.yaml'
+      $ref: './schemas/request.yaml#/CheckoutCartRequest'
     CheckoutCartResponse:
-      $ref: './schemas/response/checkout_cart.yaml'
+      $ref: './schemas/response.yaml#/CheckoutCartResponse'
     AddCartItemResponse:
-      $ref: './schemas/response/add_cart_item.yaml'
-    
+      $ref: './schemas/response.yaml#/AddCartItemResponse'
 
     Order:
-      $ref: './schemas/order/order.yaml'
+      $ref: './schemas/order.yaml#/Order'
     OrderBase:
-      $ref: './schemas/order/order_base.yaml'
+      $ref: './schemas/order.yaml#/OrderBase'
     ShortOrder:
-      $ref: './schemas/order/short_order.yaml'
+      $ref: './schemas/order.yaml#/ShortOrder'
     OrderItemBase:
-      $ref: './schemas/order/order_item_base.yaml'
+      $ref: './schemas/order.yaml#/OrderItemBase'
 
     UpdateOrderStatusRequest:
-      $ref: './schemas/request/update_order_status.yaml'
+      $ref: './schemas/request.yaml#/UpdateOrderStatusRequest'
     UpdateOrderShippingRequest:
-      $ref: './schemas/request/update_order_shipping.yaml'
+      $ref: './schemas/request.yaml#/UpdateOrderShippingRequest'
     PlaceOrderRequest:
-      $ref: './schemas/request/place_order.yaml'
+      $ref: './schemas/request.yaml#/PlaceOrderRequest'
 
     UserOrder:
-      $ref: './schemas/order/user_order.yaml'
+      $ref: './schemas/order.yaml#/UserOrder'
     UserOrderItem:
-      $ref: './schemas/order/user_order_item.yaml'
+      $ref: './schemas/order.yaml#/UserOrderItem'
 
     Transaction:
-      $ref: './schemas/transaction/transaction.yaml'
+      $ref: './schemas/transaction.yaml#/Transaction'

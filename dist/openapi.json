@@ -1,0 +1,6513 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PinkCapy API",
+    "version": "1.0.0",
+    "description": "API documentation for PinkCapy Retail E-commerce System"
+  },
+  "servers": [
+    {
+      "url": "https://pinkcapy.dev/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:8000/v1",
+      "description": "Local development"
+    }
+  ],
+  "paths": {
+    "/products/{id}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieve a product by its ID.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductPublic"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/products/{slug}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieve a product by its slug.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Slug of the product",
+            "schema": {
+              "type": "string",
+              "example": "tai-nghe-1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductPublic"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/products/{id}/related": {
+      "get": {
+        "summary": "Get related products",
+        "description": "Retrieve a list of products related to the specified product.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/ProductPublic"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Search products",
+        "description": "Retrieve a list of products based on search criteria.",
+        "tags": [
+          "Product_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category ID of the products",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "description": "Minimum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 100000
+            }
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "description": "Maximum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 500000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/ProductPublic"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/products/{id}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieve a product by its ID.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product",
+        "description": "Update a product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "description": "Delete a product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/metas": {
+      "post": {
+        "summary": "Create product meta",
+        "description": "Create a new product meta.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductMeta"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/metas/{meta_id}": {
+      "delete": {
+        "summary": "Delete a product meta",
+        "description": "Delete a product meta.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "meta_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product meta",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product meta",
+        "description": "Update a product meta.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "meta_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product meta",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductMeta"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/categories": {
+      "put": {
+        "summary": "Update categories of a product",
+        "description": "Update categories of a product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/tags": {
+      "patch": {
+        "summary": "Update tags for a product",
+        "description": "Update tags for a product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "product_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Tag"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/status": {
+      "patch": {
+        "summary": "Update a product status",
+        "description": "Update a product status.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateProductStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/products": {
+      "post": {
+        "summary": "Create a new product",
+        "description": "Create a new product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search products",
+        "description": "Retrieve a list of products based on search criteria.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": 1
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category ID of the products",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "description": "Minimum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            }
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "description": "Maximum price of the products",
+            "schema": {
+              "type": "integer",
+              "example": 10000000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Pagination"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Product"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/products/{id}/inventories": {
+      "patch": {
+        "summary": "Update a product stock",
+        "description": "Admin to update an stock of product.",
+        "tags": [
+          "Product_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdjustProductInventoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/tags/{id}/products": {
+      "get": {
+        "summary": "Get products by tag ID",
+        "description": "Retrieve a list of products associated with a specific tag.",
+        "tags": [
+          "Tag_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tag",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/ProductPublic"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/tags": {
+      "get": {
+        "summary": "Get all tags",
+        "description": "Retrieve a list of all tags.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Tag"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new tag",
+        "description": "Create a new tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tag"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/tags/{id}": {
+      "delete": {
+        "summary": "Delete a tag",
+        "description": "Delete a tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tag",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tag"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a tag",
+        "description": "Update a tag.",
+        "tags": [
+          "Tag_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tag",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tag"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Search categories",
+        "description": "Retrieve a list of categories.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": true,
+            "description": "Level of categories to retrieve",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryPublicHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{slug}": {
+      "get": {
+        "summary": "Get category",
+        "description": "Retrieve a category by its slug.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Slug of the category to retrieve",
+            "schema": {
+              "type": "string",
+              "example": "dien-thoai"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryPublicHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/categories/{slug}/products": {
+      "get": {
+        "summary": "Get products by category slug",
+        "description": "Retrieve a list of products belonging to a category by its slug.",
+        "tags": [
+          "Category_Public"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Slug of the category to retrieve",
+            "schema": {
+              "type": "string",
+              "example": "dien-thoai"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/ProductPublic"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/categories/{id}": {
+      "get": {
+        "summary": "Get category for admin",
+        "description": "Retrieve a category by its ID for admin.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a category",
+        "description": "Admin to update an existing category in the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a category",
+        "description": "Admin to delete an existing category in the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/categories": {
+      "post": {
+        "summary": "Create a category",
+        "description": "Admin to add a new category to the system.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CategoryHierarchy"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search categories for admin",
+        "description": "Retrieve a list of categories.",
+        "tags": [
+          "Category_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": true,
+            "description": "Level of categories to retrieve",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Pagination"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "items": {
+                                "$ref": "#/components/schemas/CategoryHierarchy"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/carts": {
+      "get": {
+        "summary": "Get current user cart",
+        "description": "Retrieve the current user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Cart"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/carts/items": {
+      "post": {
+        "summary": "Add item to cart",
+        "description": "Add a new item to the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCartItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AddCartItemResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/carts/items/{id}": {
+      "patch": {
+        "summary": "Update a cart item",
+        "description": "Update an existing item in the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the cart item to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCartItemQuantityRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CartItem"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a cart item",
+        "description": "User to delete an existing cart item in user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the cart item to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CartItem"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/carts/clear": {
+      "delete": {
+        "summary": "Clear all cart items in user's cart",
+        "description": "User to clear all cart items in user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/EmptyCart"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/carts/checkout": {
+      "patch": {
+        "summary": "Checkout cart",
+        "description": "Proceed to checkout with the items in the user's cart.",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutCartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutCartResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/orders": {
+      "get": {
+        "summary": "Get user orders history",
+        "description": "Retrieve a list of the user's past orders.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "optional": true,
+            "description": "Filter orders by their status",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "example": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/InfiniteScroll"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "items": {
+                                "$ref": "#/components/schemas/ShortOrder"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a order",
+        "description": "Create a new order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaceOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ShortOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}": {
+      "get": {
+        "summary": "Get order details",
+        "description": "Retrieve the details of a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/status": {
+      "get": {
+        "summary": "Get the status of a specific order",
+        "description": "Retrieve the current status of a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/shipping": {
+      "patch": {
+        "summary": "Update a order shipping information",
+        "description": "Update shipping information for a specific order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderShippingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/orders/{id}/cancel": {
+      "delete": {
+        "summary": "Cancel an order",
+        "description": "User to cancel an existing order.",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders": {
+      "get": {
+        "summary": "Search user orders for admin",
+        "description": "Retrieve a list of the user's past orders.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter orders by their status - `1`: Pending payment - `2`: Paid - `3`: Processing - `4`: Shipped - `5`: Delivered - `6`: Refunded - `7`: Returned - `8`: Cancelled\n",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "example": 3
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter orders by user ID",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Order start date (upper bound)",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-01-01"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Order end date (lower bound)",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-12-01"
+            }
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "description": "Order minimum price",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 100
+            }
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "description": "Order maximum price",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Pagination"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Order"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}": {
+      "get": {
+        "summary": "Get order details",
+        "description": "Retrieve the details of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}/status": {
+      "get": {
+        "summary": "Get the status of a specific order",
+        "description": "Retrieve the current status of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update the status of a specific order",
+        "description": "Update the current status of a specific order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/orders/{id}/cancel": {
+      "delete": {
+        "summary": "Cancel an order",
+        "description": "User to cancel an existing order.",
+        "tags": [
+          "Order_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the order",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/transactions": {
+      "get": {
+        "summary": "Search transactions for admin",
+        "description": "Retrieve a list of transactions based on search criteria.",
+        "tags": [
+          "Transaction_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter by user ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by transaction status",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Pagination"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Transaction"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Get current user",
+        "description": "Retrieve the current user information.",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user profile",
+        "description": "Admin to update an existing user in the system.",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserProfileBase"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Register a new user in the system.",
+        "tags": [
+          "User_Auth"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/RegisterUserResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/users/auth/login": {
+      "post": {
+        "summary": "Login a user",
+        "description": "Login a user in the system.",
+        "tags": [
+          "User_Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/LoginResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/logout": {
+      "post": {
+        "summary": "Logout a user",
+        "description": "Admin to logout a user in the system.",
+        "tags": [
+          "User_Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot user password request",
+        "description": "Send a password reset email to the user.",
+        "tags": [
+          "User_Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/users/auth/reset-password": {
+      "post": {
+        "summary": "Reset user password",
+        "description": "Reset the user's password using the provided token.",
+        "tags": [
+          "User_Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer",
+                          "description": "User id",
+                          "example": 1
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Email of the user",
+                          "example": "user@example.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/ResetPasswordTokenInvalid"
+          }
+        }
+      }
+    },
+    "/me/password": {
+      "put": {
+        "summary": "Update a user password",
+        "description": "Update an existing user password in the system.",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer",
+                          "description": "User id",
+                          "example": 1
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Email of the user",
+                          "example": "user@example.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/admin/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Admin to add a new user to the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserAdmin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "summary": "Search users for admin",
+        "description": "Retrieve a list of users based on search criteria.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/SizeParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortParam"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search keyword",
+            "schema": {
+              "type": "string",
+              "example": "tai nghe"
+            }
+          },
+          {
+            "name": "is_admin",
+            "in": "query",
+            "description": "Filter by admin status",
+            "schema": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by user status",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Pagination"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/UserAdmin"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/users/{id}": {
+      "get": {
+        "summary": "Get user for admin",
+        "description": "Retrieve a user by its ID for admin.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserAdmin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "description": "Admin to delete an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserAdmin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/users/{id}/status": {
+      "patch": {
+        "summary": "Update a user status",
+        "description": "Admin to update a status of an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateUserStatusRequest"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/users/{id}/roles": {
+      "patch": {
+        "summary": "Update user roles",
+        "description": "Admin to update roles of an existing user in the system.",
+        "tags": [
+          "User_Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to retrieve",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRolesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Role"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/admin/dashboard/overview": {
+      "get": {
+        "summary": "Get dashboard overview",
+        "description": "Retrieve the overview statistics for the dashboard.",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/ResponseBase"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Overview"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/revenue": {
+      "get": {
+        "summary": "Statistics of revenue",
+        "description": "Return revenue statistics by day, week, or month.\nData is used to display revenue charts, order counts, and average revenue.\n",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "The period (`day`, `week`, `month`)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "week",
+                "month"
+              ],
+              "default": "month"
+            },
+            "example": "month"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "The year to filter (if period = month)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 2025
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "The month to filter (if period = day)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/ResponseBase"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Revenue"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/orders/stats": {
+      "get": {
+        "summary": "Get order statistics by status",
+        "description": "API returns the number of orders grouped by statuses such as:\n- `pending`\n- `processing`\n- `completed`\n- `cancelled`\n- `refunded`\nData is used to display pie charts or bar charts in the order statistics section of the Dashboard.\n",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/ResponseBase"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/OrdersStats"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/products/top": {
+      "get": {
+        "summary": "Get top selling products",
+        "description": "API returns a list of products with **sales or quantity sold** in the last year.\nData is used to display the \"Top Selling Products\" table or chart on the Dashboard.\n",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of products to retrieve (default is 5)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 5
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "$ref": "#/components/schemas/ResponseBase"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductTop"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "InfiniteScroll": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 10
+          },
+          "offset": {
+            "type": "integer",
+            "example": 0
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 2
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "total_page": {
+            "type": "integer",
+            "example": 1
+          },
+          "current_page": {
+            "type": "integer",
+            "example": 1
+          },
+          "total_count": {
+            "type": "integer",
+            "example": 2
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ResponseBase": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "200000"
+              },
+              "type": {
+                "type": "string",
+                "example": "SUCCESS"
+              },
+              "message": {
+                "type": "string",
+                "example": "Success"
+              },
+              "extra_meta": {
+                "type": "object"
+              }
+            }
+          },
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "200000"
+          },
+          "type": {
+            "type": "string",
+            "example": "SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "Success"
+          },
+          "extra_meta": {
+            "type": "object"
+          }
+        }
+      },
+      "AuditFields": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-10-30T09:10:34Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-10-30T09:10:34Z"
+          },
+          "created_by": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "updated_by": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          }
+        }
+      },
+      "ProductPublic": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1
+              },
+              "category_id": {
+                "type": "integer",
+                "example": 3
+              },
+              "title": {
+                "type": "string",
+                "example": "Tai nghe Bluetooth Sony WH-1000XM5"
+              },
+              "meta_title": {
+                "type": "string",
+                "example": "Tai nghe chống ồn Sony WH-1000XM5 - Âm thanh đỉnh cao | PinkCapy"
+              },
+              "slug": {
+                "type": "string",
+                "example": "tai-nghe-bluetooth-sony-wh-1000xm5"
+              },
+              "thumb": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://cdn.pinkcapy.vn/products/sony-wh1000xm5-thumb.jpg"
+              },
+              "desc": {
+                "type": "string",
+                "example": "Sony WH-1000XM5 là thế hệ tai nghe chống ồn cao cấp, pin 30 giờ, sạc nhanh, Bluetooth 5.2."
+              },
+              "summary": {
+                "type": "string",
+                "example": "Tai nghe chống ồn cao cấp, pin 30 giờ, âm thanh Hi-Res, Bluetooth 5.2"
+              },
+              "type": {
+                "type": "string",
+                "example": "headphone"
+              },
+              "sku": {
+                "type": "string",
+                "example": "WH1000XM5-BLK"
+              },
+              "price": {
+                "type": "integer",
+                "example": 8990000
+              },
+              "quantity": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 25
+              },
+              "published_at": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2025-10-30T09:00:00Z"
+              },
+              "status": {
+                "type": "integer",
+                "readOnly": true,
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              },
+              "discount": {
+                "type": "number",
+                "format": "float",
+                "example": 10
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-10-25T00:00:00Z"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-11-10T23:59:59Z"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "meta_title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "meta_title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "meta": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "content": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "starts_at": null,
+              "published_at": null,
+              "meta_title": null,
+              "sku": null
+            }
+          }
+        ]
+      },
+      "Product": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1
+              },
+              "category_id": {
+                "type": "integer",
+                "example": 3
+              },
+              "title": {
+                "type": "string",
+                "example": "Tai nghe Bluetooth Sony WH-1000XM5"
+              },
+              "meta_title": {
+                "type": "string",
+                "example": "Tai nghe chống ồn Sony WH-1000XM5 - Âm thanh đỉnh cao | PinkCapy"
+              },
+              "slug": {
+                "type": "string",
+                "example": "tai-nghe-bluetooth-sony-wh-1000xm5"
+              },
+              "thumb": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://cdn.pinkcapy.vn/products/sony-wh1000xm5-thumb.jpg"
+              },
+              "desc": {
+                "type": "string",
+                "example": "Sony WH-1000XM5 là thế hệ tai nghe chống ồn cao cấp, pin 30 giờ, sạc nhanh, Bluetooth 5.2."
+              },
+              "summary": {
+                "type": "string",
+                "example": "Tai nghe chống ồn cao cấp, pin 30 giờ, âm thanh Hi-Res, Bluetooth 5.2"
+              },
+              "type": {
+                "type": "string",
+                "example": "headphone"
+              },
+              "sku": {
+                "type": "string",
+                "example": "WH1000XM5-BLK"
+              },
+              "price": {
+                "type": "integer",
+                "example": 8990000
+              },
+              "quantity": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 25
+              },
+              "published_at": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2025-10-30T09:00:00Z"
+              },
+              "status": {
+                "type": "integer",
+                "readOnly": true,
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              },
+              "discount": {
+                "type": "number",
+                "format": "float",
+                "example": 10
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-10-25T00:00:00Z"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-11-10T23:59:59Z"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "categories": {
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Tai nghe"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "example": "tai-nghe"
+                    },
+                    "meta_title": {
+                      "type": "string",
+                      "example": "Tai nghe - PinkCapy"
+                    }
+                  }
+                }
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Hot_Trend"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "example": "hot-trend"
+                    },
+                    "meta_title": {
+                      "type": "string",
+                      "example": "Hot_Trend"
+                    }
+                  }
+                }
+              },
+              "meta": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "example": "color"
+                    },
+                    "content": {
+                      "type": "string",
+                      "example": "red"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ProductMeta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "product_id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 101
+          },
+          "key": {
+            "type": "string",
+            "example": "Màu sắc"
+          },
+          "content": {
+            "type": "string",
+            "example": "Đen nhám"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "Phụ kiện điện tử"
+          },
+          "meta_title": {
+            "type": "string",
+            "example": "Phụ kiện điện tử chính hãng giá tốt"
+          },
+          "slug": {
+            "type": "string",
+            "example": "phu-kien-dien-tu"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Tổng hợp các sản phẩm phụ kiện điện tử chất lượng cao."
+          }
+        }
+      },
+      "UpdateProductStatusRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1001
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "example": 1
+          }
+        }
+      },
+      "AdjustProductInventoryRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "example": 10
+          },
+          "operationType": {
+            "type": "string",
+            "enum": [
+              "increase",
+              "decrease"
+            ],
+            "example": "increase"
+          },
+          "reason": {
+            "type": "string",
+            "example": "Restocking after inventory audit"
+          }
+        }
+      },
+      "CategoryPublicHierarchy": {
+        "allOf": [
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 3
+                  },
+                  "parent_id": {
+                    "type": "integer",
+                    "nullable": true,
+                    "example": 1
+                  },
+                  "level": {
+                    "type": "integer",
+                    "example": 2
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Tai nghe Bluetooth"
+                  },
+                  "meta_title": {
+                    "type": "string",
+                    "example": "Tai nghe Bluetooth - Am thanh dinh cao | PinkCapy"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "tai-nghe-bluetooth"
+                  },
+                  "desc": {
+                    "type": "string",
+                    "example": "Danh mục các loại tai nghe không dây, chống ồn, pin lâu."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "meta_title": null
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "readOnly": true,
+                          "example": 3
+                        },
+                        "parent_id": {
+                          "type": "integer",
+                          "nullable": true,
+                          "example": 1
+                        },
+                        "level": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Tai nghe Bluetooth"
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "example": "Tai nghe Bluetooth - Am thanh dinh cao | PinkCapy"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "example": "tai-nghe-bluetooth"
+                        },
+                        "desc": {
+                          "type": "string",
+                          "example": "Danh mục các loại tai nghe không dây, chống ồn, pin lâu."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "meta_title": null
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CategoryHierarchy": {
+        "allOf": [
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 3
+                  },
+                  "parent_id": {
+                    "type": "integer",
+                    "nullable": true,
+                    "example": 1
+                  },
+                  "level": {
+                    "type": "integer",
+                    "example": 2
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Tai nghe Bluetooth"
+                  },
+                  "meta_title": {
+                    "type": "string",
+                    "example": "Tai nghe Bluetooth - Am thanh dinh cao | PinkCapy"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "tai-nghe-bluetooth"
+                  },
+                  "desc": {
+                    "type": "string",
+                    "example": "Danh mục các loại tai nghe không dây, chống ồn, pin lâu."
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/AuditFields"
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": "category"
+              }
+            }
+          }
+        ]
+      },
+      "Category": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 3
+              },
+              "parent_id": {
+                "type": "integer",
+                "nullable": true,
+                "example": 1
+              },
+              "level": {
+                "type": "integer",
+                "example": 2
+              },
+              "title": {
+                "type": "string",
+                "example": "Tai nghe Bluetooth"
+              },
+              "meta_title": {
+                "type": "string",
+                "example": "Tai nghe Bluetooth - Am thanh dinh cao | PinkCapy"
+              },
+              "slug": {
+                "type": "string",
+                "example": "tai-nghe-bluetooth"
+              },
+              "desc": {
+                "type": "string",
+                "example": "Danh mục các loại tai nghe không dây, chống ồn, pin lâu."
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          }
+        ]
+      },
+      "UpdateCategoryRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Category"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "children": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "example": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "total_quantity": {
+            "type": "integer",
+            "example": 2
+          },
+          "total_price": {
+            "type": "number",
+            "format": "float",
+            "example": 199.99
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "example": 1
+          },
+          "items": {
+            "type": "array",
+            "items": "cart_item"
+          }
+        }
+      },
+      "AddCartItemRequest": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "example": 23
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 2
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Please handle with care"
+          }
+        }
+      },
+      "AddCartItemResponse": {
+        "type": "object",
+        "description": "Cart item responses",
+        "properties": {
+          "item_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Cart item ID",
+            "example": 101
+          },
+          "product_id": {
+            "type": "integer",
+            "description": "Product ID",
+            "example": 23
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Product quantity in cart",
+            "example": 2
+          }
+        }
+      },
+      "CartItem": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 101
+              },
+              "cart_id": {
+                "type": "integer",
+                "example": 5
+              },
+              "product_id": {
+                "type": "integer",
+                "example": 23
+              },
+              "is_active": {
+                "type": "boolean",
+                "example": true
+              },
+              "price": {
+                "type": "number",
+                "format": "float",
+                "example": 8990000
+              },
+              "quantity": {
+                "type": "integer",
+                "example": 2
+              },
+              "discount": {
+                "type": "number",
+                "format": "float",
+                "example": 500000
+              },
+              "note": {
+                "type": "string",
+                "nullable": true,
+                "example": "Gói quà sinh nhật"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cart_id": null,
+              "is_active": null
+            }
+          }
+        ]
+      },
+      "UpdateCartItemQuantityRequest": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 2
+          }
+        }
+      },
+      "EmptyCart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "total_quantity": {
+            "type": "integer",
+            "example": 0
+          },
+          "total_price": {
+            "type": "number",
+            "format": "float",
+            "example": 0
+          },
+          "status": {
+            "type": "integer",
+            "readOnly": true,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "example": 1
+          },
+          "items": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "CheckoutCartRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Nguyễn"
+          },
+          "middle_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Văn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "A"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "example": "0987654321"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "example": "nguyenvana@example.com"
+          },
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "123 Nguyễn Trãi"
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Phường 4, Quận 5"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "TP. Hồ Chí Minh"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Hồ Chí Minh"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Việt Nam"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              101,
+              102,
+              103
+            ]
+          }
+        }
+      },
+      "CheckoutCartResponse": {
+        "type": "object",
+        "properties": {
+          "cart_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Cart ID",
+            "example": 1
+          },
+          "item_count": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Number of items in the cart",
+            "example": 3
+          },
+          "shipping_address": {
+            "type": "object",
+            "readOnly": true,
+            "description": "Shipping address details",
+            "properties": {
+              "line1": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Address line 1",
+                "example": "123 Nguyễn Trãi"
+              },
+              "line2": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Address line 2 (optional)",
+                "example": "Phường 4, Quận 5"
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "City",
+                "example": "TP. Hồ Chí Minh"
+              },
+              "province": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Province / City",
+                "example": "Hồ Chí Minh"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Country",
+                "example": "Việt Nam"
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items in the cart",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          }
+        }
+      },
+      "ShortOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1001
+          },
+          "total": {
+            "type": "number",
+            "format": "float",
+            "example": 14319000
+          },
+          "grand_total": {
+            "type": "number",
+            "format": "float",
+            "example": 13819000
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "example": 3
+          },
+          "orders_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-10-31T09:30:00Z"
+          }
+        }
+      },
+      "PlaceOrderRequest": {
+        "type": "object",
+        "properties": {
+          "cart_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "promo": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "SUMMER2025"
+          },
+          "payment_method": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "VNPay"
+          }
+        }
+      },
+      "UserOrder": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1001
+              },
+              "user_id": {
+                "type": "integer",
+                "example": 25
+              },
+              "subtotal": {
+                "type": "number",
+                "format": "float",
+                "example": 12990000
+              },
+              "tax": {
+                "type": "number",
+                "format": "float",
+                "example": 1299000
+              },
+              "shipping": {
+                "type": "number",
+                "format": "float",
+                "example": 30000
+              },
+              "total": {
+                "type": "number",
+                "format": "float",
+                "example": 14319000
+              },
+              "discount_total": {
+                "type": "number",
+                "format": "float",
+                "example": 500000
+              },
+              "promo": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "SUMMER2025"
+              },
+              "discount": {
+                "type": "number",
+                "format": "float",
+                "example": 500000
+              },
+              "grand_total": {
+                "type": "number",
+                "format": "float",
+                "example": 13819000
+              },
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Nguyễn"
+              },
+              "middle_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Văn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "A"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 20,
+                "example": "0987654321"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "maxLength": 100,
+                "example": "nguyenvana@example.com"
+              },
+              "line1": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "123 Nguyễn Trãi"
+              },
+              "line2": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Phường 4, Quận 5"
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "TP. Hồ Chí Minh"
+              },
+              "province": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Hồ Chí Minh"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Việt Nam"
+              },
+              "orders_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-10-31T09:30:00Z"
+              },
+              "status": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "example": 3
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Giao buổi sáng, gọi trước khi tới"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "user_id": null,
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 10001
+                        },
+                        "order_id": {
+                          "type": "integer",
+                          "example": 1001
+                        },
+                        "product_id": {
+                          "type": "integer",
+                          "example": 23
+                        },
+                        "sku": {
+                          "type": "string",
+                          "maxLength": 150,
+                          "example": "WH1000XM5-BLK"
+                        },
+                        "is_active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "price": {
+                          "type": "number",
+                          "format": "float",
+                          "example": 8990000
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "discount": {
+                          "type": "number",
+                          "format": "float",
+                          "example": 500000
+                        },
+                        "note": {
+                          "type": "string",
+                          "maxLength": 255,
+                          "nullable": true,
+                          "example": "Gói quà sinh nhật"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "sku": null
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UpdateOrderStatusRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1001
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "example": 3
+          }
+        }
+      },
+      "UpdateOrderShippingRequest": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "example": "0987654321"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "example": "nguyenvana@example.com"
+          },
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "123 Nguyễn Trãi"
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Phường 4, Quận 5"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "TP. Hồ Chí Minh"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Hồ Chí Minh"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Việt Nam"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Giao buổi sáng, gọi trước khi tới"
+          }
+        }
+      },
+      "Order": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1001
+              },
+              "user_id": {
+                "type": "integer",
+                "example": 25
+              },
+              "subtotal": {
+                "type": "number",
+                "format": "float",
+                "example": 12990000
+              },
+              "tax": {
+                "type": "number",
+                "format": "float",
+                "example": 1299000
+              },
+              "shipping": {
+                "type": "number",
+                "format": "float",
+                "example": 30000
+              },
+              "total": {
+                "type": "number",
+                "format": "float",
+                "example": 14319000
+              },
+              "discount_total": {
+                "type": "number",
+                "format": "float",
+                "example": 500000
+              },
+              "promo": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "SUMMER2025"
+              },
+              "discount": {
+                "type": "number",
+                "format": "float",
+                "example": 500000
+              },
+              "grand_total": {
+                "type": "number",
+                "format": "float",
+                "example": 13819000
+              },
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Nguyễn"
+              },
+              "middle_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Văn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "A"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 20,
+                "example": "0987654321"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "maxLength": 100,
+                "example": "nguyenvana@example.com"
+              },
+              "line1": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "123 Nguyễn Trãi"
+              },
+              "line2": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Phường 4, Quận 5"
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "TP. Hồ Chí Minh"
+              },
+              "province": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Hồ Chí Minh"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Việt Nam"
+              },
+              "orders_at": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-10-31T09:30:00Z"
+              },
+              "status": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "example": 3
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "Giao buổi sáng, gọi trước khi tới"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 10001
+                    },
+                    "order_id": {
+                      "type": "integer",
+                      "example": 1001
+                    },
+                    "product_id": {
+                      "type": "integer",
+                      "example": 23
+                    },
+                    "sku": {
+                      "type": "string",
+                      "maxLength": 150,
+                      "example": "WH1000XM5-BLK"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 8990000
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "discount": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 500000
+                    },
+                    "note": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "nullable": true,
+                      "example": "Gói quà sinh nhật"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Transaction": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 5001
+              },
+              "order_id": {
+                "type": "integer",
+                "example": 1001
+              },
+              "amount": {
+                "type": "number",
+                "format": "float",
+                "example": 13819000
+              },
+              "content": {
+                "type": "string",
+                "example": "Payment for order #1001 via VNPay"
+              },
+              "code": {
+                "type": "string",
+                "maxLength": 255,
+                "example": "TXN-VNPAY-20251031-0001"
+              },
+              "type": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2
+                ],
+                "example": 1
+              },
+              "mode": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "VNPay"
+              },
+              "status": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "example": 1
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          }
+        ]
+      },
+      "User": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "readOnly": true,
+                "maxLength": 100,
+                "example": "user@example.com"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 20,
+                "example": "0987654321"
+              },
+              "is_admin": {
+                "type": "boolean",
+                "readOnly": true,
+                "example": false
+              },
+              "status": {
+                "type": "integer",
+                "readOnly": true,
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "example": 1
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Nguyễn"
+              },
+              "middle_name": {
+                "type": "string",
+                "maxLength": 150,
+                "nullable": true,
+                "example": "Văn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "A"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 255,
+                "format": "uri",
+                "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+              },
+              "profile": {
+                "type": "string",
+                "example": "Loves technology, enjoys music, and exploring new products."
+              },
+              "registered_at": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2025-01-15T08:30:00Z"
+              },
+              "last_login": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "nullable": true,
+                "example": "2025-10-31T09:00:00Z"
+              }
+            }
+          }
+        ]
+      },
+      "UserProfileBase": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Nguyễn"
+          },
+          "middle_name": {
+            "type": "string",
+            "maxLength": 150,
+            "nullable": true,
+            "example": "Văn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "A"
+          },
+          "avatar": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "uri",
+            "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+          },
+          "profile": {
+            "type": "string",
+            "example": "Loves technology, enjoys music, and exploring new products."
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-01-15T08:30:00Z"
+          },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "nullable": true,
+            "example": "2025-10-31T09:00:00Z"
+          }
+        }
+      },
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "0987654321"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Nguyễn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "A"
+          }
+        }
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "example": "user@example.com"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-15T08:30:00Z"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "maxLength": 100,
+                "example": "user@example.com"
+              },
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Nguyễn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "A"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 255,
+                "format": "uri",
+                "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+              }
+            }
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password_reset_token": {
+            "type": "string",
+            "example": "abcdef123456"
+          },
+          "new_password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!"
+          }
+        }
+      },
+      "UpdatePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "old_password": {
+            "type": "string",
+            "format": "password"
+          },
+          "new_password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "UserAdmin": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true,
+                "example": 1
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "readOnly": true,
+                "maxLength": 100,
+                "example": "user@example.com"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 20,
+                "example": "0987654321"
+              },
+              "is_admin": {
+                "type": "boolean",
+                "readOnly": true,
+                "example": false
+              },
+              "status": {
+                "type": "integer",
+                "readOnly": true,
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "example": 1
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "Nguyễn"
+              },
+              "middle_name": {
+                "type": "string",
+                "maxLength": 150,
+                "nullable": true,
+                "example": "Văn"
+              },
+              "last_name": {
+                "type": "string",
+                "maxLength": 150,
+                "example": "A"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 255,
+                "format": "uri",
+                "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+              },
+              "profile": {
+                "type": "string",
+                "example": "Loves technology, enjoys music, and exploring new products."
+              },
+              "registered_at": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2025-01-15T08:30:00Z"
+              },
+              "last_login": {
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "nullable": true,
+                "example": "2025-10-31T09:00:00Z"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "profiles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "first_name": {
+                      "type": "string",
+                      "maxLength": 150,
+                      "example": "Nguyễn"
+                    },
+                    "middle_name": {
+                      "type": "string",
+                      "maxLength": 150,
+                      "nullable": true,
+                      "example": "Văn"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "maxLength": 150,
+                      "example": "A"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "format": "uri",
+                      "example": "https://cdn.pinkcapy.vn/avatars/user1.jpg"
+                    },
+                    "profile": {
+                      "type": "string",
+                      "example": "Loves technology, enjoys music, and exploring new products."
+                    },
+                    "registered_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "readOnly": true,
+                      "example": "2025-01-15T08:30:00Z"
+                    },
+                    "last_login": {
+                      "type": "string",
+                      "format": "date-time",
+                      "readOnly": true,
+                      "nullable": true,
+                      "example": "2025-10-31T09:00:00Z"
+                    }
+                  }
+                }
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "customer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "6A5o1@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "0987654321"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "StrongP@ssw0rd!"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "Nguyễn"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "A"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "customer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateUserStatusRequest": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "readOnly": true,
+            "example": 1
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "example": 1
+          }
+        },
+        "required": [
+          "user_id",
+          "status"
+        ]
+      },
+      "AssignRolesRequest": {
+        "type": "object",
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "customer"
+          }
+        }
+      },
+      "Overview": {
+        "type": "object",
+        "properties": {
+          "total_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 253900000
+          },
+          "total_orders": {
+            "type": "integer",
+            "example": 128
+          },
+          "total_customers": {
+            "type": "integer",
+            "example": 74
+          },
+          "total_products": {
+            "type": "integer",
+            "example": 312
+          },
+          "today_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 18900000
+          },
+          "month_revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 203000000
+          },
+          "growth_rate": {
+            "type": "number",
+            "format": "float",
+            "example": 12.5
+          }
+        }
+      },
+      "Revenue": {
+        "type": "object",
+        "properties": {
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2025-10-01"
+                },
+                "revenue": {
+                  "type": "number",
+                  "format": "double",
+                  "example": 3500000
+                },
+                "orders": {
+                  "type": "integer",
+                  "example": 6
+                }
+              }
+            }
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "total_revenue": {
+                "type": "number",
+                "format": "double",
+                "example": 203000000
+              },
+              "avg_order_value": {
+                "type": "number",
+                "format": "double",
+                "example": 1580000
+              },
+              "top_day": {
+                "type": "string",
+                "format": "date",
+                "example": "2025-10-24"
+              }
+            },
+            "required": [
+              "total_revenue",
+              "avg_order_value",
+              "top_day"
+            ]
+          }
+        }
+      },
+      "OrdersStats": {
+        "type": "object",
+        "properties": {
+          "pending": {
+            "type": "integer",
+            "example": 5
+          },
+          "processing": {
+            "type": "integer",
+            "example": 12
+          },
+          "completed": {
+            "type": "integer",
+            "example": 89
+          },
+          "cancelled": {
+            "type": "integer",
+            "example": 7
+          },
+          "refunded": {
+            "type": "integer",
+            "example": 3
+          }
+        }
+      },
+      "ProductTop": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 101
+          },
+          "title": {
+            "type": "string",
+            "example": "iPhone 16 Pro Max"
+          },
+          "sku": {
+            "type": "string",
+            "example": "IPH16PMAX256"
+          },
+          "thumb": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://cdn.pinkcapy.vn/products/iphone16pro-thumb.jpg"
+          },
+          "sold": {
+            "type": "integer",
+            "example": 74
+          },
+          "revenue": {
+            "type": "number",
+            "format": "double",
+            "example": 2590000000
+          },
+          "category": {
+            "type": "string",
+            "example": "Smartphone"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "archived"
+            ],
+            "example": "published"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SortParam": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "description": "Sort order",
+        "schema": {
+          "type": "string",
+          "format": "<sort_field>:<order>",
+          "example": "created_at:desc"
+        }
+      },
+      "AuthorizationHeader": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "Auth token `Bearer <JWT>`, ex: `admin` | `customer` | `public`",
+        "schema": {
+          "type": "string",
+          "example": "Bearer admin"
+        }
+      },
+      "IdempotencyKeyHeader": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Key helper for recognize duplicate request",
+        "schema": {
+          "type": "string",
+          "example": "oc8tKg1P2FV44hpj"
+        }
+      },
+      "PageParam": {
+        "name": "page",
+        "description": "Page number to retrieve",
+        "schema": {
+          "type": "integer",
+          "default": 1,
+          "example": 1
+        }
+      },
+      "SizeParam": {
+        "name": "size",
+        "description": "Number of results per page",
+        "schema": {
+          "type": "integer",
+          "default": 10,
+          "example": 10
+        }
+      },
+      "OffsetParam": {
+        "name": "offset",
+        "description": "Currect offset to retrieve",
+        "schemas": {
+          "type": "integer",
+          "default": 1,
+          "example": 1
+        }
+      },
+      "LimitParam": {
+        "name": "limit",
+        "description": "Limit number of results",
+        "schema": {
+          "type": "integer",
+          "default": 10,
+          "example": 10
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request (400)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400000",
+                "type": "BAD_REQUEST",
+                "message": "Data invalid or incorrect request.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized (401)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400001",
+                "type": "UNAUTHORIZED",
+                "message": "User is not authenticated.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error (422)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400002",
+                "type": "VALIDATION_ERROR",
+                "message": "Data invalid or missing required fields.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden (403)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400003",
+                "type": "FORBIDDEN",
+                "message": "User does not have permission to access this resource.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found (404)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400004",
+                "type": "NOT_FOUND",
+                "message": "Resource not found.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict (409)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "400009",
+                "type": "CONFLICT",
+                "message": "Resource already exists.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error (500)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "500000",
+                "type": "INTERNAL_SERVER_ERROR",
+                "message": "An unexpected error occurred on the server.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "NoContent": {
+        "description": "No content (204)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "200004",
+                "type": "NO_CONTENT",
+                "message": "No content.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      },
+      "ResetPasswordTokenInvalid": {
+        "description": "Reset password token is invalid or expired.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseBase"
+            },
+            "example": {
+              "meta": {
+                "code": "200050",
+                "type": "RESET_PASSWORD_TOKEN_INVALID",
+                "message": "Reset password token is invalid or expired.",
+                "extra_meta": {}
+              },
+              "data": null
+            }
+          }
+        }
+      }
+    }
+  }
+}
