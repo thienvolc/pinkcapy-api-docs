@@ -12,45 +12,45 @@ servers:
 
 paths:
   # Catalog API : @catalog
-  /products/{id}: { $ref: '@catalog#/paths/~1products~1{id}' }
+  /products/{product_id}: { $ref: '@catalog#/paths/~1products~1{product_id}' }
   /products/{slug}: { $ref: '@catalog#/paths/~1products~1{slug}' }
-  /products/{id}/related: { $ref: '@catalog#/paths/~1products~1{id}~1related' }
+  /products/{product_id}/related: { $ref: '@catalog#/paths/~1products~1{product_id}~1related' }
   /products: { $ref: '@catalog#/paths/~1products' }
 
-  /admin/products/{id}: { $ref: '@catalog#/paths/~1admin~1products~1{id}' }
-  /admin/products/{id}/metas: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1metas' }
-  /admin/products/{id}/metas/{meta_id}: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1metas~1{meta_id}' }
-  /admin/products/{id}/categories: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1categories' }
-  /admin/products/{id}/tags: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1tags' }
-  /admin/products/{id}/status: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1status' }
+  /admin/products/{product_id}: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}' }
+  /admin/products/{product_id}/metas: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1metas' }
+  /admin/products/{product_id}/metas/{meta_id}: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1metas~1{meta_id}' }
+  /admin/products/{product_id}/categories: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1categories' }
+  /admin/products/{product_id}/tags: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1tags' }
+  /admin/products/{product_id}/status: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1status' }
   /admin/products: { $ref: '@catalog#/paths/~1admin~1products' }
-  /admin/products/{id}/inventories: { $ref: '@catalog#/paths/~1admin~1products~1{id}~1inventories' }
+  /admin/products/{product_id}/inventories: { $ref: '@catalog#/paths/~1admin~1products~1{product_id}~1inventories' }
 
-  /tags/{id}/products: { $ref: '@catalog#/paths/~1tags~1{id}~1products' }
+  /tags/{tag_id}/products: { $ref: '@catalog#/paths/~1tags~1{tag_id}~1products' }
   /admin/tags: { $ref: '@catalog#/paths/~1admin~1tags' }
-  /admin/tags/{id}: { $ref: '@catalog#/paths/~1admin~1tags~1{id}' }
+  /admin/tags/{tag_id}: { $ref: '@catalog#/paths/~1admin~1tags~1{tag_id}' }
   /categories: { $ref: '@catalog#/paths/~1categories' }
   /categories/{slug}: { $ref: '@catalog#/paths/~1categories~1{slug}' }
   /categories/{slug}/products: { $ref: '@catalog#/paths/~1categories~1{slug}~1products' }
-  /admin/categories/{id}: { $ref: '@catalog#/paths/~1admin~1categories~1{id}' }
+  /admin/categories/{category_id}: { $ref: '@catalog#/paths/~1admin~1categories~1{category_id}' }
   /admin/categories: { $ref: '@catalog#/paths/~1admin~1categories' }
 
   # Sales Domain : @sales
   /me/carts: { $ref: '@sales#/paths/~1me~1carts' }
   /me/carts/items: { $ref: '@sales#/paths/~1me~1carts~1items' }
-  /me/carts/items/{id}: { $ref: '@sales#/paths/~1me~1carts~1items~1{id}' }
+  /me/carts/items/{cart_item_id}: { $ref: '@sales#/paths/~1me~1carts~1items~1{cart_item_id}' }
   /me/carts/clear: { $ref: '@sales#/paths/~1me~1carts~1clear' }
   /me/carts/checkout: { $ref: '@sales#/paths/~1me~1carts~1checkout' }
   /me/orders: { $ref: '@sales#/paths/~1me~1orders' }
-  /me/orders/{id}: { $ref: '@sales#/paths/~1me~1orders~1{id}' }
-  /me/orders/{id}/status: { $ref: '@sales#/paths/~1me~1orders~1{id}~1status' }
-  /me/orders/{id}/shipping: { $ref: '@sales#/paths/~1me~1orders~1{id}~1shipping' }
-  /me/orders/{id}/cancel: { $ref: '@sales#/paths/~1me~1orders~1{id}~1cancel' }
+  /me/orders/{order_id}: { $ref: '@sales#/paths/~1me~1orders~1{order_id}' }
+  /me/orders/{order_id}/status: { $ref: '@sales#/paths/~1me~1orders~1{order_id}~1status' }
+  /me/orders/{order_id}/shipping: { $ref: '@sales#/paths/~1me~1orders~1{order_id}~1shipping' }
+  /me/orders/{order_id}/cancel: { $ref: '@sales#/paths/~1me~1orders~1{order_id}~1cancel' }
 
   /admin/orders: { $ref: '@sales#/paths/~1admin~1orders' }
-  /admin/orders/{id}: { $ref: '@sales#/paths/~1admin~1orders~1{id}' }
-  /admin/orders/{id}/status: { $ref: '@sales#/paths/~1admin~1orders~1{id}~1status' }
-  /admin/orders/{id}/cancel: { $ref: '@sales#/paths/~1admin~1orders~1{id}~1cancel' }
+  /admin/orders/{order_id}: { $ref: '@sales#/paths/~1admin~1orders~1{order_id}' }
+  /admin/orders/{order_id}/status: { $ref: '@sales#/paths/~1admin~1orders~1{order_id}~1status' }
+  /admin/orders/{order_id}/cancel: { $ref: '@sales#/paths/~1admin~1orders~1{order_id}~1cancel' }
 
   /admin/transactions: { $ref: '@sales#/paths/~1admin~1transactions' }
 
@@ -63,9 +63,9 @@ paths:
   /me/password: { $ref: '@identity#/paths/~1me~1password' }
 
   /admin/users: { $ref: '@identity#/paths/~1admin~1users' }
-  /admin/users/{id}: { $ref: '@identity#/paths/~1admin~1users~1{id}' }
-  /admin/users/{id}/status: { $ref: '@identity#/paths/~1admin~1users~1{id}~1status' }
-  /admin/users/{id}/roles: { $ref: '@identity#/paths/~1admin~1users~1{id}~1roles' }
+  /admin/users/{user_id}: { $ref: '@identity#/paths/~1admin~1users~1{user_id}' }
+  /admin/users/{user_id}/status: { $ref: '@identity#/paths/~1admin~1users~1{user_id}~1status' }
+  /admin/users/{user_id}/roles: { $ref: '@identity#/paths/~1admin~1users~1{user_id}~1roles' }
 
   # Analytics Domain: @analytics
   /admin/dashboard/overview: { $ref: '@analytics#/paths/~1admin~1dashboard~1overview' }

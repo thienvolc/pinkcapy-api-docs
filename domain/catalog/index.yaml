@@ -5,39 +5,39 @@ info:
 
 paths:
   # @Product_Public
-  /products/{id}:
-    $ref: './paths/product.yaml#/paths/~1products~1{id}'
+  /products/{product_id}:
+    $ref: './paths/product.yaml#/paths/~1products~1{product_id}'
   /products/{slug}:
     $ref: './paths/product.yaml#/paths/~1products~1{slug}'
-  /products/{id}/related:
-    $ref: './paths/product.yaml#/paths/~1products~1{id}~1related'
+  /products/{product_id}/related:
+    $ref: './paths/product.yaml#/paths/~1products~1{product_id}~1related'
   /products:
     $ref: './paths/product.yaml#/paths/~1products'
   # @Product_Admin
-  /admin/products/{id}:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}'
-  /admin/products/{id}/metas:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1metas'
-  /admin/products/{id}/metas/{meta_id}:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1metas~1{meta_id}'
-  /admin/products/{id}/categories:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1categories'
-  /admin/products/{id}/tags:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1tags'
-  /admin/products/{id}/status:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1status'
+  /admin/products/{product_id}:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}'
+  /admin/products/{product_id}/metas:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1metas'
+  /admin/products/{product_id}/metas/{meta_id}:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1metas~1{meta_id}'
+  /admin/products/{product_id}/categories:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1categories'
+  /admin/products/{product_id}/tags:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1tags'
+  /admin/products/{product_id}/status:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1status'
   /admin/products:
     $ref: './paths/admin_product.yaml#/paths/~1admin~1products'
-  /admin/products/{id}/inventories:
-    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{id}~1inventories'
+  /admin/products/{product_id}/inventories:
+    $ref: './paths/admin_product.yaml#/paths/~1admin~1products~1{product_id}~1inventories'
   # @Tag_Public
-  /tags/{id}/products:
-    $ref: './paths/tag.yaml#/paths/~1tags~1{id}~1products'
+  /tags/{tag_id}/products:
+    $ref: './paths/tag.yaml#/paths/~1tags~1{tag_id}~1products'
   # @Tag_Admin
   /admin/tags:
     $ref: './paths/admin_tag.yaml#/paths/~1admin~1tags'
-  /admin/tags/{id}:
-    $ref: './paths/admin_tag.yaml#/paths/~1admin~1tags~1{id}'
+  /admin/tags/{tag_id}:
+    $ref: './paths/admin_tag.yaml#/paths/~1admin~1tags~1{tag_id}'
   # @Category_Public
   /categories:
     $ref: './paths/category.yaml#/paths/~1categories'
@@ -46,8 +46,8 @@ paths:
   /categories/{slug}/products:
     $ref: './paths/category.yaml#/paths/~1categories~1{slug}~1products'
   # @Category_Admin
-  /admin/categories/{id}:
-    $ref: './paths/admin_category.yaml#/paths/~1admin~1categories~1{id}'
+  /admin/categories/{category_id}:
+    $ref: './paths/admin_category.yaml#/paths/~1admin~1categories~1{category_id}'
   /admin/categories:
     $ref: './paths/admin_category.yaml#/paths/~1admin~1categories'
   

@@ -134,7 +134,7 @@ UpdateOrderShippingRequest:
 UpdateOrderStatusRequest:
   type: object
   properties:
-    id:
+    order_id:
       type: integer
       readOnly: true
       example: 1001

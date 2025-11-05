@@ -25,7 +25,7 @@ CreateUserRequest:
       items:
         type: object
         properties:
-          id:
+          role_id:
             type: integer
             example: 1
           name:
@@ -130,6 +130,6 @@ AssignRolesRequest:
       items:
         type: object
         properties:
-          id:
+          role_id:
             type: integer
             example: 1

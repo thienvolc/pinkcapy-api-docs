@@ -7,7 +7,7 @@ Transaction:
   allOf:
     - type: object
       properties:
-        id:
+        transaction_id:
           type: integer
           example: 5001
         order_id:

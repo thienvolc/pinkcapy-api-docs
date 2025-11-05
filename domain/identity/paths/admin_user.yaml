@@ -25,10 +25,10 @@ common_admin: &common_admin
     - bearerAuth: []
 
 user_id: &user_id
-  name: id
+  name: user_id
   in: path
   required: true
-  description: ID of the product to retrieve
+  description: ID of the user to retrieve
   schema:
     type: integer
     example: 1
@@ -47,16 +47,16 @@ assign_roles_request: &assign_roles_request
 
 parameters:
   UserId:
-    name: id
+    name: user_id
     in: path
     required: true
-    description: ID of the product to retrieve
+    description: ID of the user to retrieve
     schema:
       type: integer
       example: 1
 
 paths:
-  /admin/users/{id}:
+  /admin/users/{user_id}:
     get:
       summary: Get user for admin
       description: Retrieve a user by its ID for admin.
@@ -91,7 +91,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/users/{id}/status:
+  /admin/users/{user_id}/status:
     patch:
       summary: Update a user status
       description: Admin to update a status of an existing user in the system.
@@ -115,7 +115,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/users/{id}/roles:
+  /admin/users/{user_id}/roles:
     patch:
       summary: Update user roles
       description: Admin to update roles of an existing user in the system.

@@ -1,7 +1,7 @@
 Tag:
   type: object
   properties:
-    id:
+    tag_id:
       type: integer
       readOnly: true
       example: 1

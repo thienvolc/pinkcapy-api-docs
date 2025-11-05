@@ -16,12 +16,12 @@ paths:
 
   /admin/users:
     $ref: './paths/admin_user.yaml#/paths/~1admin~1users'
-  /admin/users/{id}:
-    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{id}'
-  /admin/users/{id}/status:
-    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{id}~1status'
-  /admin/users/{id}/roles:
-    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{id}~1roles'
+  /admin/users/{user_id}:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{user_id}'
+  /admin/users/{user_id}/status:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{user_id}~1status'
+  /admin/users/{user_id}/roles:
+    $ref: './paths/admin_user.yaml#/paths/~1admin~1users~1{user_id}~1roles'
 
 components:
   schemas:

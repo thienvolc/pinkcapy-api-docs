@@ -10,7 +10,7 @@ LoginResponse:
     user:
       type: object
       properties:
-        id:
+        user_id:
           type: integer
           example: 1
         email:
@@ -36,7 +36,7 @@ LoginResponse:
 RegisterUserResponse:
   type: object
   properties:
-    id:
+    user_id:
       type: integer
       example: 1
     email:

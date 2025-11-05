@@ -25,7 +25,7 @@ common_admin: &common_admin
     - bearerAuth: []
 
 category_id: &category_id
-  name: id
+  name: category_id
   in: path
   required: true
   description: ID of the category to retrieve
@@ -40,7 +40,7 @@ update_category_request: &update_category_request
 # ============================================================
 
 paths:
-  /admin/categories/{id}:
+  /admin/categories/{category_id}:
     get:
       summary: Get category for admin
       description: Retrieve a category by its ID for admin.

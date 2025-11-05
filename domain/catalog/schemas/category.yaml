@@ -5,7 +5,7 @@ audit: &audit
 CategoryBase: &base
   type: object
   properties:
-    id:
+    category_id:
       type: integer
       readOnly: true
       example: 3

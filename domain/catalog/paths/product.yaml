@@ -16,7 +16,7 @@ tags: &tags
   - Product_Public
 
 product_id: &product_id
-  name: id
+  name: product_id
   in: path
   required: true
   description: ID of the product
@@ -37,7 +37,7 @@ product_public: &product_public
 # ============================================================
 
 paths:
-  /products/{id}:
+  /products/{product_id}:
     get:
       summary: Get product
       description: Retrieve a product by its ID.
@@ -75,7 +75,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /products/{id}/related:
+  /products/{product_id}/related:
     get:
       summary: Get related products
       description: Retrieve a list of products related to the specified product.

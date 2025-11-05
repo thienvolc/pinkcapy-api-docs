@@ -27,7 +27,7 @@ common_admin: &common_admin
     - bearerAuth: []
 
 product_id: &product_id
-  name: id
+  name: product_id
   in: path
   required: true
   description: ID of the product
@@ -61,7 +61,7 @@ adjust_product_inventory: &adjust_product_inventory
 # ============================================================
 
 paths:
-  /admin/products/{id}:
+  /admin/products/{product_id}:
     get:
       summary: Get product
       description: Retrieve a product by its ID.
@@ -120,7 +120,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/products/{id}/metas:
+  /admin/products/{product_id}/metas:
     post:
       summary: Create product meta
       description: Create a new product meta.
@@ -139,11 +139,11 @@ paths:
               schema:
                 properties:
                   meta: *meta
-                  data: *product
+                  data: *product_meta
         '404': *not_found
   # ============================================================
 
-  /admin/products/{id}/metas/{meta_id}:
+  /admin/products/{product_id}/metas/{meta_id}:
     delete:
       summary: Delete a product meta
       description: Delete a product meta.
@@ -182,7 +182,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/products/{id}/tags:
+  /admin/products/{product_id}/tags:
     patch:
       summary: Update tags for a product
       description: Update tags for a product.
@@ -213,7 +213,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/products/{id}/categories:
+  /admin/products/{product_id}/categories:
     put:
       summary: Update categories of a product
       description: Update categories of a product.
@@ -236,7 +236,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/products/{id}/status:
+  /admin/products/{product_id}/status:
     patch:
       summary: Update a product status
       description: Update a product status.
@@ -336,7 +336,7 @@ paths:
                             items: *product
   # ============================================================
 
-  /admin/products/{id}/inventories:
+  /admin/products/{product_id}/inventories:
     patch:
       summary: Update a product stock
       description: Admin to update an stock of product.

@@ -25,7 +25,7 @@ common_admin: &common_admin
     - bearerAuth: []
 
 order_id: &order_id
-  name: id
+  name: order_id
   in: path
   required: true
   description: ID of the order
@@ -41,7 +41,7 @@ update_order_status_request: &update_order_status_request
 
 parameters:
   OrderIdParam:
-    name: id
+    name: order_id
     in: path
     required: true
     description: ID of the order
@@ -135,7 +135,7 @@ paths:
         '400': *bad_request
   # ============================================================
 
-  /admin/orders/{id}/confirm:
+  /admin/orders/{order_id}/confirm:
     post:
       summary: Confirm a new order
       description: Confirm a new order.
@@ -153,7 +153,7 @@ paths:
         '400': *bad_request
   # ============================================================
 
-  /admin/orders/{id}:
+  /admin/orders/{order_id}:
     get:
       summary: Get order details
       description: Retrieve the details of a specific order.
@@ -172,7 +172,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/orders/{id}/status:
+  /admin/orders/{order_id}/status:
     get:
       summary: Get the status of a specific order
       description: Retrieve the current status of a specific order.
@@ -213,7 +213,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /admin/orders/{id}/cancel:
+  /admin/orders/{order_id}/cancel:
     delete:
       summary: Cancel an order
       description: User to cancel an existing order.

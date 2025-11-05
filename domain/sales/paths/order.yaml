@@ -19,7 +19,7 @@ common_user: &common_user
     - bearerAuth: []
 
 order_id: &order_id
-  name: id
+  name: order_id
   in: path
   required: true
   description: ID of the order
@@ -97,7 +97,7 @@ paths:
         '400': *bad_request
   # ============================================================
 
-  /me/orders/{id}:
+  /me/orders/{order_id}:
     get:
       summary: Get order details
       description: Retrieve the details of a specific order.
@@ -117,7 +117,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /me/orders/{id}/status:
+  /me/orders/{order_id}/status:
     get:
       summary: Get the status of a specific order
       description: Retrieve the current status of a specific order.
@@ -137,7 +137,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /me/orders/{id}/shipping:
+  /me/orders/{order_id}/shipping:
     patch:
       summary: Update a order shipping information
       description: Update shipping information for a specific order.
@@ -162,7 +162,7 @@ paths:
         '404': *not_found
   # ============================================================
 
-  /me/orders/{id}/cancel:
+  /me/orders/{order_id}/cancel:
     delete:
       summary: Cancel an order
       description: User to cancel an existing order.

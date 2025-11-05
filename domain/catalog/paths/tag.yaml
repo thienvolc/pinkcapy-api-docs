@@ -13,7 +13,7 @@ tags: &tags
   - Tag_Public
 
 tag_id: &tag_id
-  name: id
+  name: tag_id
   in: path
   required: true
   description: ID of the tag
@@ -26,7 +26,7 @@ product_public: &product_public
 # ============================================================
 
 paths:
-  /tags/{id}/products:
+  /tags/{tag_id}/products:
     get:
       summary: Get products by tag ID
       description: Retrieve a list of products associated with a specific tag.

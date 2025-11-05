@@ -21,7 +21,7 @@ common_admin: &common_admin
     - bearerAuth: []
 
 tag_id: &tag_id
-  name: id
+  name: tag_id
   in: path
   required: true
   description: ID of the tag
@@ -80,7 +80,7 @@ paths:
                   data: *product_tag
 # ============================================================
 
-  /admin/tags/{id}:
+  /admin/tags/{tag_id}:
     delete:
       summary: Delete a tag
       description: Delete a tag.

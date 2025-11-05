@@ -17,7 +17,7 @@ common_user: &common_user
     - bearerAuth: []
 
 cart_item_id: &cart_item_id
-  name: id
+  name: cart_item_id
   in: path
   required: true
   description: ID of the cart item to update
@@ -87,7 +87,7 @@ paths:
         '400': *bad_request
   # ============================================================
 
-  /me/carts/items/{id}:
+  /me/carts/items/{cart_item_id}:
     patch:
       summary: Update a cart item
       description: Update an existing item in the user's cart.

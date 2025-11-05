@@ -3,8 +3,8 @@ paths:
     $ref: './paths/cart.yaml#/paths/~1me~1carts'
   /me/carts/items:
     $ref: './paths/cart.yaml#/paths/~1me~1carts~1items'
-  /me/carts/items/{id}:
-    $ref: './paths/cart.yaml#/paths/~1me~1carts~1items~1{id}'
+  /me/carts/items/{cart_item_id}:
+    $ref: './paths/cart.yaml#/paths/~1me~1carts~1items~1{cart_item_id}'
   /me/carts/clear:
     $ref: './paths/cart.yaml#/paths/~1me~1carts~1clear'
   /me/carts/checkout:
@@ -12,23 +12,23 @@ paths:
 
   /me/orders:
     $ref: './paths/order.yaml#/paths/~1me~1orders'
-  /me/orders/{id}:
-    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}'
-  /me/orders/{id}/status:
-    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1status'
-  /me/orders/{id}/shipping:
-    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1shipping'
-  /me/orders/{id}/cancel:
-    $ref: './paths/order.yaml#/paths/~1me~1orders~1{id}~1cancel'
+  /me/orders/{order_id}:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{order_id}'
+  /me/orders/{order_id}/status:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{order_id}~1status'
+  /me/orders/{order_id}/shipping:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{order_id}~1shipping'
+  /me/orders/{order_id}/cancel:
+    $ref: './paths/order.yaml#/paths/~1me~1orders~1{order_id}~1cancel'
 
   /admin/orders:
     $ref: './paths/admin_order.yaml#/paths/~1admin~1orders'
-  /admin/orders/{id}:
-    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}'
-  /admin/orders/{id}/status:
-    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}~1status'
-  /admin/orders/{id}/cancel:
-    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{id}~1cancel'
+  /admin/orders/{order_id}:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{order_id}'
+  /admin/orders/{order_id}/status:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{order_id}~1status'
+  /admin/orders/{order_id}/cancel:
+    $ref: './paths/admin_order.yaml#/paths/~1admin~1orders~1{order_id}~1cancel'
 
   /admin/transactions:
     $ref: './paths/transaction.yaml#/paths/~1admin~1transactions'

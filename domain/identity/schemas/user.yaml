@@ -5,7 +5,7 @@ audit: &audit
 UserBase: &user_base
   type: object
   properties:
-    id:
+    user_id:
       type: integer
       readOnly: true
       example: 1
@@ -70,7 +70,7 @@ UserProfileBase: &user_profile_base
 Role: &role
   type: object
   properties:
-    id:
+    role_id:
       type: integer
       example: 1
     name:
